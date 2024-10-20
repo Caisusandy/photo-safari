@@ -371,8 +371,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelPreset: {fileID: 11400000, guid: 10df69b5b67e1364197b329e3e1afac4, type: 2}
   parameter:
-    size: {x: 16, y: 16}
-    length: 5
+    size: {x: 32, y: 32}
+    length: 6
 --- !u!4 &1249723289
 Transform:
   m_ObjectHideFlags: 0

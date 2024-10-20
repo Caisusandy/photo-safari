@@ -75,7 +75,7 @@ namespace Safari.MapComponents
             {
                 for (int x = 0; x < size.x; x++)
                 {
-                    sb.Append(this[x, y].asHallway ? "H" : (this[x, y].isRoom ? "R" : "O"));
+                    sb.Append(this[x, y].asHallway ? "H" : (this[x, y].isRoom ? "R" : ""));
                     sb.Append('\t');
                 }
                 sb.AppendLine();

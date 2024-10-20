@@ -19,8 +19,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 42e2b60f1b412c542836cfce8661fd62, type: 2}
   - {fileID: 11400000, guid: 1c1263ef936c98245a073a8e01493dff, type: 2}
   - {fileID: 11400000, guid: 02c310da88d7182448f08468c8d80cbd, type: 2}
-  - {fileID: 11400000, guid: 02c310da88d7182448f08468c8d80cbd, type: 2}
-  - {fileID: 11400000, guid: 02c310da88d7182448f08468c8d80cbd, type: 2}
-  - {fileID: 11400000, guid: 02c310da88d7182448f08468c8d80cbd, type: 2}
-  - {fileID: 11400000, guid: 02c310da88d7182448f08468c8d80cbd, type: 2}
+  - {fileID: 11400000, guid: b34e7751f98ec2a40b9b64408e65b010, type: 2}
+  - {fileID: 11400000, guid: b34e7751f98ec2a40b9b64408e65b010, type: 2}
+  - {fileID: 11400000, guid: aa10ae0f0f6b0fb4fb7f5eb4a7301cb5, type: 2}
+  - {fileID: 11400000, guid: aa10ae0f0f6b0fb4fb7f5eb4a7301cb5, type: 2}
+  - {fileID: 11400000, guid: 66f0d32719be9814abcf8063c84556b2, type: 2}
+  - {fileID: 11400000, guid: 66f0d32719be9814abcf8063c84556b2, type: 2}
   finalRoom: {fileID: 11400000, guid: 186d63e856df66b4f92d9f10e09dab0f, type: 2}
