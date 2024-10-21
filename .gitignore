@@ -26,9 +26,9 @@ MSBuildForUnity.Common.props
 !/[Aa]ssets/**/*.meta
 
 # Nuget Packages
-/Packages
 !/Packages/manifest.json
 !/Packages/packages-locks.json
+!/Packages/packages-locks.git.json
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*
