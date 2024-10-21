@@ -14,7 +14,7 @@
       "dependencies": {
         "com.minervastudio.utilities": "1.0.2410"
       },
-      "hash": "303c138bb43bb964e3e08ffdf02b7c4db64201a8"
+      "hash": "de2d3b991e9f4ffdbbd4028243b7e21677e01c26"
     },
     "com.minervastudio.utilities": {
       "version": "https://github.com/minerva-studio/unity-utilities.git",
