@@ -687,7 +687,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   movePoint: {fileID: 1692640219}
-  moveInterval: 3
+  playerMovePoint: {fileID: 55468400}
+  player: {fileID: 1403674922}
 --- !u!4 &1474654000
 Transform:
   m_ObjectHideFlags: 0
