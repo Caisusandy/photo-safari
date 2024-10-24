@@ -10,9 +10,9 @@ namespace Safari.MapComponents
     public class RoomPointer
     {
         public Vector2Int origin;
-        public RoomData roomData;
+        public RoomPreset roomData;
         public Room room;
 
-        public RectInt Rect => new RectInt(origin, roomData.ChunkSize);
+        public RectInt Rect => new RectInt(origin, roomData.chunkSize);
     }
 }

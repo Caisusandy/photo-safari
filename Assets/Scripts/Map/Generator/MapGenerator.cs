@@ -36,7 +36,7 @@ namespace Safari.MapComponents.Generators
 
         private void PlaceRooms(LevelPreset levelPreset, GeneratorParameter generatorParameter)
         {
-            List<RoomData> rooms = new List<RoomData>(levelPreset.rooms);
+            List<RoomPreset> rooms = new List<RoomPreset>(levelPreset.rooms);
             for (int i = 0; i < generatorParameter.length && rooms.Count > 0; i++)
             {
                 var room = rooms.RandomPop();
@@ -44,14 +44,14 @@ namespace Safari.MapComponents.Generators
             }
         }
 
-        private void RunPlaceRoom(RoomData room)
+        private void RunPlaceRoom(RoomPreset room)
         {
             RectInt rect = this.rooms[^1].Rect;
             int j = 0;
             for (; j < SINGLE_ROOM_MAX_TRIAL; j++)
             {
                 // placing nearby
-                Vector2Int position = PlaceRectNearby(rect, room.ChunkSize).position;
+                Vector2Int position = PlaceRectNearby(rect, room.chunkSize).position;
                 if (TryGenerateNextRoom(room, position))
                     break;
             }
@@ -221,13 +221,13 @@ namespace Safari.MapComponents.Generators
 
 
 
-        private bool TryGenerateNextRoom(RoomData roomData, Vector2Int? position = null)
+        private bool TryGenerateNextRoom(RoomPreset roomData, Vector2Int? position = null)
         {
             var rp = position ?? RandomPosition();
             var x = rp.x;
             var y = rp.y;
 
-            RectInt rect = new RectInt(x, y, roomData.ChunkSize.x, roomData.ChunkSize.y);
+            RectInt rect = new RectInt(x, y, roomData.chunkSize.x, roomData.chunkSize.y);
             RectInt emptyBound = rect;
             emptyBound.min -= Vector2Int.one;
             emptyBound.max += Vector2Int.one;
@@ -264,12 +264,12 @@ namespace Safari.MapComponents.Generators
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <param name="roomData"></param>
-        private RoomPointer PlaceAt(int x, int y, RoomData roomData)
+        private RoomPointer PlaceAt(int x, int y, RoomPreset roomData)
         {
             var pointer = new RoomPointer() { origin = new Vector2Int(x, y), roomData = roomData };
             rooms.Add(pointer);
-            for (int i = 0; i < roomData.ChunkSize.x; i++)
-                for (int j = 0; j < roomData.ChunkSize.y; j++)
+            for (int i = 0; i < roomData.chunkSize.x; i++)
+                for (int j = 0; j < roomData.chunkSize.y; j++)
                 {
                     mapData.chunks[i + x, j + y] = new Chunk() { instancePointer = pointer };
                 }
@@ -284,8 +284,8 @@ namespace Safari.MapComponents.Generators
         /// <param name="roomPointer"></param>
         private void Remove(int x, int y, RoomPointer roomPointer)
         {
-            for (int i = 0; i < roomPointer.roomData.ChunkSize.x; i++)
-                for (int j = 0; j < roomPointer.roomData.ChunkSize.y; j++)
+            for (int i = 0; i < roomPointer.roomData.chunkSize.x; i++)
+                for (int j = 0; j < roomPointer.roomData.chunkSize.y; j++)
                 {
                     if (roomPointer == mapData.chunks[i + x, j + y].instancePointer)
                         mapData.chunks[i + x, j + y] = new Chunk();
