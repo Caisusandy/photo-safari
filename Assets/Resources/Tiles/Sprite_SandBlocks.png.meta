@@ -1,0 +1,859 @@
+fileFormatVersion: 2
+guid: 21ea85d79c414b944985c65e4e869c49
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8424572087743188642
+    second: Sprite_SandBlock_10
+  - first:
+      213: 2045352661981086295
+    second: Sprite_SandBlock_11
+  - first:
+      213: 8733532460692241090
+    second: Sprite_SandBlock_2
+  - first:
+      213: 2153691076412658297
+    second: Sprite_SandBlock_3
+  - first:
+      213: -1258528977854501314
+    second: Sprite_SandBlock_4
+  - first:
+      213: -1667763841257191666
+    second: Sprite_SandBlock_5
+  - first:
+      213: 2752701104469628675
+    second: Sprite_SandBlock_6
+  - first:
+      213: -7232451599054155617
+    second: Sprite_SandBlock_7
+  - first:
+      213: 2426021146547776375
+    second: Sprite_SandBlock_12
+  - first:
+      213: 7965360797313347544
+    second: Sprite_SandBlock_13
+  - first:
+      213: -1436448215948243641
+    second: Sprite_SandBlock_8
+  - first:
+      213: 3615216172993704082
+    second: Sprite_SandBlock_9
+  - first:
+      213: 7958962834221086218
+    second: Sprite_SandBlock_14
+  - first:
+      213: -6158445514766945141
+    second: Sprite_SandBlock_15
+  - first:
+      213: 8610565575992400378
+    second: Sprite_SandBlock_10
+  - first:
+      213: 3623700348287497924
+    second: Sprite_SandBlock_11
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Sprite_SandBlock_0
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 224
+        width: 38
+        height: 38
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -13, y: 13}
+        - {x: -13, y: -19}
+        - {x: 19, y: -19}
+        - {x: 19, y: 13}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e51756d4258e51b80800000000000000
+      internalID: -8424572087743188642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_1
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 224
+        width: 38
+        height: 38
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -13, y: 13}
+        - {x: -13, y: -19}
+        - {x: 19, y: -19}
+        - {x: 19, y: 13}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75248c9c86d826c10800000000000000
+      internalID: 2045352661981086295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_2
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 224
+        width: 38
+        height: 38
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -13, y: 13}
+        - {x: -13, y: -19}
+        - {x: 19, y: -19}
+        - {x: 19, y: 13}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ca77e1308db33970800000000000000
+      internalID: 8733532460692241090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_3
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 224
+        width: 38
+        height: 38
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -13, y: 13}
+        - {x: -13, y: -19}
+        - {x: 19, y: -19}
+        - {x: 19, y: 13}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 972518d8f9273ed10800000000000000
+      internalID: 2153691076412658297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 160
+        width: 32
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 13}
+        - {x: -16, y: -19}
+        - {x: 16, y: -19}
+        - {x: 16, y: 13}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e3e6277009ec88ee0800000000000000
+      internalID: -1258528977854501314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_5
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 160
+        width: 32
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 13}
+        - {x: -16, y: -19}
+        - {x: 16, y: -19}
+        - {x: 16, y: 13}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e07cf906f99ead8e0800000000000000
+      internalID: -1667763841257191666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_6
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 160
+        width: 32
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 13}
+        - {x: -16, y: -19}
+        - {x: 16, y: -19}
+        - {x: 16, y: 13}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 307dcb0f11f833620800000000000000
+      internalID: 2752701104469628675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_7
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 160
+        width: 32
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 13}
+        - {x: -16, y: -19}
+        - {x: 16, y: -19}
+        - {x: 16, y: 13}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f90db2ff69b21ab90800000000000000
+      internalID: -7232451599054155617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_12
+      rect:
+        serializedVersion: 2
+        x: 26
+        y: 96
+        width: 44
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -17, y: 14}
+        - {x: -17, y: -19}
+        - {x: 17, y: -19}
+        - {x: 17, y: 14}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77be0911165faa120800000000000000
+      internalID: 2426021146547776375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_13
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 96
+        width: 44
+        height: 38
+      alignment: 9
+      pivot: {x: 0.5, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -17, y: 13}
+        - {x: -17, y: -19}
+        - {x: 16, y: -19}
+        - {x: 16, y: 13}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8df2faf5175aa8e60800000000000000
+      internalID: 7965360797313347544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_8
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 154
+        width: 32
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74d492e45f5b01ce0800000000000000
+      internalID: -1436448215948243641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_9
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 154
+        width: 32
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 290798184f3db2230800000000000000
+      internalID: 3615216172993704082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_14
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+      tessellationDetail: 0
+      bones: []
+      spriteID: a06b842878ae37e60800000000000000
+      internalID: 7958962834221086218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_15
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+      tessellationDetail: 0
+      bones: []
+      spriteID: b84f7b3ee6ec88aa0800000000000000
+      internalID: -6158445514766945141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_10
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 154
+        width: 32
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+      tessellationDetail: 0
+      bones: []
+      spriteID: af9db3845cfde7770800000000000000
+      internalID: 3868243182945911531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlock_11
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 154
+        width: 32
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -16, y: 16}
+        - {x: -16, y: -16}
+        - {x: 16, y: -16}
+        - {x: 16, y: 16}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c6b2208448f94230800000000000000
+      internalID: -2366160091071752344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_0
+      rect:
+        serializedVersion: 2
+        x: 154
+        y: 90
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4b572b6d6f98ea4497409680147f5a3
+      internalID: -227797622
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_1
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 92
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4c0cb7e035812b4797a8c5cbd760669
+      internalID: -757988657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_2
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 224
+        width: 38
+        height: 36
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.44444445}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 308cd144455402247a9ef1069f1de794
+      internalID: 1709822025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_3
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 160
+        width: 38
+        height: 38
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a8a8e76b223f254e940a7667fa44ebb
+      internalID: 1646469595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_4
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 96
+        width: 38
+        height: 38
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 313e0003c56838c43997562345e478ba
+      internalID: 1816416344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_5
+      rect:
+        serializedVersion: 2
+        x: 282
+        y: 32
+        width: 38
+        height: 38
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.42105263}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d628cb572b6cfa84bba84b968165ce6a
+      internalID: 675571564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_6
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 218
+        width: 38
+        height: 45
+      alignment: 9
+      pivot: {x: 0.55263156, y: 0.51111114}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffa7454ecf8f82e4c9836d8f680d23af
+      internalID: -826895915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_7
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 154
+        width: 38
+        height: 44
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 90c3967c73ef7274eb2e7462f655f0b7
+      internalID: -233928325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_8
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 216
+        width: 38
+        height: 44
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.54545456}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c023b433fd6411e48afbacab1df14a87
+      internalID: -2087413934
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_9
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 154
+        width: 38
+        height: 44
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.54545456}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a98f3fdda22547469824588f8899a45
+      internalID: -1001073647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_10
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 89
+        width: 37
+        height: 45
+      alignment: 9
+      pivot: {x: 0.5675676, y: 0.4888889}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9153f3c1240b5e441a6679ed16359d65
+      internalID: -1435715885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sprite_SandBlocks_11
+      rect:
+        serializedVersion: 2
+        x: 346
+        y: 26
+        width: 38
+        height: 44
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e1ef74bb4e9ee14e9af8a13d7319b2e
+      internalID: -470879675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures:
+    - texture: {fileID: 2800000, guid: 3ed9f4ac8eba45d409088d29290193f6, type: 3}
+      name: _NormalMap
+    - texture: {fileID: 2800000, guid: 3ed9f4ac8eba45d409088d29290193f6, type: 3}
+      name: _Emission
+    nameFileIdTable:
+      Sprite_SandBlock_0: -8424572087743188642
+      Sprite_SandBlock_1: 2045352661981086295
+      Sprite_SandBlock_10: 3868243182945911531
+      Sprite_SandBlock_11: -2366160091071752344
+      Sprite_SandBlock_12: 2426021146547776375
+      Sprite_SandBlock_13: 7965360797313347544
+      Sprite_SandBlock_14: 7958962834221086218
+      Sprite_SandBlock_15: -6158445514766945141
+      Sprite_SandBlock_2: 8733532460692241090
+      Sprite_SandBlock_3: 2153691076412658297
+      Sprite_SandBlock_4: -1258528977854501314
+      Sprite_SandBlock_5: -1667763841257191666
+      Sprite_SandBlock_6: 2752701104469628675
+      Sprite_SandBlock_7: -7232451599054155617
+      Sprite_SandBlock_8: -1436448215948243641
+      Sprite_SandBlock_9: 3615216172993704082
+      Sprite_SandBlocks_0: -227797622
+      Sprite_SandBlocks_1: -757988657
+      Sprite_SandBlocks_10: -1435715885
+      Sprite_SandBlocks_11: -470879675
+      Sprite_SandBlocks_2: 1709822025
+      Sprite_SandBlocks_3: 1646469595
+      Sprite_SandBlocks_4: 1816416344
+      Sprite_SandBlocks_5: 675571564
+      Sprite_SandBlocks_6: -826895915
+      Sprite_SandBlocks_7: -233928325
+      Sprite_SandBlocks_8: -2087413934
+      Sprite_SandBlocks_9: -1001073647
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

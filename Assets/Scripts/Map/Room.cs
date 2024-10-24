@@ -5,6 +5,8 @@ namespace Safari.MapComponents
 {
     public class Room : MonoBehaviour
     {
+        public RoomPreset preset;
+
         public Tilemap geometry;
         public Tilemap floor;
         public Tilemap decor;
@@ -12,20 +14,31 @@ namespace Safari.MapComponents
         public Tilemap Geometry => geometry;
         public Tilemap Floor => floor;
 
-        public void CreateAllLayer()
+
+
+
+        private void OnDrawGizmos()
         {
-            GenerateFor("Geometry", ref geometry);
-            GenerateFor("Floor", ref floor);
-            GenerateFor("Decor", ref decor);
+            Map.DrawGrid();
         }
 
-        private void GenerateFor(string name, ref Tilemap tilemap)
+        public void CreateAllLayer()
+        {
+            GenerateFor("Geometry", ref geometry, 2);
+            GenerateFor("Floor", ref floor, 1);
+            GenerateFor("Decor", ref decor, 0);
+        }
+
+        private void GenerateFor(string name, ref Tilemap tilemap, int layer)
         {
             if (tilemap == null)
             {
-                var newGO = new GameObject(name, typeof(Tilemap));
+                var newGO = new GameObject(name, typeof(Tilemap), typeof(TilemapRenderer));
                 var newTransform = newGO.transform;
+                newTransform.SetParent(transform);
                 tilemap = newGO.GetComponent<Tilemap>();
+                TilemapRenderer tilemapRenderer = newGO.GetComponent<TilemapRenderer>();
+                tilemapRenderer.sortingLayerID = layer;
             }
         }
     }
