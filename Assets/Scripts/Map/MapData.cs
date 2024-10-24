@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Safari.MapComponents.Generators;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Safari.MapComponents
     /// </summary>
     public class MapData
     {
+        public LevelPreset levelPreset;
         public Chunk[,] chunks;
         public List<RoomPointer> rooms = new();
 
@@ -75,7 +77,7 @@ namespace Safari.MapComponents
             {
                 for (int x = 0; x < size.x; x++)
                 {
-                    sb.Append(this[x, y].asHallway ? "H" : (this[x, y].isRoom ? "R" : ""));
+                    sb.Append(this[x, y].isHallway ? "H" : (this[x, y].isRoom ? "R" : ""));
                     sb.Append('\t');
                 }
                 sb.AppendLine();
@@ -93,9 +95,10 @@ namespace Safari.MapComponents
         public const int SIZE = 16;
 
         public RoomPointer instancePointer;
-        public bool asHallway;
+        public Direction hallwayDirection;
 
-        public bool isOccupied => isRoom || asHallway;
+        public bool isHallway => hallwayDirection != Direction.None;
+        public bool isOccupied => isRoom || isHallway;
         public bool isRoom => instancePointer != null;
         public Room room => instancePointer?.room;
     }

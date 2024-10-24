@@ -1,9 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Safari.MapComponents
 {
     public class Map : MonoBehaviour
     {
+        public Tilemap geometry;
+        public Tilemap floor;
+        public Tilemap decor;
+
         private void OnDrawGizmosSelected()
         {
             DrawGrid();
@@ -30,5 +36,19 @@ namespace Safari.MapComponents
             }
 #endif
         }
+
+        /// <summary>
+        /// Paste a room to the map
+        /// </summary>
+        /// <param name="chunkOrigin"></param>
+        /// <param name="room"></param>
+        public void Paste(Vector2Int chunkOrigin, Room room)
+        {
+            Vector3Int offset = (Vector3Int)(chunkOrigin * Chunk.SIZE);
+            geometry.Paste(room.geometry, offset);
+            floor.Paste(room.floor, offset);
+            decor.Paste(room.decor, offset);
+        }
+
     }
 }

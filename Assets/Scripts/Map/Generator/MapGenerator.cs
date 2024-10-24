@@ -6,7 +6,6 @@ using System.Drawing;
 
 namespace Safari.MapComponents.Generators
 {
-
     /// <summary>
     /// The generator
     /// </summary>
@@ -21,6 +20,7 @@ namespace Safari.MapComponents.Generators
             ValidateParameter(levelPreset, generatorParameter);
 
             mapData = new MapData(generatorParameter.size);
+            mapData.levelPreset = levelPreset;
 
             // intial
             PlaceAt(2, 2, levelPreset.initialRoom);
@@ -212,10 +212,12 @@ namespace Safari.MapComponents.Generators
         /// <param name="path"></param>
         private void Connect(List<Vector2Int> path)
         {
-            foreach (Vector2Int point in path)
+            for (int i = 0; i < path.Count; i++)
             {
+                Vector2Int point = path[i];
                 ref var chunk = ref mapData.chunks[point.x, point.y];
-                if (!chunk.isRoom) chunk.asHallway = true;
+                if (i > 0) chunk.hallwayDirection |= DirectionExtensions.FromVector(point - path[i - 1]);
+                if (i < path.Count - 1) chunk.hallwayDirection |= DirectionExtensions.FromVector(point - path[i + 1]);
             }
         }
 
