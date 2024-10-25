@@ -8,15 +8,19 @@ namespace Safari.MapComponents
     {
         public static void Paste(this Tilemap dst, Tilemap source, Vector3Int offset)
         {
-            var count = source.GetUsedTilesCount();
+            var bounds = source.cellBounds;
+            var count = source.GetTilesRangeCount(bounds.min, bounds.max);
             var positions = new Vector3Int[count];
             var tiles = new TileBase[count];
-            var bounds = source.cellBounds;
+            Debug.Log(count + " " + offset);
+            // get tiles
+            source.GetTilesRangeNonAlloc(bounds.min, bounds.max, positions, tiles);
+            // update position
             for (int i = 0; i < positions.Length; i++)
             {
                 positions[i] += offset;
             }
-            source.GetTilesRangeNonAlloc(bounds.min, bounds.max, positions, tiles);
+            // set tiles
             dst.SetTiles(positions, tiles);
         }
     }

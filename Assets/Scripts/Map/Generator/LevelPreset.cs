@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.Tilemaps;
 
 namespace Safari.MapComponents.Generators
 {
@@ -11,11 +10,5 @@ namespace Safari.MapComponents.Generators
         public RoomPreset finalRoom;
 
         public HallwayPreset hallwayPreset;
-    }
-
-    public class HallwayPreset
-    {
-        public TileBase floor;
-        public TileBase geometry;
     }
 }

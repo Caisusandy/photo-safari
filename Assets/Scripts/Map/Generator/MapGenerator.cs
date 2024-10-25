@@ -142,9 +142,7 @@ namespace Safari.MapComponents.Generators
                 for (int x = start.x; x != end.x; x += v1)
                 {
                     Vector2Int point = new Vector2Int(x, start.y);
-                    if (mapData.IsAny(point, roomPointer1, roomPointer2))
-                    { }
-                    else if (mapData.IsNoRoom(point))
+                    if (mapData.IsAny(point, roomPointer1, roomPointer2) || mapData.IsNoRoom(point))
                         path.Add(point);
                     else return null;
                 }
@@ -154,9 +152,7 @@ namespace Safari.MapComponents.Generators
                 for (int y = start.y; y != end.y; y += v)
                 {
                     Vector2Int point = new Vector2Int(end.x, y);
-                    if (mapData.IsAny(point, roomPointer1, roomPointer2))
-                    { }
-                    else if (mapData.IsNoRoom(point))
+                    if (mapData.IsAny(point, roomPointer1, roomPointer2) || mapData.IsNoRoom(point))
                         path.Add(point);
                     else return null;
                 }
@@ -178,9 +174,7 @@ namespace Safari.MapComponents.Generators
                 for (int y = start.y; y != end.y; y += v)
                 {
                     Vector2Int point = new Vector2Int(start.x, y);
-                    if (mapData.IsAny(point, roomPointer1, roomPointer2))
-                    { }
-                    else if (mapData.IsNoRoom(point))
+                    if (mapData.IsAny(point, roomPointer1, roomPointer2) || mapData.IsNoRoom(point))
                         path.Add(point);
                     else return null;
                 }
@@ -190,9 +184,7 @@ namespace Safari.MapComponents.Generators
                 for (int x = start.x; x != end.x; x += v1)
                 {
                     Vector2Int point = new Vector2Int(x, end.y);
-                    if (mapData.IsAny(point, roomPointer1, roomPointer2))
-                    { }
-                    else if (mapData.IsNoRoom(point))
+                    if (mapData.IsAny(point, roomPointer1, roomPointer2) || mapData.IsNoRoom(point))
                         path.Add(point);
                     else return null;
 
@@ -216,8 +208,10 @@ namespace Safari.MapComponents.Generators
             {
                 Vector2Int point = path[i];
                 ref var chunk = ref mapData.chunks[point.x, point.y];
-                if (i > 0) chunk.hallwayDirection |= DirectionExtensions.FromVector(point - path[i - 1]);
-                if (i < path.Count - 1) chunk.hallwayDirection |= DirectionExtensions.FromVector(point - path[i + 1]);
+                if (i > 0) chunk.hallwayDirection |= DirectionExtensions.FromVector(path[i - 1] - point);
+                else if (i < path.Count - 1) chunk.hallwayDirection |= DirectionExtensions.FromVector(path[i + 1] - point).Opposite();
+                if (i < path.Count - 1) chunk.hallwayDirection |= DirectionExtensions.FromVector(path[i + 1] - point);
+                else if (i > 0) chunk.hallwayDirection |= DirectionExtensions.FromVector(path[i - 1] - point).Opposite();
             }
         }
 

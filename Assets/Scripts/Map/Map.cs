@@ -44,7 +44,7 @@ namespace Safari.MapComponents
         /// <param name="room"></param>
         public void Paste(Vector2Int chunkOrigin, Room room)
         {
-            Vector3Int offset = (Vector3Int)(chunkOrigin * Chunk.SIZE);
+            Vector3Int offset = Chunk.ToWorld(chunkOrigin);
             geometry.Paste(room.geometry, offset);
             floor.Paste(room.floor, offset);
             decor.Paste(room.decor, offset);

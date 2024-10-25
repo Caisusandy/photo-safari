@@ -101,5 +101,16 @@ namespace Safari.MapComponents
         public bool isOccupied => isRoom || isHallway;
         public bool isRoom => instancePointer != null;
         public Room room => instancePointer?.room;
+
+
+        /// <summary>
+        /// Convert a chunk position to world position
+        /// </summary>
+        /// <param name="chunkPosition"></param>
+        /// <returns></returns>
+        public static Vector3Int ToWorld(Vector2Int chunkPosition)
+        {
+            return new Vector3Int(chunkPosition.x * SIZE, chunkPosition.y * SIZE, 0);
+        }
     }
 }

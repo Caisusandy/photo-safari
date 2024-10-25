@@ -12,16 +12,16 @@
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.minervastudio.utilities": "1.0.2410"
+        "com.minervastudio.utilities": "https://github.com/minerva-studio/unity-utilities.git#1.2410.2"
       },
-      "hash": "de2d3b991e9f4ffdbbd4028243b7e21677e01c26"
+      "hash": "a636c278edba637ed36c8a78f38b4b248a6901c1"
     },
     "com.minervastudio.utilities": {
       "version": "https://github.com/minerva-studio/unity-utilities.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "426a2bd16655c37d8f5d820cb30000db7e6ff18d"
+      "hash": "c6a126865a9dfd938cf169d4cce97be8d3aa60b5"
     },
     "com.unity.2d.animation": {
       "version": "10.1.3",

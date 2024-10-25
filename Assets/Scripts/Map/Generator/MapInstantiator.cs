@@ -10,6 +10,13 @@ namespace Safari
     /// </summary>
     public class MapInstantiator
     {
+        const int hallwaySize = 4;
+        const int wallThickness = 1;
+        const int hallwayTotalSize = hallwaySize + wallThickness * 2;
+        const int lowerLeft = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
+        const int upperRight = Chunk.SIZE / 2 + hallwaySize / 2 + wallThickness;
+        const int netLength = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
+
         private Map map;
         private MapData mapData;
 
@@ -33,23 +40,38 @@ namespace Safari
                 for (int y = 0; y < mapData.RectSize.y; y++)
                 {
                     ref Chunk chunk = ref mapData.chunks[x, y];
-                    if (chunk.isHallway)
+                    Vector2Int chunkPosition = new(x, y);
+
+                    // maybe we want to do something with it
+                    if (!chunk.isHallway) continue;
+
+                    DrawHallwayCenter(chunkPosition);
+                    // intersection space between hallway and room...
+                    if (chunk.isRoom)
+                    {
+                    }
+                    // simple case: just create the hallway according to its shape
+                    else
                     {
                         foreach (var d in directions)
-                            DrawDirection(new Vector2Int(x, y), d, chunk.hallwayDirection.HasFlag(d));
+                        {
+                            DrawDirection(chunkPosition, d, chunk.hallwayDirection.HasFlag(d));
+                        }
                     }
                 }
         }
 
+        private void DrawHallwayCenter(Vector2Int chunkPosition)
+        {
+            var centerRect = new BoundsInt(lowerLeft, lowerLeft, 0, hallwayTotalSize, hallwayTotalSize, 1);
+            centerRect.position += Chunk.ToWorld(chunkPosition);
+            var arr = map.floor.GetTilesBlock(centerRect);// CreateFillArray(centerRect, mapData.levelPreset.hallwayPreset.floor);
+            FillIfNull(arr, mapData.levelPreset.hallwayPreset.floor);
+            map.floor.SetTilesBlock(centerRect, arr);
+        }
+
         void DrawDirection(Vector2Int chunkPosition, Direction direction, bool hallway = true)
         {
-            const int hallwaySize = 4;
-            const int wallThickness = 1;
-            const int hallwayTotalSize = hallwaySize + wallThickness * 2;
-            const int lowerLeft = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
-            const int upperRight = Chunk.SIZE / 2 + hallwaySize / 2 + wallThickness;
-            const int netLength = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
-
             var floorTile = mapData.levelPreset.hallwayPreset.floor;
             TileBase geometryTile = mapData.levelPreset.hallwayPreset.geometry;
 
@@ -60,10 +82,11 @@ namespace Safari
                 {
                     Direction.Right => new BoundsInt(upperRight, lowerLeft, 0, 1, hallwayTotalSize, 1),
                     Direction.Up => new BoundsInt(lowerLeft, upperRight, 0, hallwayTotalSize, 1, 1),
-                    Direction.Left => new BoundsInt(0, lowerLeft, 0, 1, hallwayTotalSize, 1),
-                    Direction.Down => new BoundsInt(lowerLeft, upperRight, 0, hallwayTotalSize, 1, 1),
+                    Direction.Left => new BoundsInt(lowerLeft, lowerLeft, 0, 1, hallwayTotalSize, 1),
+                    Direction.Down => new BoundsInt(lowerLeft, lowerLeft, 0, hallwayTotalSize, 1, 1),
                     _ => throw new ArgumentException("Direction is either composite or none"),
                 };
+                wallRect.position += Chunk.ToWorld(chunkPosition);
                 var geometryTiles = CreateFillArray(wallRect, geometryTile);
                 map.geometry.SetTilesBlock(wallRect, geometryTiles);
                 return;
@@ -74,12 +97,12 @@ namespace Safari
                 Direction.Right => new RectInt(upperRight, lowerLeft, netLength, hallwayTotalSize),
                 Direction.Up => new RectInt(lowerLeft, upperRight, hallwayTotalSize, netLength),
                 Direction.Left => new RectInt(0, lowerLeft, netLength, hallwayTotalSize),
-                Direction.Down => new RectInt(lowerLeft, upperRight, hallwayTotalSize, netLength),
+                Direction.Down => new RectInt(lowerLeft, 0, hallwayTotalSize, netLength),
                 _ => throw new ArgumentException("Direction is either composite or none"),
             };
-
             // fill the floor
             var bounds = new BoundsInt((Vector3Int)floorRect.position, (Vector3Int)floorRect.size);
+            bounds.position += Chunk.ToWorld(chunkPosition);
             //var tiles = map.floor.GetTilesBlock(bounds);
             var tiles = CreateFillArray(bounds, floorTile);
             bounds.zMax = 1;
@@ -115,6 +138,14 @@ namespace Safari
             TileBase[] tiles = new TileBase[floorRect.size.x * floorRect.size.y];
             Array.Fill(tiles, tile);
             return tiles;
+        }
+
+        void FillIfNull(TileBase[] tiles, TileBase tile)
+        {
+            for (int i = 0; i < tiles.Length; i++)
+            {
+                if (tiles[i] == null) tiles[i] = tile;
+            }
         }
     }
 }

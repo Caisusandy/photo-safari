@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d26b428b18f3e34eb5b8450a35a8e71, type: 3}
   m_Name: Room Data 4x4
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
-  ChunkSize: {x: 4, y: 4}
+  prefab: {fileID: 7914825233803018378, guid: 17115abbd3286464082c4fdd48707f20, type: 3}
+  chunkSize: {x: 4, y: 4}
+  roomName: Room_4x4
