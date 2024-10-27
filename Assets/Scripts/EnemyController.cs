@@ -7,6 +7,7 @@ public class EnemyController : MonoBehaviour
     public Transform movePoint;
     public Transform playerMovePoint;
     public Transform player;
+    public LayerMask collisionLayer;
     private bool playerWasMoving = false;
 
     private bool PlayerIsMoving
@@ -33,13 +34,19 @@ public class EnemyController : MonoBehaviour
         {
             int moveBy = Random.Range(-1, 2);
 
+            Vector3 finalMoveLocation = movePoint.position;
             if (Random.Range(0, 2) == 0)
             {
-                movePoint.position += new Vector3(moveBy, 0f, 0f);
+                finalMoveLocation += new Vector3(moveBy, 0f, 0f);
             }
             else
             {
-                movePoint.position += new Vector3(0f, moveBy, 0f);
+                finalMoveLocation += new Vector3(0f, moveBy, 0f);
+            }
+
+            if (!Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
+            {
+                movePoint.position = finalMoveLocation;
             }
         }
 
