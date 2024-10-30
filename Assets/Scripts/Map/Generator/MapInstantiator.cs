@@ -100,13 +100,10 @@ namespace Safari
                 Direction.Down => new RectInt(lowerLeft, 0, hallwayTotalSize, netLength),
                 _ => throw new ArgumentException("Direction is either composite or none"),
             };
-            // fill the floor
             var bounds = new BoundsInt((Vector3Int)floorRect.position, (Vector3Int)floorRect.size);
             bounds.position += Chunk.ToWorld(chunkPosition);
-            //var tiles = map.floor.GetTilesBlock(bounds);
-            var tiles = CreateFillArray(bounds, floorTile);
             bounds.zMax = 1;
-            map.floor.SetTilesBlock(bounds, tiles);
+
 
             // geometry
             switch (direction)
@@ -115,22 +112,48 @@ namespace Safari
                 case Direction.Left:
                     for (var x = bounds.xMin; x < bounds.xMax; x++)
                     {
-                        map.geometry.SetTile(new Vector3Int(x, bounds.yMin), geometryTile);
-                        map.geometry.SetTile(new Vector3Int(x, bounds.yMax), geometryTile);
+                        Vector3Int min = new Vector3Int(x, bounds.yMin);
+                        Vector3Int max = new Vector3Int(x, bounds.yMax);
+                        if (!map.floor.GetTile(min))
+                            map.geometry.SetTile(min, geometryTile);
+                        if (!map.floor.GetTile(max))
+                            map.geometry.SetTile(max, geometryTile);
                     }
                     break;
                 case Direction.Up:
                 case Direction.Down:
                     for (var y = bounds.yMin; y < bounds.yMax; y++)
                     {
-                        map.geometry.SetTile(new Vector3Int(bounds.xMin, y), geometryTile);
-                        map.geometry.SetTile(new Vector3Int(bounds.xMax, y), geometryTile);
+                        Vector3Int min = new Vector3Int(bounds.xMin, y);
+                        Vector3Int max = new Vector3Int(bounds.xMax, y);
+                        if (!map.floor.GetTile(min))
+                            map.geometry.SetTile(min, geometryTile);
+                        if (!map.floor.GetTile(max))
+                            map.geometry.SetTile(max, geometryTile);
                     }
                     break;
                 case Direction.None:
                 default:
                     break;
             }
+
+            var breakingRect = direction switch
+            {
+                Direction.Right => new BoundsInt(Chunk.SIZE, lowerLeft, 0, 1, hallwayTotalSize, 1),
+                Direction.Up => new BoundsInt(lowerLeft, Chunk.SIZE, 0, hallwayTotalSize, 1, 1),
+                Direction.Left => new BoundsInt(-1, lowerLeft, 0, 1, hallwayTotalSize, 1),
+                Direction.Down => new BoundsInt(lowerLeft, -1, 0, hallwayTotalSize, 1, 1),
+                _ => throw new ArgumentException("Direction is either composite or none"),
+            };
+            breakingRect.position += Chunk.ToWorld(chunkPosition);
+            foreach (var item in breakingRect.allPositionsWithin)
+            {
+                map.geometry.SetTile(item, null);
+            }
+
+            // fill the floor
+            var tiles = CreateFillArray(bounds, floorTile);
+            map.floor.SetTilesBlock(bounds, tiles);
         }
 
         TileBase[] CreateFillArray(BoundsInt floorRect, TileBase tile)
