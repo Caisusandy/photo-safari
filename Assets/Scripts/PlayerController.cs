@@ -5,12 +5,11 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
     public Transform movePoint;
     public PlayerHealth playerHealth;
-
     public Transform enemyTranform;
-
     public LayerMask collisionLayer;
-
     public GameManager gameManager;
+
+    private bool waitForPlayerToReleaseKey = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,7 +21,14 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
-        if (Vector3.Distance(transform.position, movePoint.position) <= .05f && gameManager.state is GameState.PLAYERTURN)
+
+        bool playerIsNotPressingKeys = Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0;
+        if (waitForPlayerToReleaseKey && playerIsNotPressingKeys)
+        {
+            waitForPlayerToReleaseKey = false;
+        }
+
+        if (Vector3.Distance(transform.position, movePoint.position) <= .05f && gameManager.state is GameState.PLAYERTURN && !waitForPlayerToReleaseKey)
         {
             Vector3 finalMoveLocation = movePoint.position;
             if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
@@ -45,14 +51,15 @@ public class PlayerController : MonoBehaviour
                         // take damage and don't move
                         playerHealth.currentHealth--;
                         Debug.Log("Player moved onto enemy. Current Health: " + playerHealth.currentHealth);
+                        waitForPlayerToReleaseKey = true;
                     }
                     else
                     {
                         movePoint.position = finalMoveLocation;
+                        gameManager.state = GameState.ENEMYTURN;
                     }
                 }
 
-                gameManager.state = GameState.ENEMYTURN;
             }
         }
     }

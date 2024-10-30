@@ -16,7 +16,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (currentHealth <= 0)
         {
-            manager.state = GameState.LOST;
+            manager.state = GameState.GAMEOVER;
         }
     }
 }
