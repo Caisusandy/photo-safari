@@ -4,11 +4,13 @@ public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public Transform movePoint;
-    public PlayerHealth manager;
+    public PlayerHealth playerHealth;
 
     public Transform enemyTranform;
 
     public LayerMask collisionLayer;
+
+    public GameManager gameManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -20,7 +22,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
-        if (Vector3.Distance(transform.position, movePoint.position) <= .05f)
+        if (Vector3.Distance(transform.position, movePoint.position) <= .05f && gameManager.state is GameState.PLAYERTURN)
         {
             Vector3 finalMoveLocation = movePoint.position;
             if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
@@ -41,14 +43,16 @@ public class PlayerController : MonoBehaviour
                     if (Vector3.Distance(finalMoveLocation, enemyTranform.position) == 0)
                     {
                         // take damage and don't move
-                        manager.currentHealth--;
-                        Debug.Log("Player moved onto enemy. Current Health: " + manager.currentHealth);
+                        playerHealth.currentHealth--;
+                        Debug.Log("Player moved onto enemy. Current Health: " + playerHealth.currentHealth);
                     }
                     else
                     {
                         movePoint.position = finalMoveLocation;
                     }
                 }
+
+                gameManager.state = GameState.ENEMYTURN;
             }
         }
     }
