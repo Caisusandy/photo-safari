@@ -50,7 +50,7 @@ public class EnemyController : MonoBehaviour
         if (!Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
         {
             // check for player pos
-            if (Vector3.Distance(playerMovePoint.position, finalMoveLocation) == 0)
+            if (Vector2.Distance(playerMovePoint.position, finalMoveLocation) == 0)
             {
                 // deal damage to player and don't move
                 playerHealth.currentHealth--;
