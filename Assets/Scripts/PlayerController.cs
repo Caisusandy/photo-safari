@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     {
         int enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
         int numEnemiesWithPictures = enemiesWithPictures.Count;
-        if (numEnemiesWithPictures == enemyCount)
+        if (numEnemiesWithPictures >= enemyCount)
         {
             gameManager.state = GameState.WON;
         }
