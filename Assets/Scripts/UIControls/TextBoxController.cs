@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class TextBoxController : MonoBehaviour
 {
     public TextMeshProUGUI messageText;
-    public Image textBackground;
+    public GameObject textBackground;
     public float timeToDisplay = 3f;
     public bool isDisplayingMessage = false;
     public string messageToDisplay = null;
@@ -16,7 +16,7 @@ public class TextBoxController : MonoBehaviour
     void Start()
     {
         messageText.gameObject.SetActive(false);
-        textBackground.color = new Color(textBackground.color.r, textBackground.color.g, textBackground.color.b, 0);
+        textBackground.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -37,7 +37,7 @@ public class TextBoxController : MonoBehaviour
             {
                 messageToDisplay = null;
                 messageText.gameObject.SetActive(false);
-                textBackground.color = new Color(textBackground.color.r, textBackground.color.g, textBackground.color.b, 0);
+                textBackground.gameObject.SetActive(false);
                 isDisplayingMessage = false;
                 elapsedTime = 0f;
             }
@@ -56,6 +56,6 @@ public class TextBoxController : MonoBehaviour
         }
 
         messageText.gameObject.SetActive(true);
-        textBackground.color = new Color(textBackground.color.r, textBackground.color.g, textBackground.color.b, 100);
+        textBackground.gameObject.SetActive(true);
     }
 }
