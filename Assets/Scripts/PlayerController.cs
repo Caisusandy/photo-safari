@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
 
         string photoSubject = DetectPhotoSubject();
 
-        if (!enemiesWithPictures.Contains(photoSubject))
+        if (!enemiesWithPictures.Contains(photoSubject) && !string.IsNullOrEmpty(photoSubject))
         {
             enemiesWithPictures.Add(photoSubject);
         }
