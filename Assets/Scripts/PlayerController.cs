@@ -30,12 +30,17 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
-        if (Vector2.Distance(transform.position, stairs.position) == 0)
+        bool noDirectionInput = Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0;
+        if (Vector2.Distance(transform.position, stairs.position) <= 0.5f)
         {
             HandlePlayerOnStairs();
+
+            if (!waitForPlayerToReleaseDirection && noDirectionInput)
+            {
+                waitForPlayerToReleaseDirection = true;
+            }
         }
 
-        bool noDirectionInput = Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0;
         if (waitForPlayerToReleaseDirection && noDirectionInput)
         {
             waitForPlayerToReleaseDirection = false;
@@ -103,12 +108,12 @@ public class PlayerController : MonoBehaviour
         {
             foreach (Transform enemy in enemies)
             {
-                if (Vector2.Distance(finalMoveLocation, enemy.position) == 0)
+                if (Vector2.Distance(finalMoveLocation, enemy.position) <= 0.5f)
                 {
                     // take damage and don't move
                     playerHealth.currentHealth--;
-                    Debug.Log("Player moved onto enemy. Current Health: " + playerHealth.currentHealth);
-                    waitForPlayerToReleaseDirection = true; // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
+                    Debug.Log("Player moved onto enemy. Current Health: " + playerHealth.currentHealth); // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
+                    waitForPlayerToReleaseDirection = true; // the player should only take damage once
                     break;
                 }
             }
@@ -171,7 +176,7 @@ public class PlayerController : MonoBehaviour
         {
             foreach (Transform enemy in enemies)
             {
-                if (Vector2.Distance(space, enemy.position) == 0)
+                if (Vector2.Distance(space, enemy.position) <= 0.5f)
                 {
                     photoSubject = enemy.name;
                     enemyFound = true;
