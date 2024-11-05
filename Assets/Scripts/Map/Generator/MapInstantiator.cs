@@ -10,7 +10,7 @@ namespace Safari
     /// </summary>
     public class MapInstantiator
     {
-        const int hallwaySize = 2;
+        const int hallwaySize = 0;
         const int wallThickness = 1;
         const int hallwayTotalSize = hallwaySize + wallThickness * 2;
         const int lowerLeft = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
