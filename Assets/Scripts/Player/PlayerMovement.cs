@@ -26,9 +26,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
         {
-            foreach (Transform enemy in controller.enemies)
+            foreach (EnemyController enemy in controller.enemyManager.enemies)
             {
-                if (Vector2.Distance(finalMoveLocation, enemy.position) <= 0.5f)
+                if (Vector2.Distance(finalMoveLocation, enemy.enemyTransform.position) <= 0.5f)
                 {
                     // take damage and don't move
                     playerHealth.currentHealth--;

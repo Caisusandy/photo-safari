@@ -8,7 +8,7 @@ public class PlayerController : MonoBehaviour
     public Transform movePoint;
 
     // enemy info
-    public List<Transform> enemies;
+    public EnemyManager enemyManager;
     internal List<string> enemiesWithPictures = new List<string>();
 
     // scripts
@@ -30,17 +30,12 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
-        bool noDirectionInput = Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0;
         if (Vector2.Distance(transform.position, stairs.position) <= 0.5f)
         {
             HandlePlayerOnStairs();
-
-            if (!waitForPlayerToReleaseDirection && noDirectionInput)
-            {
-                waitForPlayerToReleaseDirection = true;
-            }
         }
 
+        bool noDirectionInput = Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0;
         if (waitForPlayerToReleaseDirection && noDirectionInput)
         {
             waitForPlayerToReleaseDirection = false;

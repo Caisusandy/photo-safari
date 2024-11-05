@@ -51,9 +51,9 @@ public class PlayerCamera : MonoBehaviour
         bool enemyFound = false;
         foreach (Vector2 space in adjacentSpacesToPlayer)
         {
-            foreach (Transform enemy in controller.enemies)
+            foreach (EnemyController enemy in controller.enemyManager.enemies)
             {
-                if (Vector2.Distance(space, enemy.position) <= 0.5f)
+                if (Vector2.Distance(space, enemy.enemyTransform.position) <= 0.5f)
                 {
                     photoSubject = enemy.name;
                     enemyFound = true;
