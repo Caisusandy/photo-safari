@@ -3,23 +3,17 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // player-specific fields
     public float moveSpeed = 5f;
     public Transform movePoint;
-
-    // enemy info
     public EnemyManager enemyManager;
-    internal List<string> enemiesWithPictures = new List<string>();
-
-    // scripts
     public PlayerMovement movementScript;
     public PlayerCamera cameraScript;
-
-    // other fields
     public GameManager gameManager;
     public Transform stairs;
-    public bool waitForPlayerToReleaseDirection = false;
     public TextBoxController textBox;
+
+    internal List<string> enemiesWithPictures = new List<string>();
+    internal bool waitForPlayerToReleaseDirection = false;
 
     void Start()
     {
@@ -58,7 +52,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandlePlayerOnStairs()
     {
-        int enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
+        int enemyCount = enemyManager.enemies.Count;
         int numEnemiesWithPictures = enemiesWithPictures.Count;
         if (numEnemiesWithPictures >= enemyCount)
         {
