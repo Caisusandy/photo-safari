@@ -1,61 +1,101 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 
 public class TextBoxController : MonoBehaviour
 {
-    public TextMeshProUGUI messageText;
+    public TextMeshProUGUI textMesh;
     public GameObject textBackground;
-    public float timeToDisplay = 3f;
-    public bool isDisplayingMessage = false;
-    public string messageToDisplay = null;
-    public bool resetMessage = false;
 
+    internal string textBoxMessage = null;
+
+    private Queue<string> messagesDisplaying = new Queue<string>();
+    private Queue<string> messageBacklog = new Queue<string>();
+    private bool waitForSpace = false;
     private float elapsedTime = 0f;
 
     void Start()
     {
-        messageText.gameObject.SetActive(false);
+        textMesh.gameObject.SetActive(false);
         textBackground.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isDisplayingMessage)
+        if (messagesDisplaying.Count > 0)
         {
-            if (elapsedTime == 0f || resetMessage)
-            {
-                elapsedTime = 0f;
-                InitializeTextBox();
-                resetMessage = false;
-            }
-
+            ActivateTextBox();
             elapsedTime += Time.deltaTime;
-
-            if (elapsedTime > timeToDisplay)
+            if (elapsedTime >= 2f)
             {
-                messageToDisplay = null;
-                messageText.gameObject.SetActive(false);
-                textBackground.gameObject.SetActive(false);
-                isDisplayingMessage = false;
                 elapsedTime = 0f;
-            }
-        }
-    }
+                messagesDisplaying.Dequeue();
+                waitForSpace = false;
 
-    private void InitializeTextBox()
-    {
-        if (!string.IsNullOrEmpty(messageText.text))
-        {
-            messageText.text = messageToDisplay;
+                if (messageBacklog.Count > 0)
+                {
+                    messagesDisplaying.Enqueue(messageBacklog.Dequeue());
+                }
+
+                List<string> messagesDisplayingList = messagesDisplaying.ToList();
+                textBoxMessage = string.Empty;
+                for (int i = 0; i < messagesDisplayingList.Count; i++)
+                {
+                    if (i > 0 )
+                    {
+                        textBoxMessage += "\n";
+                    }
+
+                    textBoxMessage += messagesDisplayingList[i];
+                }
+            }
         }
         else
         {
-            messageText.text = "Default Message";
+            DeactivateTextBox();
+        }
+    }
+
+    private void ActivateTextBox()
+    {
+        textMesh.text = textBoxMessage;
+        textMesh.gameObject.SetActive(true);
+        textBackground.gameObject.SetActive(true);
+    }
+
+    private void DeactivateTextBox()
+    {
+        textMesh.gameObject.SetActive(false);
+        textBackground.gameObject.SetActive(false);
+        textBoxMessage = string.Empty;
+        textMesh.pageToDisplay = 1;
+    }
+
+    public void AddNewMessage(string newMessage)
+    {
+        if (!waitForSpace)
+        {
+            if (!string.IsNullOrEmpty(textBoxMessage))
+            {
+                textBoxMessage += "\n";
+            }
+
+            textBoxMessage += newMessage;
+            messagesDisplaying.Enqueue(newMessage);
+
+            if (textMesh.isTextOverflowing)
+            {
+                waitForSpace = true;
+            }
+        }
+        else
+        {
+            messageBacklog.Enqueue(newMessage);
         }
 
-        messageText.gameObject.SetActive(true);
-        textBackground.gameObject.SetActive(true);
     }
 }

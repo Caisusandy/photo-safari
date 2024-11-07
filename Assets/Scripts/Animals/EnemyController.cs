@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour
     public PlayerHealth playerHealth;
     public LayerMask collisionLayer;
     public GameManager gameManager;
+    public TextBoxController textBox;
 
     internal bool finishedTurn = false;
     internal Transform enemyTransform; // this field is so that the transform can be shared with the player
@@ -99,6 +100,7 @@ public class EnemyController : MonoBehaviour
             {
                 // deal damage to player and don't move
                 playerHealth.currentHealth--;
+                textBox.AddNewMessage($"You were in the {this.name}'s way so it attacked you!");
                 Debug.Log("Player moved where enemy was heading. Current Health: " + playerHealth.currentHealth);
                 patrolCount--;
             }

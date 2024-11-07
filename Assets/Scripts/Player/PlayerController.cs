@@ -66,22 +66,7 @@ public class PlayerController : MonoBehaviour
                 winConMessage += "s";
             }
 
-            SetUpMessage(winConMessage);
+            textBox.AddNewMessage(winConMessage);
         }
     }
-
-    public void SetUpMessage(string messageToDisplay)
-    {
-        textBox.messageToDisplay = messageToDisplay;
-
-        if (textBox.isDisplayingMessage)
-        {
-            textBox.resetMessage = true;
-        }
-        else
-        {
-            textBox.isDisplayingMessage = true;
-        }
-    }
-
 }
