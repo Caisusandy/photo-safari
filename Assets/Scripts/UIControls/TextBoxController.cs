@@ -4,6 +4,28 @@ using UnityEngine.UI;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.VersionControl;
+
+public struct Message
+{
+    public Message(float totalTimeToDisplay, string message)
+    {
+        this.totalTimeToDisplay = totalTimeToDisplay;
+        messageToDisplay = message;
+        startTime = 0f;
+    }
+
+    public Message(string message)
+    {
+        totalTimeToDisplay = 2.5f;
+        messageToDisplay = message;
+        startTime = 0f;
+    }
+
+    public float totalTimeToDisplay;
+    public string messageToDisplay;
+    public float startTime;
+}
 
 public class TextBoxController : MonoBehaviour
 {
@@ -12,8 +34,8 @@ public class TextBoxController : MonoBehaviour
 
     internal string textBoxMessage = null;
 
-    private Queue<string> messagesDisplaying = new Queue<string>();
-    private Queue<string> messageBacklog = new Queue<string>();
+    private Queue<Message> messagesDisplaying = new Queue<Message>();
+    private Queue<Message> messageBacklog = new Queue<Message>();
     private bool waitForSpace = false;
     private float elapsedTime = 0f;
 
@@ -28,29 +50,36 @@ public class TextBoxController : MonoBehaviour
     {
         if (messagesDisplaying.Count > 0)
         {
-            ActivateTextBox();
             elapsedTime += Time.deltaTime;
-            if (elapsedTime >= 2.5f)
+
+            List<Message> messagesDisplayingList = messagesDisplaying.ToList();
+            for (int i = 0; i < messagesDisplayingList.Count; i++)
             {
-                elapsedTime = 0f;
-                messagesDisplaying.Dequeue();
-                waitForSpace = false;
-
-                if (messageBacklog.Count > 0)
+                ActivateTextBox();
+                Message message = messagesDisplayingList[i];
+                if (elapsedTime - message.startTime >= message.totalTimeToDisplay)
                 {
-                    messagesDisplaying.Enqueue(messageBacklog.Dequeue());
-                }
+                    messagesDisplaying.Dequeue();
+                    waitForSpace = false;
 
-                List<string> messagesDisplayingList = messagesDisplaying.ToList();
-                textBoxMessage = string.Empty;
-                for (int i = 0; i < messagesDisplayingList.Count; i++)
-                {
-                    if (i > 0 )
+                    if (messageBacklog.Count > 0)
                     {
-                        textBoxMessage += "\n";
+                        Message backlogMessage = messageBacklog.Dequeue();
+                        backlogMessage.startTime = elapsedTime;
+                        messagesDisplaying.Enqueue(backlogMessage);
                     }
 
-                    textBoxMessage += messagesDisplayingList[i];
+                    messagesDisplayingList = messagesDisplaying.ToList();
+                    textBoxMessage = string.Empty;
+                    for (int j = 0; j < messagesDisplayingList.Count; j++)
+                    {
+                        if (j > 0)
+                        {
+                            textBoxMessage += "\n";
+                        }
+
+                        textBoxMessage += messagesDisplayingList[i].messageToDisplay;
+                    }
                 }
             }
         }
@@ -75,16 +104,17 @@ public class TextBoxController : MonoBehaviour
         textMesh.pageToDisplay = 1;
     }
 
-    public void AddNewMessage(string newMessage)
+    public void AddNewMessage(Message newMessage)
     {
         if (!waitForSpace)
         {
+            newMessage.startTime = elapsedTime;
             if (!string.IsNullOrEmpty(textBoxMessage))
             {
                 textBoxMessage += "\n";
             }
 
-            textBoxMessage += newMessage;
+            textBoxMessage += newMessage.messageToDisplay;
             messagesDisplaying.Enqueue(newMessage);
 
             if (textMesh.isTextOverflowing)

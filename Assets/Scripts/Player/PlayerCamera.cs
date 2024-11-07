@@ -18,7 +18,7 @@ public class PlayerCamera : MonoBehaviour
         }
 
         string message = GetPictureMessage(photoSubject);
-        controller.textBox.AddNewMessage(message);
+        controller.textBox.AddNewMessage(new Message(message));
         controller.gameManager.state = GameState.ENEMYTURN;
     }
 

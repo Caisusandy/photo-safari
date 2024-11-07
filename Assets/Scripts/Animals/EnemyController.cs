@@ -100,7 +100,7 @@ public class EnemyController : MonoBehaviour
             {
                 // deal damage to player and don't move
                 playerHealth.currentHealth--;
-                textBox.AddNewMessage($"You were in the {this.name}'s way so it attacked you!");
+                textBox.AddNewMessage(new Message($"You were in the {this.name}'s way so it attacked you!"));
                 Debug.Log("Player moved where enemy was heading. Current Health: " + playerHealth.currentHealth);
                 patrolCount--;
             }

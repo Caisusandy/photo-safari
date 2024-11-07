@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
             if (!textBox.textBoxMessage.Contains(winConMessage))
             {
-                textBox.AddNewMessage(winConMessage);
+                textBox.AddNewMessage(new Message(winConMessage));
             }
         }
     }

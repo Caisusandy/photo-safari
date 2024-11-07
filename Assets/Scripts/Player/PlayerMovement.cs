@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     // take damage and don't move
                     playerHealth.currentHealth--;
-                    controller.textBox.AddNewMessage($"You walked into the {enemy.name} and it attacked you!"); // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
+                    controller.textBox.AddNewMessage(new Message($"You walked into the {enemy.name} and it attacked you!")); // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
                     controller.waitForPlayerToReleaseDirection = true; // the player should only take damage once
                     break;
                 }
