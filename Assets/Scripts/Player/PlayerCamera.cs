@@ -1,3 +1,6 @@
+using Safari;
+using Safari.Animals;
+using Safari.Player;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,8 +21,7 @@ public class PlayerCamera : MonoBehaviour
         }
 
         string message = GetPictureMessage(photoSubject);
-        controller.textBox.AddNewMessage(new Message(message));
-        controller.gameManager.state = GameState.ENEMYTURN;
+        TextBoxController.instance.AddNewMessage(new Message(message));
     }
 
     private string GetPictureMessage(string photoSubject)
@@ -51,9 +53,9 @@ public class PlayerCamera : MonoBehaviour
         bool enemyFound = false;
         foreach (Vector2 space in adjacentSpacesToPlayer)
         {
-            foreach (EnemyController enemy in controller.enemyManager.enemies)
+            foreach (EnemyController enemy in EnemyManager.instance.enemies)
             {
-                if (Vector2.Distance(space, enemy.enemyTransform.position) <= 0.5f)
+                if (Vector2.Distance(space, enemy.transform.position) <= 0.5f)
                 {
                     photoSubject = enemy.name;
                     enemyFound = true;

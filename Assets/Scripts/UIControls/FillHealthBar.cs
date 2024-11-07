@@ -1,9 +1,9 @@
+using Safari.Player;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class FillHealthBar : MonoBehaviour
 {
-    public PlayerHealth playerHealth;
     public Image fillImage;
     private Slider slider;
 
@@ -24,7 +24,7 @@ public class FillHealthBar : MonoBehaviour
             fillImage.enabled = true;
         }
 
-        float fillValue = (float)playerHealth.currentHealth / (float)playerHealth.maxHealth;
+        float fillValue = (float)PlayerController.instance.CurrentHealth / (float)PlayerController.instance.maxHealth;
         slider.value = fillValue;
     }
 }

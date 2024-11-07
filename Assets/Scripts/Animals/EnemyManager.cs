@@ -1,22 +1,42 @@
+using Safari.Player;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+namespace Safari.Animals
 {
-    public List<EnemyController> enemies;
-    public GameManager gameManager;
-
-    void Update()
+    public class EnemyManager : MonoBehaviour
     {
-        bool enemiesFinishedTurn = true;
-        foreach (EnemyController enemy in enemies)
+        public static EnemyManager instance;
+
+        public List<EnemyController> enemies;
+        public GameManager gameManager;
+
+        private void Awake()
         {
-            enemiesFinishedTurn = enemiesFinishedTurn && enemy.finishedTurn;
+            instance = this;
         }
 
-        if (enemiesFinishedTurn && gameManager.state is GameState.ENEMYTURN)
+        void Update()
         {
-            gameManager.state = GameState.PLAYERTURN;
+            bool enemiesFinishedTurn = enemies.All(e => e == null || e.finishedTurn);
+            if (enemiesFinishedTurn && gameManager.State is GameState.ENEMYTURN)
+            {
+                gameManager.State = GameState.PLAYERTURN;
+            }
         }
+
+        public EnemyController CouldHitEnemy(Vector3 finalMoveLocation)
+        {
+            foreach (EnemyController enemy in enemies)
+            {
+                if (Vector2.Distance(finalMoveLocation, enemy.transform.position) <= 0.5f)
+                {
+                    return enemy;
+                }
+            }
+            return null;
+        }
+
     }
 }

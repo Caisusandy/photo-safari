@@ -29,6 +29,8 @@ public struct Message
 
 public class TextBoxController : MonoBehaviour
 {
+    public static TextBoxController instance;
+
     public TextMeshProUGUI textMesh;
     public GameObject textBackground;
 
@@ -38,6 +40,11 @@ public class TextBoxController : MonoBehaviour
     private Queue<Message> messageBacklog = new Queue<Message>();
     private bool waitForSpace = false;
     private float elapsedTime = 0f;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {

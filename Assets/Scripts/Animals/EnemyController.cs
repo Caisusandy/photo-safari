@@ -1,45 +1,47 @@
+using Safari.Player;
 using UnityEngine;
 
-public enum EnemyTrait { RANDOM, PATROL }
-
-public class EnemyController : MonoBehaviour
+namespace Safari.Animals
 {
-    [Tooltip("The point that the enemy moves towards")]
-    public Transform movePoint;
-    public float moveSpeed = 5f;
-    public Transform playerMovePoint;
-    public PlayerHealth playerHealth;
-    public LayerMask collisionLayer;
-    public GameManager gameManager;
-    public TextBoxController textBox;
+    public enum EnemyTrait { RANDOM, PATROL }
 
-    internal bool finishedTurn = false;
-    internal Transform enemyTransform; // this field is so that the transform can be shared with the player
-
-    [SerializeField]
-    EnemyTrait enemyTrait;
-
-    [Tooltip("If the animal is set to patrol, how many tiles it will move before turning 90 degrees")]
-    [SerializeField]
-    int patrolLength = 1;
-
-    private int patrolCount = 0;
-    private Vector2 currentDir = new Vector2(1f, 0f);
-
-
-
-    void Start()
+    public class EnemyController : EntityController
     {
-        movePoint.parent = null;
-        enemyTransform = transform;
-    }
+        public LayerMask collisionLayer;
+        public GameManager gameManager;
+        public TextBoxController textBox;
 
-    void Update()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
+        internal bool finishedTurn = false;
 
-        if (Vector2.Distance(transform.position, movePoint.position) <= 0.5f && gameManager.state is GameState.ENEMYTURN)
+        [SerializeField]
+        EnemyTrait enemyTrait;
+
+        [Tooltip("If the animal is set to patrol, how many tiles it will move before turning 90 degrees")]
+        [SerializeField]
+        int patrolLength = 1;
+
+        private int patrolCount = 0;
+        private Vector2 currentDir = new Vector2(1f, 0f);
+
+
+
+        void Start()
         {
+            TargetPosition = transform.position;
+            GameManager.OnGameStateChange += GameManager_OnGameStateChange;
+        }
+
+        void Update()
+        {
+            transform.position = Vector3.MoveTowards(transform.position, TargetPosition, moveSpeed * Time.deltaTime);
+        }
+
+        private void GameManager_OnGameStateChange(GameState obj)
+        {
+            if (obj != GameState.ENEMYTURN)
+            {
+                return;
+            }
             switch (enemyTrait)
             {
                 case EnemyTrait.RANDOM:
@@ -52,64 +54,67 @@ public class EnemyController : MonoBehaviour
                     break;
             }
         }
-    }
 
-    private void MovePatrol()
-    {
-        Vector2 finalMoveLocation = movePoint.position;
-        if (patrolCount >= patrolLength)
+        private void MovePatrol()
         {
-            currentDir = new Vector2(-currentDir.y, currentDir.x);
-            patrolCount = 0;
-        }
-
-        finalMoveLocation += currentDir;
-        patrolCount++;
-        HandleEnemyMove(finalMoveLocation);
-    }
-
-
-    private void MoveRandom()
-    {
-        int moveBy = Random.Range(-1, 2);
-        while (moveBy == 0)
-        {
-            moveBy = Random.Range(-1, 2);
-        }
-
-        Vector3 finalMoveLocation = movePoint.position;
-        if (Random.Range(0, 2) == 0)
-        {
-            finalMoveLocation += new Vector3(moveBy, 0f, 0f);
-        }
-        else
-        {
-            finalMoveLocation += new Vector3(0f, moveBy, 0f);
-        }
-
-        HandleEnemyMove(finalMoveLocation);
-    }
-
-    private void HandleEnemyMove(Vector2 finalMoveLocation)
-    {
-        // check for walls
-        if (!Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
-        {
-            // check for player pos
-            if (Vector2.Distance(playerMovePoint.position, finalMoveLocation) == 0)
+            Vector2 finalMoveLocation = TargetPosition;
+            if (patrolCount >= patrolLength)
             {
-                // deal damage to player and don't move
-                playerHealth.currentHealth--;
-                textBox.AddNewMessage(new Message($"You were in the {this.name}'s way so it attacked you!"));
-                Debug.Log("Player moved where enemy was heading. Current Health: " + playerHealth.currentHealth);
-                patrolCount--;
+                currentDir = new Vector2(-currentDir.y, currentDir.x);
+                patrolCount = 0;
+            }
+
+            finalMoveLocation += currentDir;
+            patrolCount++;
+            HandleEnemyMove(finalMoveLocation);
+        }
+
+
+        private void MoveRandom()
+        {
+            int moveBy = Random.Range(-1, 2);
+            while (moveBy == 0)
+            {
+                moveBy = Random.Range(-1, 2);
+            }
+
+            Vector3 finalMoveLocation = TargetPosition;
+            if (Random.Range(0, 2) == 0)
+            {
+                finalMoveLocation += new Vector3(moveBy, 0f, 0f);
             }
             else
             {
-                movePoint.position = finalMoveLocation;
+                finalMoveLocation += new Vector3(0f, moveBy, 0f);
             }
+
+            HandleEnemyMove(finalMoveLocation);
         }
 
-        finishedTurn = true;
+        private void HandleEnemyMove(Vector2 finalMoveLocation)
+        {
+            // check for walls
+            if (!Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
+            {
+                // check for player pos
+                // use < 0.1 to avoid float calculation
+                //if (Vector2.Distance(PlayerController.instance.TargetPosition, finalMoveLocation) < 0.1f)
+                var rounded = Vector2Int.FloorToInt(finalMoveLocation);
+                if (positionMap.TryGetValue(rounded, out var entity) && entity is PlayerController player)
+                {
+                    // deal damage to player and don't move
+                    player.CurrentHealth--;
+                    player.TargetPosition = player.transform.position;
+
+                    textBox.AddNewMessage(new Message($"You were in the {name}'s way so it attacked you!"));
+                    Debug.Log("Player moved where enemy was heading. Current Health: " + PlayerController.instance.CurrentHealth);
+                    patrolCount--;
+                }
+                if (CanMove(finalMoveLocation))
+                    TargetPosition = finalMoveLocation;
+            }
+
+            finishedTurn = true;
+        }
     }
 }

@@ -1,74 +1,134 @@
+using Minerva.Module.Tasks;
+using Safari.Animals;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+namespace Safari.Player
 {
-    public float moveSpeed = 5f;
-    public Transform movePoint;
-    public EnemyManager enemyManager;
-    public PlayerMovement movementScript;
-    public PlayerCamera cameraScript;
-    public GameManager gameManager;
-    public Transform stairs;
-    public TextBoxController textBox;
-
-    internal List<string> enemiesWithPictures = new List<string>();
-    internal bool waitForPlayerToReleaseDirection = false;
-
-    void Start()
+    public class PlayerController : EntityController
     {
-        movePoint.parent = null;
-    }
+        public static PlayerController instance;
 
-    void Update()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
+        [Header("Health")]
+        public int maxHealth = 3;
+        [SerializeField]
+        private int currentHealth;
 
-        if (Vector2.Distance(transform.position, stairs.position) <= 0.5f)
+        [Header("References")]
+        public PlayerMovement movementScript;
+        public PlayerCamera cameraScript;
+        public Transform stairs;
+
+        [SerializeField]
+        private bool waitForPlayerToReleaseDirection;
+
+
+        public List<string> enemiesWithPictures = new List<string>();
+
+        public int CurrentHealth
         {
-            HandlePlayerOnStairs();
-        }
-
-        bool noDirectionInput = Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0;
-        if (waitForPlayerToReleaseDirection && noDirectionInput)
-        {
-            waitForPlayerToReleaseDirection = false;
-        }
-
-        bool acceptingPlayerInput = Vector2.Distance(transform.position, movePoint.position) <= .05f && gameManager.state is GameState.PLAYERTURN && !waitForPlayerToReleaseDirection;
-        if (acceptingPlayerInput)
-        {
-            Vector3 finalMoveLocation = movementScript.DetermineMoveLocation();
-            if (Vector2.Distance(finalMoveLocation, movePoint.position) != 0)
+            get => currentHealth; set
             {
-                movementScript.HandlePlayerMove(finalMoveLocation);
+                // decrease
+                if (value < currentHealth)
+                    BlockNextAction();
+                currentHealth = value;
+            }
+        }
+
+
+        private void Awake()
+        {
+            instance = this;
+        }
+
+        private void Start()
+        {
+            TargetPosition = transform.position;
+            currentHealth = maxHealth;
+        }
+
+        void Update()
+        {
+            if (CurrentHealth <= 0)
+            {
+                GameManager.instance.State = GameState.GAMEOVER;
+                return;
+            }
+
+            transform.position = Vector3.MoveTowards(transform.position, TargetPosition, moveSpeed * Time.deltaTime);
+
+            if (Vector2.Distance(transform.position, stairs.position) <= 0.5f)
+            {
+                HandlePlayerOnStairs();
+            }
+
+            bool acceptingPlayerInput = Vector2.Distance(transform.position, TargetPosition) <= .05f
+                && GameManager.instance.State is GameState.PLAYERTURN
+                && !waitForPlayerToReleaseDirection;
+
+            if (!acceptingPlayerInput)
+                return;
+
+            Vector3 finalMoveLocation = movementScript.DetermineMoveLocation();
+            if (Vector2.Distance(finalMoveLocation, TargetPosition) != 0)
+            {
+                var enemy = EnemyManager.instance.CouldHitEnemy(finalMoveLocation);
+                if (enemy)
+                {
+                    // take damage and don't move
+                    CurrentHealth--;
+                    TextBoxController.instance.AddNewMessage(new Message($"You walked into the {enemy.name} and it attacked you!")); // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
+                    return;
+                }
+
+                if (movementScript.HandlePlayerMove(finalMoveLocation))
+                {
+                    GameManager.instance.State = GameState.ENEMYTURN;
+                }
             }
             else if (Input.GetKeyUp(KeyCode.Space))
             {
                 cameraScript.TakePicture();
+                GameManager.instance.State = GameState.ENEMYTURN;
             }
         }
-    }
 
-    private void HandlePlayerOnStairs()
-    {
-        int enemyCount = enemyManager.enemies.Count;
-        int numEnemiesWithPictures = enemiesWithPictures.Count;
-        if (numEnemiesWithPictures >= enemyCount)
+        public async void BlockNextAction(float time = 1)
         {
-            gameManager.state = GameState.WON;
+            waitForPlayerToReleaseDirection = true;
+            await UnityTask.WaitForSeconds(time);
+            waitForPlayerToReleaseDirection = false;
         }
-        else
-        {
-            string winConMessage = $"You still need to take a picture of {enemyCount - numEnemiesWithPictures} animal";
-            if (enemyCount - numEnemiesWithPictures > 1)
-            {
-                winConMessage += "s";
-            }
 
-            if (!textBox.textBoxMessage.Contains(winConMessage))
+        private void OnDestroy()
+        {
+            instance = null;
+        }
+
+
+
+        private void HandlePlayerOnStairs()
+        {
+            int enemyCount = EnemyManager.instance.enemies.Count;
+            int numEnemiesWithPictures = enemiesWithPictures.Count;
+            if (numEnemiesWithPictures < enemyCount)
             {
-                textBox.AddNewMessage(new Message(winConMessage));
+                string winConMessage = $"You still need to take a picture of {enemyCount - numEnemiesWithPictures} animal";
+                if (enemyCount - numEnemiesWithPictures > 1)
+                {
+                    winConMessage += "s";
+                }
+
+                if (!TextBoxController.instance.textBoxMessage.Contains(winConMessage))
+                {
+                    TextBoxController.instance.AddNewMessage(new Message(winConMessage));
+                }
+            }
+            else
+            {
+                GameManager.instance.State = GameState.WON;
             }
         }
     }

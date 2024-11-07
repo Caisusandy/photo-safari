@@ -1,48 +1,51 @@
+using Safari;
+using Safari.Animals;
+using TMPro;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+namespace Safari.Player
 {
-    public PlayerHealth playerHealth;
-    public LayerMask collisionLayer;
-
-    public PlayerController controller;
-
-    public Vector3 DetermineMoveLocation()
+    public class PlayerMovement : MonoBehaviour
     {
-        Vector3 finalMoveLocation = controller.movePoint.position;
-        if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1f)
-        {
-            finalMoveLocation += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f);
-        }
-        else if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1f)
-        {
-            finalMoveLocation += new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f);
-        }
+        public PlayerHealth playerHealth;
+        public LayerMask collisionLayer;
 
-        return finalMoveLocation;
-    }
+        public PlayerController controller;
 
-    public void HandlePlayerMove(Vector3 finalMoveLocation)
-    {
-        if (!Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
+        public Vector3 DetermineMoveLocation()
         {
-            foreach (EnemyController enemy in controller.enemyManager.enemies)
+            Vector3 finalMoveLocation = controller.TargetPosition;
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
             {
-                if (Vector2.Distance(finalMoveLocation, enemy.enemyTransform.position) <= 0.5f)
-                {
-                    // take damage and don't move
-                    playerHealth.currentHealth--;
-                    controller.textBox.AddNewMessage(new Message($"You walked into the {enemy.name} and it attacked you!")); // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
-                    controller.waitForPlayerToReleaseDirection = true; // the player should only take damage once
-                    break;
-                }
+                finalMoveLocation += new Vector3(-1, 0f, 0f);
+            }
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+                finalMoveLocation += new Vector3(1f, 0f, 0f);
+            }
+            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            {
+                finalMoveLocation += new Vector3(0, 1f, 0f);
+            }
+            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            {
+                finalMoveLocation += new Vector3(0f, -1f, 0f);
             }
 
-            if (!controller.waitForPlayerToReleaseDirection)
-            {
-                controller.movePoint.position = finalMoveLocation;
-                controller.gameManager.state = GameState.ENEMYTURN;
-            }
+            return finalMoveLocation;
+        }
+
+        public bool HandlePlayerMove(Vector3 finalMoveLocation)
+        {
+            // hit wall
+            if (Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
+                return false;
+            // if player is still moving then don't move
+            if (Vector2.Distance(controller.TargetPosition, controller.transform.position) > 0.01f)
+                return false;
+
+            controller.TargetPosition = finalMoveLocation;
+            return true;
         }
     }
 }
