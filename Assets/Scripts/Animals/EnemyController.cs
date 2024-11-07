@@ -11,13 +11,13 @@ namespace Safari.Animals
     public class EnemyController : EntityController
     {
         public LayerMask collisionLayer;
-        public GameManager gameManager;
-        public TextBoxController textBox;
+        public bool isFragile;
 
-        internal bool finishedTurn = false;
-
+        /// <summary>
+        /// Trait of enemy
+        /// </summary>
         [SerializeField]
-        EnemyTrait enemyTrait;
+        protected EnemyTrait enemyTrait;
 
         [Tooltip("If the animal is set to patrol, how many tiles it will move before turning 90 degrees")]
         [SerializeField]
@@ -25,6 +25,7 @@ namespace Safari.Animals
 
         private int patrolCount = 0;
         private Vector2 currentDir = new Vector2(1f, 0f);
+        private bool finishedTurn = false;
 
 
 
@@ -110,19 +111,32 @@ namespace Safari.Animals
                 var rounded = Vector2Int.FloorToInt(finalMoveLocation);
                 if (positionMap.TryGetValue(rounded, out var entity) && entity is PlayerController player)
                 {
-                    // deal damage to player and don't move
-                    player.CurrentHealth--;
-                    player.TargetPosition = player.transform.position;
-
-                    textBox.AddNewMessage(new Message($"You were in the {name}'s way so it attacked you!"));
-                    Debug.Log("Player moved where enemy was heading. Current Health: " + PlayerController.instance.CurrentHealth);
-                    patrolCount--;
+                    HitPlayer(player);
                 }
                 if (CanMove(finalMoveLocation))
                     TargetPosition = finalMoveLocation;
             }
 
             finishedTurn = true;
+        }
+
+        private void HitPlayer(PlayerController player)
+        {
+            if (isFragile)
+            {
+                // killed the entity, need to be better
+                Destroy(gameObject);
+            }
+            else
+            {
+                // deal damage to player and don't move
+                player.CurrentHealth--;
+                player.TargetPosition = player.transform.position;
+
+                TextBoxController.instance.AddNewMessage(new Message($"You were in the {name}'s way so it attacked you!"));
+                Debug.Log("Player moved where enemy was heading. Current Health: " + PlayerController.instance.CurrentHealth);
+                patrolCount--;
+            }
         }
     }
 }
