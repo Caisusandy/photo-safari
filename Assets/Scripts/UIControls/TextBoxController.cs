@@ -30,7 +30,7 @@ public class TextBoxController : MonoBehaviour
         {
             ActivateTextBox();
             elapsedTime += Time.deltaTime;
-            if (elapsedTime >= 2f)
+            if (elapsedTime >= 2.5f)
             {
                 elapsedTime = 0f;
                 messagesDisplaying.Dequeue();

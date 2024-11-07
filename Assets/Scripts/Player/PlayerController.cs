@@ -66,7 +66,10 @@ public class PlayerController : MonoBehaviour
                 winConMessage += "s";
             }
 
-            textBox.AddNewMessage(winConMessage);
+            if (!textBox.textBoxMessage.Contains(winConMessage))
+            {
+                textBox.AddNewMessage(winConMessage);
+            }
         }
     }
 }
