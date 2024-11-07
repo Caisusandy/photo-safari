@@ -25,7 +25,7 @@ namespace Safari.Animals
 
         private int patrolCount = 0;
         private Vector2 currentDir = new Vector2(1f, 0f);
-        private bool finishedTurn = false;
+        internal bool finishedTurn = false;
 
 
 
