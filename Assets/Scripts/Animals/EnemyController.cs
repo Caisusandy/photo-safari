@@ -5,6 +5,9 @@ namespace Safari.Animals
 {
     public enum EnemyTrait { RANDOM, PATROL }
 
+    /// <summary>
+    /// Base class of all enemy, create subclass for complicate data class
+    /// </summary>
     public class EnemyController : EntityController
     {
         public LayerMask collisionLayer;
@@ -42,6 +45,11 @@ namespace Safari.Animals
             {
                 return;
             }
+            OnEnemyTurn();
+        }
+
+        public virtual void OnEnemyTurn()
+        {
             switch (enemyTrait)
             {
                 case EnemyTrait.RANDOM:
@@ -55,7 +63,7 @@ namespace Safari.Animals
             }
         }
 
-        private void MovePatrol()
+        public virtual void MovePatrol()
         {
             Vector2 finalMoveLocation = TargetPosition;
             if (patrolCount >= patrolLength)
@@ -70,7 +78,7 @@ namespace Safari.Animals
         }
 
 
-        private void MoveRandom()
+        public virtual void MoveRandom()
         {
             int moveBy = Random.Range(-1, 2);
             while (moveBy == 0)
@@ -91,7 +99,7 @@ namespace Safari.Animals
             HandleEnemyMove(finalMoveLocation);
         }
 
-        private void HandleEnemyMove(Vector2 finalMoveLocation)
+        public virtual void HandleEnemyMove(Vector2 finalMoveLocation)
         {
             // check for walls
             if (!Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
