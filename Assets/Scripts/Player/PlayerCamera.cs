@@ -50,21 +50,12 @@ public class PlayerCamera : MonoBehaviour
         };
 
         string photoSubject = null;
-        bool enemyFound = false;
         foreach (Vector2 space in adjacentSpacesToPlayer)
         {
-            foreach (EnemyController enemy in EnemyManager.instance.enemies)
+            var index = Vector2Int.FloorToInt(space);
+            if (EntityController.positionMap.TryGetValue(index, out var enemy))
             {
-                if (Vector2.Distance(space, enemy.transform.position) <= 0.5f)
-                {
-                    photoSubject = enemy.name;
-                    enemyFound = true;
-                    break;
-                }
-            }
-
-            if (enemyFound)
-            {
+                photoSubject = enemy.name;
                 break;
             }
         }

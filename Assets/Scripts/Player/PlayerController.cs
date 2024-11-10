@@ -74,8 +74,8 @@ namespace Safari.Player
             Vector3 finalMoveLocation = movementScript.DetermineMoveLocation();
             if (Vector2.Distance(finalMoveLocation, TargetPosition) != 0)
             {
-                var enemy = EnemyManager.instance.CouldHitEnemy(finalMoveLocation);
-                if (enemy)
+                var hasEnemy = positionMap.TryGetValue(Vector2Int.FloorToInt(finalMoveLocation), out var enemy);// = EnemyManager.instance.CouldHitEnemy(finalMoveLocation);
+                if (hasEnemy)
                 {
                     // take damage and don't move
                     CurrentHealth--;

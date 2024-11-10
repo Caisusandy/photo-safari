@@ -1,4 +1,5 @@
 using Safari.Player;
+using System;
 using UnityEngine;
 
 namespace Safari.Animals
@@ -16,29 +17,48 @@ namespace Safari.Animals
         /// <summary>
         /// Trait of enemy
         /// </summary>
+        [Header("Traits")]
         [SerializeField]
         protected EnemyTrait enemyTrait;
-
+        [SerializeField]
+        protected bool isInSpecialActivity;
+        [SerializeField]
+        protected EnemyTrait specialTrait;
+        [Header("Counter")]
+        [SerializeField]
+        protected int baseMovementTurn;
+        [SerializeField]
+        protected int baseMovementTurnCounter;
+        [SerializeField]
+        protected int specialActivityTurn;
+        [SerializeField]
+        protected int specialActivityTurnCounter;
+        [Header("Patrol")]
         [Tooltip("If the animal is set to patrol, how many tiles it will move before turning 90 degrees")]
         [SerializeField]
         int patrolLength = 1;
 
         private int patrolCount = 0;
+
         private Vector2 currentDir = new Vector2(1f, 0f);
         internal bool finishedTurn = false;
+        public SpriteRenderer spriteRenderer;
 
+        protected EnemyTrait EnemyTrait => isInSpecialActivity ? specialTrait : enemyTrait;
 
-
-        void Start()
+        protected virtual void Start()
         {
             TargetPosition = transform.position;
             GameManager.OnGameStateChange += GameManager_OnGameStateChange;
         }
 
-        void Update()
+        protected virtual void Update()
         {
             transform.position = Vector3.MoveTowards(transform.position, TargetPosition, moveSpeed * Time.deltaTime);
         }
+
+        protected virtual void OnDestroy()
+        { }
 
         private void GameManager_OnGameStateChange(GameState obj)
         {
@@ -46,12 +66,26 @@ namespace Safari.Animals
             {
                 return;
             }
+
+            if (isInSpecialActivity)
+            {
+                specialActivityTurnCounter--;
+                if (specialActivityTurnCounter >= 0) return;
+                specialActivityTurnCounter = specialActivityTurn;
+            }
+            else
+            {
+                baseMovementTurnCounter--;
+                if (baseMovementTurnCounter >= 0) return;
+                baseMovementTurnCounter = baseMovementTurn;
+            }
+
             OnEnemyTurn();
         }
 
         public virtual void OnEnemyTurn()
         {
-            switch (enemyTrait)
+            switch (EnemyTrait)
             {
                 case EnemyTrait.RANDOM:
                     MoveRandom();
@@ -81,14 +115,14 @@ namespace Safari.Animals
 
         public virtual void MoveRandom()
         {
-            int moveBy = Random.Range(-1, 2);
+            int moveBy = UnityEngine.Random.Range(-1, 2);
             while (moveBy == 0)
             {
-                moveBy = Random.Range(-1, 2);
+                moveBy = UnityEngine.Random.Range(-1, 2);
             }
 
             Vector3 finalMoveLocation = TargetPosition;
-            if (Random.Range(0, 2) == 0)
+            if (UnityEngine.Random.Range(0, 2) == 0)
             {
                 finalMoveLocation += new Vector3(moveBy, 0f, 0f);
             }

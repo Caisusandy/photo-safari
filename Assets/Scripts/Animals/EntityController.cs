@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Safari.Animals
@@ -12,6 +13,8 @@ namespace Safari.Animals
         [SerializeField]
         private Vector2 targetPosition;
         private Vector2Int index;
+
+        protected Vector2Int Index => index;
 
         /// <summary>
         /// The targeting position of the entity, if entity is not moving then it is the current position
@@ -46,6 +49,12 @@ namespace Safari.Animals
             var rounded = Vector2Int.FloorToInt(position);
             // not having key or value (entity) is invalid (destroyed)
             return !positionMap.TryGetValue(rounded, out var controller) || !controller;
+        }
+
+        [ContextMenu(nameof(PrintMap))]
+        public void PrintMap()
+        {
+            Debug.Log(string.Join('\n', positionMap.Select(p => $"{p.Key}: {p.Value}")));
         }
     }
 }

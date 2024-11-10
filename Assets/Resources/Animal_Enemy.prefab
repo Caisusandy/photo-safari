@@ -45,15 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6509aa9cb4c5dc4885798fd579315f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPosition: {x: 0, y: 0}
   moveSpeed: 5
-  playerMovePoint: {fileID: 0}
-  playerHealth: {fileID: 0}
+  targetPosition: {x: 0, y: 0}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 256
-  gameManager: {fileID: 0}
-  textBox: {fileID: 0}
+  isFragile: 0
   enemyTrait: 1
   patrolLength: 2
 --- !u!1 &7341402264497817607
