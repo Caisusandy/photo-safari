@@ -16,6 +16,7 @@ namespace Safari
         const int lowerLeft = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
         const int upperRight = Chunk.SIZE / 2 + hallwaySize / 2 + wallThickness;
         const int netLength = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
+        const float decorDensity = 0.05f;
 
         private Map map;
         private MapData mapData;
@@ -60,8 +61,8 @@ namespace Safari
                     }
                 }
 
-            float lower = 0.48f;
-            float upper = 0.52f;
+            float lower = 0.5f - decorDensity / 2;
+            float upper = 0.5f + decorDensity / 2;
             float offset = UnityEngine.Random.state.GetHashCode();
             float scale = 0.7f;
             // draw decor
