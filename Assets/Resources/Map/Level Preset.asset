@@ -22,5 +22,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 66f0d32719be9814abcf8063c84556b2, type: 2}
   finalRoom: {fileID: 11400000, guid: 186d63e856df66b4f92d9f10e09dab0f, type: 2}
   hallwayPreset:
-    floor: {fileID: 11400000, guid: 96223db366028714b9d88203b9ed57e3, type: 2}
+    floor: {fileID: 11400000, guid: 3cc2ecefaf6d78e4bafd3b0aed604726, type: 2}
     geometry: {fileID: 11400000, guid: f544800ecc3cc33439ee344f414b7f73, type: 2}

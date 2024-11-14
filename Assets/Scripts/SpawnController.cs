@@ -32,8 +32,20 @@ public class SpawnController : MonoBehaviour
     {
         foreach (GameObject objectToSpawn in objectsToSpawn)
         {
-            SpawnObject(objectToSpawn);
+            if (objectToSpawn.tag == "Entity")
+            {
+                SpawnEntity(objectToSpawn.GetComponent<EntityController>());
+            }
+            else
+            {
+                SpawnObject(objectToSpawn);
+            }
         }
+    }
+
+    public void SpawnEntity(EntityController controller) {
+        SpawnObject(controller.gameObject);
+        controller.TargetPosition = controller.transform.position;
     }
 
     public void SpawnObject(GameObject objectToSpawn)
