@@ -59,6 +59,24 @@ namespace Safari
                         }
                     }
                 }
+
+            float lower = 0.48f;
+            float upper = 0.52f;
+            float offset = UnityEngine.Random.state.GetHashCode();
+            float scale = 0.7f;
+            // draw decor
+            for (int x = 0; x < mapData.RectSize.x * Chunk.SIZE; x++)
+                for (int y = 0; y < mapData.RectSize.y * Chunk.SIZE; y++)
+                {
+                    if (!mapData.chunks[x / Chunk.SIZE, y / Chunk.SIZE].isRoom) continue;
+                    var f = Mathf.PerlinNoise(x * scale, y * scale);
+                    Debug.Log(f);
+                    if (f < lower || f > upper) continue;
+                    var position = new Vector3Int(x, y);
+                    if (map.decor.GetTile(position)) continue;
+                    var tile = mapData.levelPreset.decors[UnityEngine.Random.Range(0, mapData.levelPreset.decors.Count)];
+                    map.decor.SetTile(position, tile);
+                }
         }
 
         private void DrawHallwayCenter(Vector2Int chunkPosition)

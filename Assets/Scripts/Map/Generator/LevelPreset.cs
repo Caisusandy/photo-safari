@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Safari.MapComponents.Tiles;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Safari.MapComponents.Generators
 {
@@ -10,5 +12,6 @@ namespace Safari.MapComponents.Generators
         public RoomPreset finalRoom;
 
         public HallwayPreset hallwayPreset;
+        public List<SafariRuleTile> decors;
     }
 }

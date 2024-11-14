@@ -24,3 +24,5 @@ MonoBehaviour:
   hallwayPreset:
     floor: {fileID: 11400000, guid: 96223db366028714b9d88203b9ed57e3, type: 2}
     geometry: {fileID: 11400000, guid: f544800ecc3cc33439ee344f414b7f73, type: 2}
+  decors:
+  - {fileID: 11400000, guid: 65c185828408dba4f93643e787bfb10c, type: 2}
