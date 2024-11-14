@@ -7,7 +7,6 @@ namespace Safari.Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-        public PlayerHealth playerHealth;
         public LayerMask collisionLayer;
 
         public PlayerController controller;

@@ -1,6 +1,8 @@
 using Minerva.Module;
+using Safari.MapComponents;
 using System;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace Safari
 {
@@ -48,7 +50,6 @@ namespace Safari
             instance = this;
         }
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
             State = GameState.PLAYERTURN;
