@@ -99,23 +99,23 @@ namespace Safari.Editor
 
             //create all layer of room
             room.CreateAllLayer();
-            var bound = new BoundsInt(0, 0, 0, chunkSize.x * 16, chunkSize.y * 16, 1);
+            var bound = new BoundsInt(0, 0, 0, chunkSize.x * Chunk.SIZE, chunkSize.y * Chunk.SIZE, 1);
 
             //Room.Geometry.SetTilesBlock(bound, tileArray);
 
             var tiles = new TileBase[chunkSize.x * chunkSize.y * 256];
-            Array.Fill(tiles, wall, 0, chunkSize.x * 16);
-            for (int y = 1; y < chunkSize.y * 16; y++)
+            Array.Fill(tiles, wall, 0, chunkSize.x * Chunk.SIZE);
+            for (int y = 1; y < chunkSize.y * Chunk.SIZE; y++)
             {
-                tiles[chunkSize.x * 16 * y] = wall;
-                tiles[chunkSize.x * 16 * (y + 1) - 1] = wall;
+                tiles[chunkSize.x * Chunk.SIZE * y] = wall;
+                tiles[chunkSize.x * Chunk.SIZE * (y + 1) - 1] = wall;
             }
-            Array.Fill(tiles, wall, chunkSize.x * 16 * (chunkSize.y * 16 - 1), chunkSize.x * 16);
+            Array.Fill(tiles, wall, chunkSize.x * Chunk.SIZE * (chunkSize.y * Chunk.SIZE - 1), chunkSize.x * Chunk.SIZE);
             room.Geometry.SetTilesBlock(bound, tiles);
 
 
             Array.Fill(tiles, background);
-            //Vector3Int[] positionArray = (chunkSize * 16).Enumerate().Select(n => (Vector3Int)n).ToArray();
+            //Vector3Int[] positionArray = (chunkSize * Chunk.SIZE).Enumerate().Select(n => (Vector3Int)n).ToArray();
             Debug.Log(tiles.Length);
             room.Floor.SetTilesBlock(bound, tiles);
 

@@ -93,7 +93,7 @@ namespace Safari.MapComponents
     /// </summary>
     public struct Chunk
     {
-        public const int SIZE = 16;
+        public const int SIZE = 4;
 
         public RoomPointer instancePointer;
         public Direction hallwayDirection;
