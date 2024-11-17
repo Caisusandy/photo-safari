@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5508787645367874738}
   - component: {fileID: 430004717653246088}
+  - component: {fileID: -2108341032765490477}
   m_Layer: 0
   m_Name: Square
   m_TagString: Animal
@@ -25,12 +26,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2086311454910733409}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 110, y: 138, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7233515476772572790}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &430004717653246088
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  targetPosition: {x: 0, y: 0}
+  targetPosition: {x: 80.5, y: 46.5}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -59,46 +59,14 @@ MonoBehaviour:
   specialActivityTurn: 0
   specialActivityTurnCounter: 0
   patrolLength: 2
-  spriteRenderer: {fileID: 0}
---- !u!1 &7341402264497817607
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7233515476772572790}
-  - component: {fileID: 4353081553794728742}
-  m_Layer: 0
-  m_Name: Enemy Sprite
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7233515476772572790
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7341402264497817607}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.04504037}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5508787645367874738}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &4353081553794728742
+  spriteRenderer: {fileID: -2108341032765490477}
+--- !u!212 &-2108341032765490477
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7341402264497817607}
+  m_GameObject: {fileID: 2086311454910733409}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0

@@ -1,6 +1,7 @@
 using Safari.Player;
 using System;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Safari.Animals
 {
@@ -24,6 +25,7 @@ namespace Safari.Animals
         protected bool isInSpecialActivity;
         [SerializeField]
         protected EnemyTrait specialTrait;
+
         [Header("Counter")]
         [SerializeField]
         protected int baseMovementTurn;
@@ -33,6 +35,7 @@ namespace Safari.Animals
         protected int specialActivityTurn;
         [SerializeField]
         protected int specialActivityTurnCounter;
+
         [Header("Patrol")]
         [Tooltip("If the animal is set to patrol, how many tiles it will move before turning 90 degrees")]
         [SerializeField]
@@ -167,7 +170,7 @@ namespace Safari.Animals
                 player.CurrentHealth--;
                 player.TargetPosition = player.transform.position;
 
-                TextBoxController.instance.AddNewMessage(new Message($"You were in the {name}'s way so it attacked you!"));
+                TextBoxController.instance.AddNewMessage(new Message($"You were in the {name.Replace("(Clone)", "")}'s way so it attacked you!"));
                 Debug.Log("Player moved where enemy was heading. Current Health: " + PlayerController.instance.CurrentHealth);
                 patrolCount--;
             }

@@ -1,5 +1,6 @@
 using Minerva.Module;
 using Safari.MapComponents;
+using Safari.MapComponents.Generators;
 using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -17,6 +18,10 @@ namespace Safari
         public GameObject gameOverText;
         public GameObject winText;
         public TextBoxController textBox;
+        public SpawnController spawnController;
+        public MapGeneratorTester mapGenerator;
+        public Transform stairs;
+        public CameraFlash cameraFlash;
 
         public static event Action<GameState> OnGameStateChange;
 
@@ -25,6 +30,11 @@ namespace Safari
             get => state;
             set
             {
+                if (state != value)
+                {
+                    Debug.LogError($"State changed: from {value} to {state}");
+                }
+
                 state = value;
                 if (OnGameStateChange == null) return;
                 foreach (var item in OnGameStateChange?.GetInvocationList())
@@ -37,10 +47,7 @@ namespace Safari
                     {
                         Debug.LogException(e);
                     }
-                    if (state != value)
-                    {
-                        Debug.LogError($"State changed: from {value} to {state}");
-                    }
+
                 }
             }
         }
@@ -52,6 +59,11 @@ namespace Safari
 
         void Start()
         {
+            mapGenerator.ResetMapComponent();
+            mapGenerator.RunAndInstantiate();
+
+            spawnController.SpawnObjects();
+
             State = GameState.PLAYERTURN;
             gameOverText.SetActive(false);
             winText.SetActive(false);

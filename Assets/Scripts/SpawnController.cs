@@ -1,5 +1,6 @@
 using Safari.Animals;
 using Safari.MapComponents;
+using Safari.Player;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -8,6 +9,8 @@ public class SpawnController : MonoBehaviour
 {
     public Map map;
     public List<GameObject> objectsToSpawn;
+    public EnemyManager enemyManager;
+    public MainCameraController mainCameraController;
 
     private Vector3Int spawnPoint;
     private List<Vector3Int> adjacentPositions
@@ -28,32 +31,51 @@ public class SpawnController : MonoBehaviour
         }
     }
 
-    private void Start()
+    internal void SpawnObjects()
     {
         foreach (GameObject objectToSpawn in objectsToSpawn)
         {
-            if (objectToSpawn.tag == "Entity")
+            Vector3 spawnLocation = GetSpawnLocation(objectToSpawn);
+
+            if (objectToSpawn.tag == "Stairs")
             {
-                SpawnEntity(objectToSpawn.GetComponent<EntityController>());
+                spawnLocation.Set(spawnLocation.x, spawnLocation.y, 1.5f);
+                objectToSpawn.transform.position = spawnLocation;
+                Debug.Log($"Stairs position is: {spawnLocation}");
             }
-            else
+
+            GameObject newInstance;
+
+            if (objectToSpawn.tag == "Animal")
             {
-                SpawnObject(objectToSpawn);
+                newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+                SetUpAnimal(newInstance.GetComponent<EnemyController>());
+            }
+            else if (objectToSpawn.tag == "Player")
+            {
+                newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+                SetUpPlayer(newInstance.GetComponent<PlayerController>());
+            }
+            else if (objectToSpawn.tag != "Stairs")
+            {
+                Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
             }
         }
     }
 
-    public void SpawnEntity(EntityController controller) {
-        SpawnObject(controller.gameObject);
-        controller.TargetPosition = controller.transform.position;
+    private void SetUpPlayer(PlayerController controller) {
+        mainCameraController.player = controller.transform;
     }
 
-    public void SpawnObject(GameObject objectToSpawn)
+    private void SetUpAnimal(EnemyController controller)
     {
-        // Get the bounds of where the player can spawn
+        enemyManager.enemies.Add(controller);
+    }
+
+    private Vector3 GetSpawnLocation(GameObject objectToSpawn)
+    {
         BoundsInt bounds = map.floor.cellBounds;
 
-        // pick a random position for the player to spawn in
         Vector2 spawnLocation = Vector2.zero;
         bool validSpawn = false;
 
@@ -69,7 +91,6 @@ public class SpawnController : MonoBehaviour
                 bool isInHallway = PosInHallway(spawnPoint, adjacentWalls);
                 if (isInHallway)
                 {
-                    // need to move to outside of the hallway
                     // pick a random adjacent position
                     Vector3Int validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
                     bool validDirection = false;
@@ -94,7 +115,7 @@ public class SpawnController : MonoBehaviour
             }
         }
 
-        objectToSpawn.transform.position = new Vector3(spawnLocation.x + 0.5f, spawnLocation.y + 0.5f, 0);
+        return new Vector3(spawnLocation.x + 0.5f, spawnLocation.y + 0.5f, 0);
     }
 
     bool PosInWall(Vector3Int position)

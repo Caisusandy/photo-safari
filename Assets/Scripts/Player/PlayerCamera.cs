@@ -2,16 +2,16 @@ using Safari;
 using Safari.Animals;
 using Safari.Player;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public CameraFlash cameraFlash;
     public PlayerController controller;
 
     public void TakePicture()
     {
-        cameraFlash.flashEnabled = true;
+        GameManager.instance.cameraFlash.flashEnabled = true;
 
         string photoSubject = DetectPhotoSubject();
 
@@ -55,7 +55,7 @@ public class PlayerCamera : MonoBehaviour
             var index = Vector2Int.FloorToInt(space);
             if (EntityController.positionMap.TryGetValue(index, out var enemy))
             {
-                photoSubject = enemy.name;
+                photoSubject = enemy.name.Replace("(Clone)", "");
                 break;
             }
         }

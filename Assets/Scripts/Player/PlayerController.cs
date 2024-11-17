@@ -18,7 +18,6 @@ namespace Safari.Player
         [Header("References")]
         public PlayerMovement movementScript;
         public PlayerCamera cameraScript;
-        public Transform stairs;
 
         [SerializeField]
         private bool waitForPlayerToReleaseDirection;
@@ -59,7 +58,7 @@ namespace Safari.Player
 
             transform.position = Vector3.MoveTowards(transform.position, TargetPosition, moveSpeed * Time.deltaTime);
 
-            if (Vector2.Distance(transform.position, stairs.position) <= 0.5f)
+            if (Vector2.Distance(transform.position, GameManager.instance.stairs.position) <= 0.5f)
             {
                 HandlePlayerOnStairs();
             }
@@ -79,7 +78,7 @@ namespace Safari.Player
                 {
                     // take damage and don't move
                     CurrentHealth--;
-                    TextBoxController.instance.AddNewMessage(new Message($"You walked into the {enemy.name} and it attacked you!")); // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
+                    TextBoxController.instance.AddNewMessage(new Message($"You walked into the {enemy.name.Replace("(Clone)", "")} and it attacked you!")); // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
                     return;
                 }
 
