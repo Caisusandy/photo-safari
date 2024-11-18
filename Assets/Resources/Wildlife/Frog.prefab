@@ -51,15 +51,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   isFragile: 0
+  spriteRenderer: {fileID: 2740778397908600134}
   enemyTrait: 0
   isInSpecialActivity: 0
   specialTrait: 0
+  distanceToSeePlayer: 5
   baseMovementTurn: 1
   baseMovementTurnCounter: 0
   specialActivityTurn: 0
   specialActivityTurnCounter: 0
   patrolLength: 1
-  spriteRenderer: {fileID: 2740778397908600134}
 --- !u!212 &2740778397908600134
 SpriteRenderer:
   m_ObjectHideFlags: 0

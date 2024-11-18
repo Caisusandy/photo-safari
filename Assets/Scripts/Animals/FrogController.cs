@@ -34,6 +34,7 @@ namespace Safari.Animals
             {
                 DetectEnemy();
             }
+
             if (obj == GameState.ENEMYTURN)
             {
                 var index = Vector2Int.FloorToInt(TargetPosition);

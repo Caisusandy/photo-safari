@@ -1,11 +1,10 @@
 using Safari.Player;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Safari.Animals
 {
-    public enum EnemyTrait { RANDOM, PATROL }
+    public enum EnemyTrait { RANDOM, PATROL, TRACEPLAYER }
 
     /// <summary>
     /// Base class of all enemy, create subclass for complicate data class
@@ -14,6 +13,7 @@ namespace Safari.Animals
     {
         public LayerMask collisionLayer;
         public bool isFragile;
+        public SpriteRenderer spriteRenderer;
 
         /// <summary>
         /// Trait of enemy
@@ -43,9 +43,8 @@ namespace Safari.Animals
 
         private int patrolCount = 0;
 
-        private Vector2 currentDir = new Vector2(1f, 0f);
+        protected Vector2 currentDir = new Vector2(1f, 0f);
         internal bool finishedTurn = false;
-        public SpriteRenderer spriteRenderer;
 
         protected EnemyTrait EnemyTrait => isInSpecialActivity ? specialTrait : enemyTrait;
 
@@ -144,11 +143,10 @@ namespace Safari.Animals
             {
                 // check for player pos
                 // use < 0.1 to avoid float calculation
-                //if (Vector2.Distance(PlayerController.instance.TargetPosition, finalMoveLocation) < 0.1f)
                 var rounded = Vector2Int.FloorToInt(finalMoveLocation);
                 if (positionMap.TryGetValue(rounded, out var entity) && entity is PlayerController player)
                 {
-                    HitPlayer(player);
+                    HandlePlayerCollision(player);
                 }
                 if (CanMove(finalMoveLocation))
                     TargetPosition = finalMoveLocation;
@@ -157,7 +155,7 @@ namespace Safari.Animals
             finishedTurn = true;
         }
 
-        private void HitPlayer(PlayerController player)
+        private void HandlePlayerCollision(PlayerController player)
         {
             if (isFragile)
             {

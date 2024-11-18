@@ -61,8 +61,8 @@ namespace Safari
                     }
                 }
 
-            float lower = 0.5f - decorDensity / 2;
-            float upper = 0.5f + decorDensity / 2;
+            float lower = 0.48f;
+            float upper = 0.52f;
             float offset = UnityEngine.Random.state.GetHashCode();
             float scale = 0.7f;
             // draw decor

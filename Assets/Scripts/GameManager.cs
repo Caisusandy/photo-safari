@@ -30,11 +30,6 @@ namespace Safari
             get => state;
             set
             {
-                if (state != value)
-                {
-                    Debug.LogError($"State changed: from {value} to {state}");
-                }
-
                 state = value;
                 if (OnGameStateChange == null) return;
                 foreach (var item in OnGameStateChange?.GetInvocationList())
