@@ -52,6 +52,7 @@ MonoBehaviour:
   downSprite: {fileID: 0}
   leftSprite: {fileID: 0}
   rightSprite: {fileID: 7582463240575272887, guid: 28f602d73a77bde42a7218e5839477ae, type: 3}
+  animator: {fileID: 0}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -63,7 +64,6 @@ MonoBehaviour:
   baseMovementTurnCounter: 0
   specialActivityTurn: 0
   specialActivityTurnCounter: 0
-  patrolLength: 1
 --- !u!212 &2740778397908600134
 SpriteRenderer:
   m_ObjectHideFlags: 0

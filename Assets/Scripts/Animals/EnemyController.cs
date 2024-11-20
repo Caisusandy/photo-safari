@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Safari.Animals
 {
-    public enum EnemyTrait { RANDOM, PATROL, TRACEPLAYER }
+    public enum EnemyTrait { RANDOM, PATROL, TRACEPLAYER, FLEEING }
 
     /// <summary>
     /// Base class of all enemy, create subclass for complicate data class
@@ -34,13 +34,6 @@ namespace Safari.Animals
         protected int specialActivityTurn;
         [SerializeField]
         protected int specialActivityTurnCounter;
-
-        [Header("Patrol")]
-        [Tooltip("If the animal is set to patrol, how many tiles it will move before turning 90 degrees")]
-        [SerializeField]
-        int patrolLength = 1;
-
-        private int patrolCount = 0;
 
         protected Vector2 currentDir = new Vector2(1f, 0f);
         internal bool finishedTurn = false;
@@ -91,30 +84,12 @@ namespace Safari.Animals
                 case EnemyTrait.RANDOM:
                     MoveRandom();
                     break;
-                case EnemyTrait.PATROL:
-                    MovePatrol();
-                    break;
                 default:
                     break;
             }
         }
 
-        public virtual void MovePatrol()
-        {
-            Vector2 finalMoveLocation = TargetPosition;
-            if (patrolCount >= patrolLength)
-            {
-                currentDir = new Vector2(-currentDir.y, currentDir.x);
-                patrolCount = 0;
-            }
-
-            finalMoveLocation += currentDir;
-            patrolCount++;
-            HandleEnemyMove(finalMoveLocation);
-        }
-
-
-        public virtual void MoveRandom()
+        protected Vector3 PickRandomMoveLocation()
         {
             int moveBy = UnityEngine.Random.Range(-1, 2);
             while (moveBy == 0)
@@ -132,6 +107,13 @@ namespace Safari.Animals
                 finalMoveLocation += new Vector3(0f, moveBy, 0f);
             }
 
+            return finalMoveLocation;
+        }
+
+
+        public virtual void MoveRandom()
+        {
+            Vector3 finalMoveLocation = PickRandomMoveLocation();
             HandleEnemyMove(finalMoveLocation);
         }
 
@@ -158,7 +140,7 @@ namespace Safari.Animals
             finishedTurn = true;
         }
 
-        private void HandlePlayerCollision(PlayerController player)
+        public virtual void HandlePlayerCollision(PlayerController player)
         {
             if (isFragile)
             {
@@ -173,7 +155,6 @@ namespace Safari.Animals
 
                 TextBoxController.instance.AddNewMessage(new Message($"You were in the {name.Replace("(Clone)", "")}'s way so it attacked you!"));
                 Debug.Log("Player moved where enemy was heading. Current Health: " + PlayerController.instance.CurrentHealth);
-                patrolCount--;
             }
         }
     }

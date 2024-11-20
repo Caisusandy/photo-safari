@@ -120,7 +120,6 @@ MonoBehaviour:
   baseMovementTurnCounter: 0
   specialActivityTurn: 0
   specialActivityTurnCounter: 0
-  patrolLength: 1
 --- !u!95 &6125703163469573018
 Animator:
   serializedVersion: 7

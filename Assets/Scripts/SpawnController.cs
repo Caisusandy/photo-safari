@@ -44,32 +44,16 @@ public class SpawnController : MonoBehaviour
                 Debug.Log($"Stairs position is: {spawnLocation}");
             }
 
-            GameObject newInstance;
-
+            GameObject newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
             if (objectToSpawn.tag == "Animal")
             {
-                newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
-                SetUpAnimal(newInstance.GetComponent<EnemyController>());
+                enemyManager.enemies.Add(newInstance.GetComponent<EnemyController>());
             }
             else if (objectToSpawn.tag == "Player")
             {
-                newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
-                SetUpPlayer(newInstance.GetComponent<PlayerController>());
-            }
-            else if (objectToSpawn.tag != "Stairs")
-            {
-                Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+                mainCameraController.player = newInstance.GetComponent<PlayerController>().transform;
             }
         }
-    }
-
-    private void SetUpPlayer(PlayerController controller) {
-        mainCameraController.player = controller.transform;
-    }
-
-    private void SetUpAnimal(EnemyController controller)
-    {
-        enemyManager.enemies.Add(controller);
     }
 
     private Vector3 GetSpawnLocation(GameObject objectToSpawn)

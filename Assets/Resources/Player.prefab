@@ -54,6 +54,7 @@ MonoBehaviour:
   downSprite: {fileID: 1605543356, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
   leftSprite: {fileID: 292627770, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
   rightSprite: {fileID: -39772849, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
+  animator: {fileID: 0}
   maxHealth: 3
   currentHealth: 3
   movementScript: {fileID: 4308758787273860181}

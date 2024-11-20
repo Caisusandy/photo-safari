@@ -42,7 +42,6 @@ namespace Safari
                     {
                         Debug.LogException(e);
                     }
-
                 }
             }
         }

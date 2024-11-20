@@ -102,11 +102,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   targetPosition: {x: 0, y: 0}
+  spriteRenderer: {fileID: 0}
+  upSprite: {fileID: 0}
+  downSprite: {fileID: 0}
+  leftSprite: {fileID: 0}
+  rightSprite: {fileID: 0}
+  animator: {fileID: 0}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 256
   isFragile: 0
-  spriteRenderer: {fileID: 0}
   enemyTrait: 0
   isInSpecialActivity: 0
   specialTrait: 2
@@ -114,4 +119,3 @@ MonoBehaviour:
   baseMovementTurnCounter: 0
   specialActivityTurn: 2
   specialActivityTurnCounter: 0
-  patrolLength: 1
