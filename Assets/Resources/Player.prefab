@@ -49,14 +49,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   targetPosition: {x: 106.5, y: 50.5}
-  maxHealth: 3
-  currentHealth: 3
-  movementScript: {fileID: 4308758787273860181}
-  cameraScript: {fileID: 1988121760547213233}
   spriteRenderer: {fileID: 2059933049553498798}
   upSprite: {fileID: 41544261, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
   downSprite: {fileID: 1605543356, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
   leftSprite: {fileID: 292627770, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
+  rightSprite: {fileID: -39772849, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
+  maxHealth: 3
+  currentHealth: 3
+  movementScript: {fileID: 4308758787273860181}
+  cameraScript: {fileID: 1988121760547213233}
   waitForPlayerToReleaseDirection: 0
   enemiesWithPictures: []
 --- !u!114 &4308758787273860181

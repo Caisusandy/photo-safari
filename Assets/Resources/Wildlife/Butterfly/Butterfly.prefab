@@ -103,11 +103,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   targetPosition: {x: 0, y: 0}
+  spriteRenderer: {fileID: 2931896038892332517}
+  upSprite: {fileID: 0}
+  downSprite: {fileID: 0}
+  leftSprite: {fileID: 0}
+  rightSprite: {fileID: 0}
+  animator: {fileID: 6125703163469573018}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 256
   isFragile: 1
-  spriteRenderer: {fileID: 2931896038892332517}
   enemyTrait: 0
   isInSpecialActivity: 0
   specialTrait: 0

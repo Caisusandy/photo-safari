@@ -13,7 +13,6 @@ namespace Safari.Animals
     {
         public LayerMask collisionLayer;
         public bool isFragile;
-        public SpriteRenderer spriteRenderer;
 
         /// <summary>
         /// Trait of enemy
@@ -148,8 +147,12 @@ namespace Safari.Animals
                 {
                     HandlePlayerCollision(player);
                 }
+
                 if (CanMove(finalMoveLocation))
+                {
+                    UpdateSprite(finalMoveLocation);
                     TargetPosition = finalMoveLocation;
+                }
             }
 
             finishedTurn = true;
