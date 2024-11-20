@@ -19,6 +19,12 @@ namespace Safari.Player
         public PlayerMovement movementScript;
         public PlayerCamera cameraScript;
 
+        [Header("Sprites")]
+        public SpriteRenderer spriteRenderer;
+        public Sprite upSprite;
+        public Sprite downSprite;
+        public Sprite leftSprite;
+
         [SerializeField]
         private bool waitForPlayerToReleaseDirection;
 
@@ -84,6 +90,7 @@ namespace Safari.Player
 
                 if (movementScript.HandlePlayerMove(finalMoveLocation))
                 {
+                    UpdatePlayerSprite(finalMoveLocation);
                     GameManager.instance.State = GameState.ENEMYTURN;
                 }
             }
@@ -106,7 +113,48 @@ namespace Safari.Player
             instance = null;
         }
 
+        private void UpdatePlayerSprite(Vector3 finalMoveLocation)
+        {
+            Vector2 moveDirection = finalMoveLocation - transform.position;
 
+            List<Vector2> directions = new List<Vector2>()
+            {
+                Vector2.down,
+                Vector2.up,
+                Vector2.left,
+                Vector2.right,
+            };
+
+            float currentDistance = Mathf.Infinity;
+            Vector2 closestDirection = Vector2.zero;
+            foreach (Vector2 direction in directions)
+            {
+                if (Vector2.Distance(direction, moveDirection) < currentDistance)
+                {
+                    closestDirection = direction;
+                    currentDistance = Vector2.Distance(direction, moveDirection);
+                }
+            }
+
+            if (closestDirection == Vector2.down)
+            {
+                spriteRenderer.sprite = downSprite;
+            }
+            else if (closestDirection == Vector2.up)
+            {
+                spriteRenderer.sprite = upSprite;
+            }
+            else if (closestDirection == Vector2.left)
+            {
+                spriteRenderer.sprite = leftSprite;
+                spriteRenderer.flipX = false;
+            }
+            else
+            {
+                spriteRenderer.sprite = leftSprite;
+                spriteRenderer.flipX = true;
+            }
+        }
 
         private void HandlePlayerOnStairs()
         {

@@ -111,7 +111,6 @@ MonoBehaviour:
   enemyTrait: 0
   isInSpecialActivity: 0
   specialTrait: 0
-  distanceToSeePlayer: 0
   baseMovementTurn: 0
   baseMovementTurnCounter: 0
   specialActivityTurn: 0

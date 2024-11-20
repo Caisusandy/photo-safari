@@ -53,6 +53,10 @@ MonoBehaviour:
   currentHealth: 3
   movementScript: {fileID: 4308758787273860181}
   cameraScript: {fileID: 1988121760547213233}
+  spriteRenderer: {fileID: 2059933049553498798}
+  upSprite: {fileID: 41544261, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
+  downSprite: {fileID: 1605543356, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
+  leftSprite: {fileID: 292627770, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
   waitForPlayerToReleaseDirection: 0
   enemiesWithPictures: []
 --- !u!114 &4308758787273860181
@@ -128,7 +132,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: 1605543356, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

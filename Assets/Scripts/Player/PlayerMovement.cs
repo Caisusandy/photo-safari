@@ -34,6 +34,12 @@ namespace Safari.Player
             return finalMoveLocation;
         }
 
+        /// <summary>
+        /// Checks collision with walls and check if player is still moving before updating
+        /// target position
+        /// </summary>
+        /// <param name="finalMoveLocation">The calculated position the player will move to</param>
+        /// <returns></returns>
         public bool HandlePlayerMove(Vector3 finalMoveLocation)
         {
             // hit wall
