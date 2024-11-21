@@ -19,7 +19,7 @@ namespace Safari
         public GameObject winText;
         public TextBoxController textBox;
         public SpawnController spawnController;
-        public MapGeneratorTester mapGenerator;
+        public MapGeneratorRunner mapGenerator;
         public Transform stairs;
         public CameraFlash cameraFlash;
 

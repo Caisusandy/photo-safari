@@ -62,42 +62,44 @@ public class SpawnController : MonoBehaviour
 
         Vector2 spawnLocation = Vector2.zero;
         bool validSpawn = false;
-
-        while (!validSpawn)
+        do
         {
             int randomX = Random.Range(bounds.xMin, bounds.xMax);
             int randomY = Random.Range(bounds.yMin, bounds.yMax);
             spawnPoint = new Vector3Int(randomX, randomY, 0);
 
-            if (!PosInWall(spawnPoint) && !PosIsOccupied(spawnPoint))
+            if (PosInWall(spawnPoint) || PosIsOccupied(spawnPoint))
             {
-                List<Vector3Int> adjacentWalls = GetAdjacentWalls();
-                bool isInHallway = PosInHallway(spawnPoint, adjacentWalls);
-                if (isInHallway)
-                {
-                    // pick a random adjacent position
-                    Vector3Int validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
-                    bool validDirection = false;
-                    while (!validDirection)
-                    {
-                        validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
-                        validDirection = !adjacentWalls.Contains(validAdjacentPos);
-                    }
+                continue;
+            }
 
-                    // move in that direction until we are no longer in a hallway
-                    Vector3Int direction = validAdjacentPos - spawnPoint;
-                    while (isInHallway)
-                    {
-                        spawnPoint += direction;
-                        adjacentWalls = GetAdjacentWalls();
-                        isInHallway = !PosInHallway(spawnPoint, adjacentWalls);
-                    }
+            List<Vector3Int> adjacentWalls = GetAdjacentWalls();
+            bool isInHallway = PosInHallway(spawnPoint, adjacentWalls);
+            if (isInHallway)
+            {
+                // pick a random adjacent position
+                Vector3Int validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
+                bool validDirection = false;
+                while (!validDirection)
+                {
+                    validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
+                    validDirection = !adjacentWalls.Contains(validAdjacentPos);
                 }
 
-                spawnLocation = map.floor.CellToWorld(spawnPoint);
-                validSpawn = true;
+                // move in that direction until we are no longer in a hallway
+                Vector3Int direction = validAdjacentPos - spawnPoint;
+                while (isInHallway)
+                {
+                    spawnPoint += direction;
+                    adjacentWalls = GetAdjacentWalls();
+                    isInHallway = !PosInHallway(spawnPoint, adjacentWalls);
+                }
             }
+
+            spawnLocation = map.floor.CellToWorld(spawnPoint);
+            validSpawn = true;
         }
+        while (!validSpawn);
 
         return new Vector3(spawnLocation.x + 0.5f, spawnLocation.y + 0.5f, 0);
     }
@@ -113,22 +115,13 @@ public class SpawnController : MonoBehaviour
 
     bool PosIsOccupied(Vector3Int position)
     {
-        Vector3 positionVector = map.floor.CellToWorld(position);
-        foreach (GameObject gameObject in objectsToSpawn)
-        {
-            if (gameObject.activeSelf && gameObject.transform.position == positionVector)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return EntityController.positionMap.ContainsKey((Vector2Int)position);
     }
 
     bool PosInHallway(Vector3Int positionToCheck, List<Vector3Int> adjacentWalls)
     {
-        bool isInHallway = adjacentWalls.Count >= 5 && (adjacentWalls[0].x == adjacentWalls[1].x || adjacentWalls[0].y == adjacentWalls[1].y);
-        return isInHallway;
+        var chunkPosition = Chunk.ToChunk(positionToCheck);
+        return map.data[chunkPosition.x, chunkPosition.y].isHallway;
     }
 
     List<Vector3Int> GetAdjacentWalls()

@@ -16,7 +16,7 @@ namespace Safari
         const int lowerLeft = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
         const int upperRight = Chunk.SIZE / 2 + hallwaySize / 2 + wallThickness;
         const int netLength = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
-        const float decorDensity = 0.05f;
+        const float decorDensity = 0.1f;
 
         private Map map;
         private MapData mapData;

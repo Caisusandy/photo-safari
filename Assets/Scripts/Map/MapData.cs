@@ -1,8 +1,5 @@
 ﻿using Safari.MapComponents.Generators;
-using Safari.MapComponents.Tiles;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using UnityEngine;
@@ -112,6 +109,20 @@ namespace Safari.MapComponents
         public static Vector3Int ToWorld(Vector2Int chunkPosition)
         {
             return new Vector3Int(chunkPosition.x * SIZE, chunkPosition.y * SIZE, 0);
+        }
+
+        public static Vector2Int ToChunk(Vector3Int positionToCheck)
+        {
+            FromWorld(positionToCheck.x, positionToCheck.y, out var result);
+            return result;
+        }
+
+        public static void FromWorld(int x, int y, out Vector2Int result)
+        {
+            Vector2Int chunkIndex = new(x / SIZE, y / SIZE);
+            if (x < 0) chunkIndex.x = -((-x - 1) / SIZE) - 1;
+            if (y < 0) chunkIndex.y = -((-y - 1) / SIZE) - 1;
+            result = chunkIndex;
         }
     }
 }

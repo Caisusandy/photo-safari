@@ -9,6 +9,7 @@ namespace Safari.MapComponents
         public Tilemap geometry;
         public Tilemap floor;
         public Tilemap decor;
+        internal MapData data;
 
         private void OnDrawGizmosSelected()
         {
