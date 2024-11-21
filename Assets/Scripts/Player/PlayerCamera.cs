@@ -2,6 +2,7 @@ using Safari;
 using Safari.Animals;
 using Safari.Player;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 
@@ -41,23 +42,12 @@ public class PlayerCamera : MonoBehaviour
 
     private string DetectPhotoSubject()
     {
-        List<Vector2> adjacentSpacesToPlayer = new List<Vector2>()
-        {
-            new Vector2(transform.position.x + 1, transform.position.y),
-            new Vector2(transform.position.x - 1, transform.position.y),
-            new Vector2(transform.position.x, transform.position.y + 1),
-            new Vector2(transform.position.x, transform.position.y - 1),
-        };
-
         string photoSubject = null;
-        foreach (Vector2 space in adjacentSpacesToPlayer)
+        Vector2 spaceInFrontOfPlayer = controller.currentDirection + (Vector2)transform.position;
+        var index = Vector2Int.FloorToInt(spaceInFrontOfPlayer);
+        if (EntityController.positionMap.TryGetValue(index, out var enemy))
         {
-            var index = Vector2Int.FloorToInt(space);
-            if (EntityController.positionMap.TryGetValue(index, out var enemy))
-            {
-                photoSubject = enemy.name.Replace("(Clone)", "");
-                break;
-            }
+            photoSubject = enemy.name.Replace("(Clone)", "");
         }
 
         return photoSubject;

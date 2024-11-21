@@ -22,6 +22,8 @@ namespace Safari.Player
         [SerializeField]
         private bool waitForPlayerToReleaseDirection;
 
+        internal Vector2 currentDirection; // the direction that the player is currently facing
+
 
         public List<string> enemiesWithPictures = new List<string>();
 
@@ -82,6 +84,7 @@ namespace Safari.Player
                     return;
                 }
 
+                currentDirection = new Vector2(finalMoveLocation.x, finalMoveLocation.y) - TargetPosition;
                 UpdateSprite(finalMoveLocation);
                 if (movementScript.HandlePlayerMove(finalMoveLocation))
                 {
