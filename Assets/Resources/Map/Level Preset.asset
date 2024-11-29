@@ -26,4 +26,4 @@ MonoBehaviour:
     geometry: {fileID: 11400000, guid: f544800ecc3cc33439ee344f414b7f73, type: 2}
   decors:
   - {fileID: 11400000, guid: 65c185828408dba4f93643e787bfb10c, type: 2}
-  - {fileID: 11400000, guid: b5db3861d77c1d5409cb9ea3265f1e58, type: 2}
+  - {fileID: 11400000, guid: d65d84c8e4ffa3549824f3df95d0ba25, type: 2}
