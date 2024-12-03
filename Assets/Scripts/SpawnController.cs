@@ -7,10 +7,14 @@ using UnityEngine.Tilemaps;
 
 public class SpawnController : MonoBehaviour
 {
-    public Map map;
     public List<GameObject> objectsToSpawn;
     public EnemyManager enemyManager;
     public MainCameraController mainCameraController;
+    public Map map;
+
+    [Header("Debug")]
+    [Tooltip("Spawns everything in the initial room.")]
+    public bool spawnInInitialRoom = false;
 
     private Vector3Int spawnPoint;
     private List<Vector3Int> adjacentPositions
@@ -35,46 +39,81 @@ public class SpawnController : MonoBehaviour
     {
         foreach (GameObject objectToSpawn in objectsToSpawn)
         {
-            Vector3 spawnLocation = GetSpawnLocation(objectToSpawn);
+            RoomPointer roomPointer;
+            if (spawnInInitialRoom || objectToSpawn.tag == "Player")
+            {
+                roomPointer = map.data.chunks[2, 2].instancePointer;
+            }
+            else
+            {
+                roomPointer = GetRandomRoomPointer();
+            }
+
+            Room room = roomPointer.roomData.prefab.GetComponent<Room>();
+            Vector3 spawnLocation = GetSpawnLocation(room, roomPointer);
 
             if (objectToSpawn.tag == "Stairs")
             {
                 spawnLocation.Set(spawnLocation.x, spawnLocation.y, 1.5f);
                 objectToSpawn.transform.position = spawnLocation;
                 Debug.Log($"Stairs position is: {spawnLocation}");
+                continue;
             }
 
             GameObject newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+            newInstance.GetComponent<EntityController>().TargetPosition = spawnLocation;
+
             if (objectToSpawn.tag == "Animal")
             {
                 enemyManager.enemies.Add(newInstance.GetComponent<EnemyController>());
             }
-            else if (objectToSpawn.tag == "Player")
+            else if(objectToSpawn.tag == "Player")
             {
                 mainCameraController.player = newInstance.GetComponent<PlayerController>().transform;
             }
         }
     }
 
-    private Vector3 GetSpawnLocation(GameObject objectToSpawn)
+    private RoomPointer GetRandomRoomPointer()
     {
-        BoundsInt bounds = map.floor.cellBounds;
+        int roomIndex = Random.Range(0, map.data.rooms.Count);
+        RoomPointer roomPointer = map.data.rooms[roomIndex];
+        while (roomPointer == null)
+        {
+            roomIndex = Random.Range(0, map.data.rooms.Count);
+            roomPointer = map.data.rooms[roomIndex];
+        }
 
+        return roomPointer;
+    }
+
+    private Vector3 GetSpawnLocation(Room spawnRoom, RoomPointer spawnRoomPointer)
+    {
+        BoundsInt bounds = spawnRoom.floor.cellBounds;
         Vector2 spawnLocation = Vector2.zero;
         bool validSpawn = false;
+        List<Vector3Int> positionsTried = new List<Vector3Int>();
         do
         {
-            int randomX = Random.Range(bounds.xMin, bounds.xMax);
-            int randomY = Random.Range(bounds.yMin, bounds.yMax);
-            spawnPoint = new Vector3Int(randomX, randomY, 0);
+            do
+            {
+                int xAdjustAmt = spawnRoomPointer.origin.x * Chunk.SIZE - bounds.xMax / 2;
+                int yAdjustAmt = spawnRoomPointer.origin.y * Chunk.SIZE - bounds.yMax / 2;
+                int randomX = Random.Range(bounds.xMin + xAdjustAmt, bounds.xMax + xAdjustAmt);
+                int randomY = Random.Range(bounds.yMin + yAdjustAmt, bounds.yMax + yAdjustAmt);
+                spawnPoint = new Vector3Int(randomX, randomY, 0);
 
-            if (PosInWall(spawnPoint) || PosIsOccupied(spawnPoint))
+            } while (positionsTried.Contains(spawnPoint));
+
+            positionsTried.Add(spawnPoint);
+
+            if (PosInWall(spawnPoint) || EntityController.positionMap.ContainsKey((Vector2Int)spawnPoint))
             {
                 continue;
             }
 
             List<Vector3Int> adjacentWalls = GetAdjacentWalls();
-            bool isInHallway = PosInHallway(spawnPoint, adjacentWalls);
+            bool isInHallway = IsPosInHallway(spawnPoint);
             if (isInHallway)
             {
                 // pick a random adjacent position
@@ -92,7 +131,7 @@ public class SpawnController : MonoBehaviour
                 {
                     spawnPoint += direction;
                     adjacentWalls = GetAdjacentWalls();
-                    isInHallway = !PosInHallway(spawnPoint, adjacentWalls);
+                    isInHallway = IsPosInHallway(spawnPoint);
                 }
             }
 
@@ -113,15 +152,16 @@ public class SpawnController : MonoBehaviour
         return !notInWall;
     }
 
-    bool PosIsOccupied(Vector3Int position)
-    {
-        return EntityController.positionMap.ContainsKey((Vector2Int)position);
-    }
-
-    bool PosInHallway(Vector3Int positionToCheck, List<Vector3Int> adjacentWalls)
+    bool IsPosInHallway(Vector3Int positionToCheck)
     {
         var chunkPosition = Chunk.ToChunk(positionToCheck);
-        return map.data[chunkPosition.x, chunkPosition.y].isHallway;
+        Chunk currentChunk = map.data.chunks[chunkPosition.x, chunkPosition.y];
+        if (currentChunk.instancePointer != null)
+        {
+            return currentChunk.isHallway;
+        }
+
+        return true; // find another place to spawn since a room doesn't exist there.
     }
 
     List<Vector3Int> GetAdjacentWalls()

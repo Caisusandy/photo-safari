@@ -120,8 +120,8 @@ namespace Safari.MapComponents
         public static void FromWorld(int x, int y, out Vector2Int result)
         {
             Vector2Int chunkIndex = new(x / SIZE, y / SIZE);
-            if (x < 0) chunkIndex.x = -((-x - 1) / SIZE) - 1;
-            if (y < 0) chunkIndex.y = -((-y - 1) / SIZE) - 1;
+            if (x < 0) chunkIndex.x = 0;
+            if (y < 0) chunkIndex.y = 0;
             result = chunkIndex;
         }
     }
