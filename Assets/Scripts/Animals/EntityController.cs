@@ -65,29 +65,20 @@ namespace Safari.Animals
             Debug.Log(string.Join('\n', positionMap.Select(p => $"{p.Key}: {p.Value}")));
         }
 
-        protected void UpdateSprite(Vector3 finalMoveLocation)
+        private void ChangeSprite(Vector2 direction)
         {
-            Vector2 direction = new Vector2(finalMoveLocation.x, finalMoveLocation.y) - TargetPosition;
-
-            // this is just for the butterfly right now so the only directions will be left and right
-            if (animator != null)
-            {
-                animator.SetFloat("Horizontal", Mathf.Clamp(direction.x, -1f, 1f));
-                return;
-            }
-
             if (direction.y < 0 && downSprite != null)
             {
                 spriteRenderer.sprite = downSprite;
                 return;
             }
-            
+
             if (direction.y > 0 && upSprite != null)
             {
                 spriteRenderer.sprite = upSprite;
                 return;
             }
-            
+
             if (direction.x < 0)
             {
                 if (leftSprite != null)
@@ -103,7 +94,7 @@ namespace Safari.Animals
 
                 return;
             }
-            
+
             if (direction.x > 0)
             {
                 if (rightSprite != null)
@@ -119,6 +110,25 @@ namespace Safari.Animals
 
                 return;
             }
+        }
+
+        protected void UpdateSprite(Direction direction)
+        {
+            ChangeSprite(DirectionExtensions.ToVector2(direction));
+        }
+
+        protected void UpdateSprite(Vector3 finalMoveLocation)
+        {
+            Vector2 direction = new Vector2(finalMoveLocation.x, finalMoveLocation.y) - TargetPosition;
+
+            // this is just for the butterfly right now so the only directions will be left and right
+            if (animator != null)
+            {
+                animator.SetFloat("Horizontal", Mathf.Clamp(direction.x, -1f, 1f));
+                return;
+            }
+
+            ChangeSprite(direction);
         }
     }
 }

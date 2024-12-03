@@ -1,9 +1,6 @@
 using Safari;
 using Safari.Animals;
 using Safari.Player;
-using System.Collections.Generic;
-using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
@@ -43,7 +40,7 @@ public class PlayerCamera : MonoBehaviour
     private string DetectPhotoSubject()
     {
         string photoSubject = null;
-        Vector2 spaceInFrontOfPlayer = controller.currentDirection + (Vector2)transform.position;
+        Vector2 spaceInFrontOfPlayer = controller.currentDirection.ToVector2() + (Vector2)transform.position;
         var index = Vector2Int.FloorToInt(spaceInFrontOfPlayer);
         if (EntityController.positionMap.TryGetValue(index, out var enemy))
         {

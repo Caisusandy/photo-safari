@@ -14,21 +14,23 @@ namespace Safari.Player
         public Vector3 DetermineMoveLocation()
         {
             Vector3 finalMoveLocation = controller.TargetPosition;
-            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+
+            switch (controller.inputDirection)
             {
-                finalMoveLocation += new Vector3(-1, 0f, 0f);
-            }
-            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-            {
-                finalMoveLocation += new Vector3(1f, 0f, 0f);
-            }
-            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-            {
-                finalMoveLocation += new Vector3(0, 1f, 0f);
-            }
-            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-            {
-                finalMoveLocation += new Vector3(0f, -1f, 0f);
+                case Direction.Right:
+                    finalMoveLocation += new Vector3(1f, 0f, 0f);
+                    break;
+                case Direction.Up:
+                    finalMoveLocation += new Vector3(0, 1f, 0f);
+                    break;
+                case Direction.Left:
+                    finalMoveLocation += new Vector3(-1, 0f, 0f);
+                    break;
+                case Direction.Down:
+                    finalMoveLocation += new Vector3(0f, -1f, 0f);
+                    break;
+                default:
+                    break;
             }
 
             return finalMoveLocation;

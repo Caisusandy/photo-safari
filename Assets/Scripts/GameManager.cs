@@ -20,8 +20,11 @@ namespace Safari
         public TextBoxController textBox;
         public SpawnController spawnController;
         public MapGeneratorRunner mapGenerator;
+
+        [Header("Player Variables")]
         public Transform stairs;
         public CameraFlash cameraFlash;
+        public GameObject targetTile;
 
         public static event Action<GameState> OnGameStateChange;
 
@@ -61,7 +64,8 @@ namespace Safari
             State = GameState.PLAYERTURN;
             gameOverText.SetActive(false);
             winText.SetActive(false);
-            textBox.AddNewMessage(new Message(3f, "Use the arrow keys or WASD to move. Press SPACE to take a picture of the animals. Once you've finished exploring use the stairs to advance."));
+            targetTile.SetActive(false);
+            textBox.AddNewMessage(new Message(3f, "Use the arrow keys or WASD to move. Press SPACE to take a picture of the animals and shift to adjust your angle. Once you've finished exploring use the stairs to advance."));
         }
 
         private void Update()

@@ -22,8 +22,8 @@ namespace Safari.Player
         [SerializeField]
         private bool waitForPlayerToReleaseDirection;
 
-        internal Vector2 currentDirection; // the direction that the player is currently facing
-
+        internal Direction currentDirection = Direction.Down; // the direction that the player is currently facing
+        internal Direction inputDirection = Direction.None;
 
         public List<string> enemiesWithPictures = new List<string>();
 
@@ -72,10 +72,47 @@ namespace Safari.Player
             if (!acceptingPlayerInput)
                 return;
 
+
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                if (GameManager.instance.targetTile.activeSelf)
+                {
+                    GameManager.instance.targetTile.SetActive(false);
+                }
+
+                cameraScript.TakePicture();
+                GameManager.instance.State = GameState.ENEMYTURN;
+                return;
+            }
+
+            inputDirection = GetInputDirection();
+            if (inputDirection != Direction.None)
+            {
+                currentDirection = inputDirection;
+            }
+
+            UpdateSprite(currentDirection);
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            {
+                GameManager.instance.targetTile.transform.position = transform.position + currentDirection.ToVector3();
+
+                if (!GameManager.instance.targetTile.activeSelf)
+                {
+                    GameManager.instance.targetTile.SetActive(true);
+                }
+
+                return;
+            }
+
+            if (GameManager.instance.targetTile.activeSelf)
+            {
+                GameManager.instance.targetTile.SetActive(false);
+            }
+
             Vector3 finalMoveLocation = movementScript.DetermineMoveLocation();
             if (Vector2.Distance(finalMoveLocation, TargetPosition) != 0)
             {
-                var hasEnemy = positionMap.TryGetValue(Vector2Int.FloorToInt(finalMoveLocation), out var enemy);// = EnemyManager.instance.CouldHitEnemy(finalMoveLocation);
+                var hasEnemy = positionMap.TryGetValue(Vector2Int.FloorToInt(finalMoveLocation), out var enemy);
                 if (hasEnemy)
                 {
                     // take damage and don't move
@@ -84,17 +121,12 @@ namespace Safari.Player
                     return;
                 }
 
-                currentDirection = new Vector2(finalMoveLocation.x, finalMoveLocation.y) - TargetPosition;
-                UpdateSprite(finalMoveLocation);
                 if (movementScript.HandlePlayerMove(finalMoveLocation))
                 {
                     GameManager.instance.State = GameState.ENEMYTURN;
                 }
-            }
-            else if (Input.GetKeyUp(KeyCode.Space))
-            {
-                cameraScript.TakePicture();
-                GameManager.instance.State = GameState.ENEMYTURN;
+
+                return;
             }
         }
 
@@ -130,6 +162,30 @@ namespace Safari.Player
             else
             {
                 GameManager.instance.State = GameState.WON;
+            }
+        }
+
+        internal Direction GetInputDirection()
+        {
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                return Direction.Left;
+            }
+            else if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+                return Direction.Right;
+            }
+            else if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+            {
+                return Direction.Up;
+            }
+            else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+            {
+                return Direction.Down;
+            }
+            else
+            {
+                return Direction.None;
             }
         }
     }
