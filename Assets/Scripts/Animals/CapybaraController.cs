@@ -77,7 +77,7 @@ namespace Safari.Animals
 
             finalMoveLocation += currentDir;
             patrolCount++;
-            HandleEnemyMove(finalMoveLocation);
+            StartEnemyTurn(finalMoveLocation);
         }
 
         private void MoveFleeing(Vector2 detectedJaguarPos)
@@ -111,7 +111,7 @@ namespace Safari.Animals
             }
 
             finalMoveLocation = TargetPosition + bestDirection;
-            HandleEnemyMove(finalMoveLocation);
+            StartEnemyTurn(finalMoveLocation);
         }
 
 

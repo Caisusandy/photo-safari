@@ -119,7 +119,13 @@ namespace Safari.Animals
         public virtual void MoveRandom()
         {
             Vector3 finalMoveLocation = PickRandomMoveLocation();
+            StartEnemyTurn(finalMoveLocation);
+        }
+
+        public virtual void StartEnemyTurn(Vector2 finalMoveLocation)
+        {
             HandleEnemyMove(finalMoveLocation);
+            finishedTurn = true;
         }
 
         public virtual void HandleEnemyMove(Vector2 finalMoveLocation)
@@ -130,6 +136,7 @@ namespace Safari.Animals
                 // check for player pos
                 // use < 0.1 to avoid float calculation
                 var rounded = Vector2Int.FloorToInt(finalMoveLocation);
+                UpdateSprite(finalMoveLocation);
                 if (positionMap.TryGetValue(rounded, out var entity) && entity is PlayerController player)
                 {
                     HandlePlayerCollision(player);
@@ -137,12 +144,9 @@ namespace Safari.Animals
 
                 if (CanMove(finalMoveLocation))
                 {
-                    UpdateSprite(finalMoveLocation);
                     TargetPosition = finalMoveLocation;
                 }
             }
-
-            finishedTurn = true;
         }
 
         public virtual void HandlePlayerCollision(PlayerController player)

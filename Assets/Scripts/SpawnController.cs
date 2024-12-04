@@ -155,7 +155,7 @@ public class SpawnController : MonoBehaviour
     bool IsPosInHallway(Vector3Int positionToCheck)
     {
         var chunkPosition = Chunk.ToChunk(positionToCheck);
-        Chunk currentChunk = map.data.chunks[chunkPosition.x, chunkPosition.y];
+        Chunk currentChunk = map.data.chunks[Mathf.Clamp(chunkPosition.x, 0, 31), Mathf.Clamp(chunkPosition.y, 0, 31)];
         if (currentChunk.instancePointer != null)
         {
             return currentChunk.isHallway;

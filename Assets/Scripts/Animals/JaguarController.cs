@@ -1,4 +1,5 @@
 using Safari.Player;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace Safari.Animals
                     entity is PlayerController player;
                 if (playerInView)
                 {
-                    return pos;
+                    return new Vector2(pos.x + 0.5f, pos.y + 0.5f);
                 }
             }
 
@@ -45,7 +46,7 @@ namespace Safari.Animals
                 case EnemyTrait.TRACEPLAYER:
                     if (detectedPlayerPos != null)
                     {
-                        MoveTracePlayer(detectedPlayerPos.Value);
+                        StartCoroutine(MoveTracePlayer(detectedPlayerPos.Value));
                         moveAmount = 2;
                         Debug.Log($"{name} is tracing player");
                     }
@@ -60,38 +61,55 @@ namespace Safari.Animals
             }
         }
 
-        public virtual void MoveTracePlayer(Vector2 detectedPlayerPos)
+        private IEnumerator MoveTracePlayer(Vector2 detectedPlayerPos)
         {
-            Vector3 finalMoveLocation = TargetPosition;
-
-            // iterate through possible directions
-            float bestDistance = Vector2.Distance(finalMoveLocation, detectedPlayerPos);
-            Vector2 bestDirection = Vector2.up;
-            List<Vector2> possibleDirs = new List<Vector2>()
+            for (int i = 0; i < moveAmount; i++)
             {
-                Vector2.up,
-                Vector2.down,
-                Vector2.left,
-                Vector2.right,
-            };
-            foreach (var direction in possibleDirs)
-            {
-                finalMoveLocation = TargetPosition + direction;
-                var rounded = Vector2Int.FloorToInt(finalMoveLocation);
-                float currentDistance = Vector2.Distance(finalMoveLocation, detectedPlayerPos);
+                Vector3 finalMoveLocation = TargetPosition;
 
-                bool dirIsValid = currentDistance < bestDistance &&
-                    !Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer) &&
-                    !positionMap.TryGetValue(rounded, out var entity);
-                if (dirIsValid)
+                // iterate through possible directions
+                float bestDistance = Vector2.Distance(finalMoveLocation, detectedPlayerPos);
+                Vector2 bestDirection = Vector2.up;
+                List<Vector2> possibleDirs = new List<Vector2>()
                 {
-                    bestDistance = currentDistance;
-                    bestDirection = direction;
+                    Vector2.up,
+                    Vector2.down,
+                    Vector2.left,
+                    Vector2.right,
+                };
+                foreach (var direction in possibleDirs)
+                {
+                    finalMoveLocation = TargetPosition + direction;
+                    var rounded = Vector2Int.FloorToInt(finalMoveLocation);
+                    float currentDistance = Vector2.Distance(finalMoveLocation, detectedPlayerPos);
+
+                    bool dirIsValid = currentDistance < bestDistance &&
+                        !Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer) &&
+                        !(positionMap.TryGetValue(rounded, out var entity)
+                        && !(entity is PlayerController));
+                    if (dirIsValid)
+                    {
+                        bestDistance = currentDistance;
+                        bestDirection = direction;
+                    }
+                }
+
+                finalMoveLocation = TargetPosition + bestDirection;
+                HandleEnemyMove(finalMoveLocation);
+
+                if (TargetPosition != new Vector2(finalMoveLocation.x, finalMoveLocation.y))
+                {
+                    // collision occurred with player so we don't want to move anymore
+                    break;
+                }
+
+                if (i < moveAmount)
+                {
+                    yield return new WaitUntil(() => Vector2.Distance(transform.position, TargetPosition) <= .05f);
                 }
             }
 
-            finalMoveLocation = TargetPosition + bestDirection * moveAmount;
-            HandleEnemyMove(finalMoveLocation);
+            finishedTurn = true;
         }
     }
 }

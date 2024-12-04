@@ -13,15 +13,18 @@ public class PlayerCamera : MonoBehaviour
 
         EnemyController animal = DetectPhotoSubject();
 
-        if (!GameManager.instance.enemiesWithPictures.Contains(animal) && animal != null)
+        if (animal != null)
         {
-            GameManager.instance.enemiesWithPictures.Add(animal);
-            UpdateStatusCounter(animal.name);
-        }
+            if (!GameManager.instance.enemiesWithPictures.Contains(animal))
+            {
+                GameManager.instance.enemiesWithPictures.Add(animal);
+                UpdateStatusCounter(animal.name);
+            }
 
-        string photoSubject = animal.name.Remove(animal.name.IndexOf("("));
-        string message = GetPictureMessage(photoSubject);
-        TextBoxController.instance.AddNewMessage(new Message(message));
+            string photoSubject = animal.name.Remove(animal.name.IndexOf("("));
+            string message = GetPictureMessage(photoSubject);
+            TextBoxController.instance.AddNewMessage(new Message(message));
+        }
     }
 
     private void UpdateStatusCounter(string photoSubject)

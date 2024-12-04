@@ -1710,11 +1710,7 @@ MonoBehaviour:
   stairs: {fileID: 54481479}
   cameraFlash: {fileID: 140628914}
   targetTile: {fileID: 986961}
-  minPhotosRequired: 0
-  numButterfliesRequired: 0
-  numCapybarasRequired: 0
-  numFrogsRequired: 0
-  numJaguarsRequired: 0
+  minPhotosRequired: 2
 --- !u!4 &1207776195
 Transform:
   m_ObjectHideFlags: 0

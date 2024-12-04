@@ -60,7 +60,6 @@ MonoBehaviour:
   movementScript: {fileID: 4308758787273860181}
   cameraScript: {fileID: 1988121760547213233}
   waitForPlayerToReleaseDirection: 0
-  enemiesWithPictures: []
 --- !u!114 &4308758787273860181
 MonoBehaviour:
   m_ObjectHideFlags: 0
