@@ -130,5 +130,22 @@ namespace Safari.Animals
 
             ChangeSprite(direction);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            EntityController compareTo = obj as EntityController;
+            return name == compareTo.name;
+        }
+
+        public override int GetHashCode()
+        {
+            // TODO: write your implementation of GetHashCode() here
+            return name.GetHashCode();
+        }
     }
 }

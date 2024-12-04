@@ -1,10 +1,7 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.VersionControl;
 
 public struct Message
 {
@@ -20,6 +17,26 @@ public struct Message
         totalTimeToDisplay = 2.5f;
         messageToDisplay = message;
         startTime = 0f;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Message)
+        {
+            return ((Message)obj).messageToDisplay == messageToDisplay;
+        }
+
+        if (obj is string)
+        {
+            return (string)obj == messageToDisplay;
+        }
+
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return messageToDisplay.GetHashCode();
     }
 
     public float totalTimeToDisplay;
@@ -113,26 +130,28 @@ public class TextBoxController : MonoBehaviour
 
     public void AddNewMessage(Message newMessage)
     {
-        if (!waitForSpace)
+        if (!messagesDisplaying.Contains(newMessage))
         {
-            newMessage.startTime = elapsedTime;
-            if (!string.IsNullOrEmpty(textBoxMessage))
+            if (!waitForSpace)
             {
-                textBoxMessage += "\n";
+                newMessage.startTime = elapsedTime;
+                if (!string.IsNullOrEmpty(textBoxMessage))
+                {
+                    textBoxMessage += "\n";
+                }
+
+                textBoxMessage += newMessage.messageToDisplay;
+                messagesDisplaying.Enqueue(newMessage);
+
+                if (textMesh.isTextOverflowing)
+                {
+                    waitForSpace = true;
+                }
             }
-
-            textBoxMessage += newMessage.messageToDisplay;
-            messagesDisplaying.Enqueue(newMessage);
-
-            if (textMesh.isTextOverflowing)
+            else
             {
-                waitForSpace = true;
+                messageBacklog.Enqueue(newMessage);
             }
         }
-        else
-        {
-            messageBacklog.Enqueue(newMessage);
-        }
-
     }
 }

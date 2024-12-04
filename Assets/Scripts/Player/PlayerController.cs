@@ -25,8 +25,6 @@ namespace Safari.Player
         internal Direction currentDirection = Direction.Down; // the direction that the player is currently facing
         internal Direction inputDirection = Direction.None;
 
-        public List<string> enemiesWithPictures = new List<string>();
-
         public int CurrentHealth
         {
             get => currentHealth; set
@@ -115,9 +113,17 @@ namespace Safari.Player
                 var hasEnemy = positionMap.TryGetValue(Vector2Int.FloorToInt(finalMoveLocation), out var enemy);
                 if (hasEnemy)
                 {
-                    // take damage and don't move
-                    CurrentHealth--;
-                    TextBoxController.instance.AddNewMessage(new Message($"You walked into the {enemy.name.Replace("(Clone)", "")} and it attacked you!")); // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
+                    if (((EnemyController)enemy).isFragile)
+                    {
+                        Destroy(enemy);
+                    }
+                    else
+                    {
+                        // take damage and don't move
+                        CurrentHealth--;
+                        TextBoxController.instance.AddNewMessage(new Message($"You walked into the {enemy.name.Replace("(Clone)", "")} and it attacked you!")); // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
+                    }
+
                     return;
                 }
 
@@ -144,12 +150,16 @@ namespace Safari.Player
 
         private void HandlePlayerOnStairs()
         {
-            int enemyCount = EnemyManager.instance.enemies.Count;
-            int numEnemiesWithPictures = enemiesWithPictures.Count;
-            if (numEnemiesWithPictures < enemyCount)
+            GameManager gameManager = GameManager.instance;
+            int totalRemainingEnemies = gameManager.numButterfliesRequired + gameManager.numCapybarasRequired + gameManager.numFrogsRequired + gameManager.numJaguarsRequired;
+            if (totalRemainingEnemies == 0)
             {
-                string winConMessage = $"You still need to take a picture of {enemyCount - numEnemiesWithPictures} animal";
-                if (enemyCount - numEnemiesWithPictures > 1)
+                GameManager.instance.State = GameState.WON;
+            }
+            else
+            {
+                string winConMessage = $"You still need to take a picture of {totalRemainingEnemies} animal";
+                if (totalRemainingEnemies > 1)
                 {
                     winConMessage += "s";
                 }
@@ -158,10 +168,6 @@ namespace Safari.Player
                 {
                     TextBoxController.instance.AddNewMessage(new Message(winConMessage));
                 }
-            }
-            else
-            {
-                GameManager.instance.State = GameState.WON;
             }
         }
 

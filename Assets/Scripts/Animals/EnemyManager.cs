@@ -8,13 +8,25 @@ namespace Safari.Animals
     public class EnemyManager : MonoBehaviour
     {
         public static EnemyManager instance;
-
-        public List<EnemyController> enemies;
         public GameManager gameManager;
+        public List<EnemyController> enemies;
+        internal int butterflyTotal = 0;
+        internal int capybaraTotal = 0;
+        internal int jaguarTotal = 0;
+        internal int frogTotal = 0;
 
         private void Awake()
         {
             instance = this;
+        }
+
+        internal void DetermineAnimalTotals()
+        {
+            butterflyTotal = enemies.Count(animal => animal.name.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase));
+            capybaraTotal = enemies.Count(animal => animal.name.Contains("capybara", System.StringComparison.CurrentCultureIgnoreCase));
+            frogTotal = enemies.Count(animal => animal.name.Contains("frog", System.StringComparison.CurrentCultureIgnoreCase));
+            jaguarTotal = enemies.Count(animal => animal.name.Contains("jaguar", System.StringComparison.CurrentCultureIgnoreCase));
+
         }
 
         void Update()
@@ -37,6 +49,5 @@ namespace Safari.Animals
             }
             return null;
         }
-
     }
 }

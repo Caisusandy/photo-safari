@@ -65,7 +65,7 @@ public class SpawnController : MonoBehaviour
 
             if (objectToSpawn.tag == "Animal")
             {
-                enemyManager.enemies.Add(newInstance.GetComponent<EnemyController>());
+                EnemyManager.instance.enemies.Add(newInstance.GetComponent<EnemyController>());
             }
             else if(objectToSpawn.tag == "Player")
             {

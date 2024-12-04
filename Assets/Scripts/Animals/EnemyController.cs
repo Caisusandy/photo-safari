@@ -1,5 +1,4 @@
 using Safari.Player;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Safari.Animals
@@ -52,7 +51,13 @@ namespace Safari.Animals
         }
 
         protected virtual void OnDestroy()
-        { }
+        {
+            // update animal count
+            if (name.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase))
+            {
+                EnemyManager.instance.butterflyTotal--;
+            }
+        }
 
         private void GameManager_OnGameStateChange(GameState obj)
         {
@@ -91,14 +96,14 @@ namespace Safari.Animals
 
         protected Vector3 PickRandomMoveLocation()
         {
-            int moveBy = UnityEngine.Random.Range(-1, 2);
+            int moveBy = Random.Range(-1, 2);
             while (moveBy == 0)
             {
-                moveBy = UnityEngine.Random.Range(-1, 2);
+                moveBy = Random.Range(-1, 2);
             }
 
             Vector3 finalMoveLocation = TargetPosition;
-            if (UnityEngine.Random.Range(0, 2) == 0)
+            if (Random.Range(0, 2) == 0)
             {
                 finalMoveLocation += new Vector3(moveBy, 0f, 0f);
             }
