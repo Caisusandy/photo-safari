@@ -36,6 +36,12 @@ namespace Safari.MapComponents
             return rect.xMin < 0 || rect.yMin < 0 || rect.xMax >= size.x || rect.yMax >= size.y;
         }
 
+        public bool IsOutOfBound(Vector2Int chunkPosition)
+        {
+            var size = this.RectSize;
+            return chunkPosition.x < 0 || chunkPosition.y < 0 || chunkPosition.x >= size.x || chunkPosition.y >= size.y;
+        }
+
         public bool IsEmpty(RectInt rect, bool outOfBoundAsFalse = false)
         {
             var size = this.RectSize;

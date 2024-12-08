@@ -95,7 +95,7 @@ public class SpawnController : MonoBehaviour
                     EnemyManager.instance.enemies.Add(newInstance.GetComponent<EnemyController>());
                 }
             }
-            else if(objectToSpawn.tag == "Player")
+            else if (objectToSpawn.tag == "Player")
             {
                 mainCameraController.player = newInstance.GetComponent<PlayerController>().transform;
             }
@@ -206,6 +206,7 @@ public class SpawnController : MonoBehaviour
     bool IsPosInHallway(Vector3Int positionToCheck)
     {
         var chunkPosition = Chunk.ToChunk(positionToCheck);
+        if (map.data.IsOutOfBound(chunkPosition)) return false;
         Chunk currentChunk = map.data.chunks[Mathf.Clamp(chunkPosition.x, 0, 31), Mathf.Clamp(chunkPosition.y, 0, 31)];
         if (currentChunk.instancePointer != null)
         {
