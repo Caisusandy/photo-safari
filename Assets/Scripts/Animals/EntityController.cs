@@ -139,6 +139,9 @@ namespace Safari.Animals
             }
 
             EntityController compareTo = obj as EntityController;
+            if (this == null && compareTo == null) return true;
+            if(this ==null)return false;
+            if (null== compareTo) return false;
             return name == compareTo.name;
         }
 

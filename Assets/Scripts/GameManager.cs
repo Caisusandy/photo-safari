@@ -38,7 +38,7 @@ namespace Safari
         internal int numFrogsRequired = 0;
         internal int numJaguarsRequired = 0;
 
-        internal List<EnemyController> enemiesWithPictures = new List<EnemyController>();
+        internal List<string> enemiesWithPictures = new List<string>();
 
         public GameState State
         {

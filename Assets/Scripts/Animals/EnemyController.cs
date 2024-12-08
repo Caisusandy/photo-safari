@@ -57,6 +57,10 @@ namespace Safari.Animals
             {
                 EnemyManager.instance.butterflyTotal--;
             }
+
+            EnemyManager.instance.enemies.Remove(this);
+            positionMap.Remove(Index);
+            Debug.Log($"Destroyed {name}");
         }
 
         private void GameManager_OnGameStateChange(GameState obj)

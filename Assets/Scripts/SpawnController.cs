@@ -12,6 +12,18 @@ public class SpawnController : MonoBehaviour
     public MainCameraController mainCameraController;
     public Map map;
 
+    [Header("Spawn Rates (in %)")]
+    public float jaguarSpawnRate = 50;
+    public float frogSpawnRate = 50;
+    public float capybaraSpawnRate = 50;
+    public float butterflySpawnRate = 50;
+
+    [Header("Max Amount of each Animal")]
+    public int maxJaguars = 5;
+    public int maxFrogs = 5;
+    public int maxCapybaras = 5;
+    public int maxButterflies = 5;
+
     [Header("Debug")]
     [Tooltip("Spawns everything in the initial room.")]
     public bool spawnInInitialRoom = false;
@@ -39,18 +51,7 @@ public class SpawnController : MonoBehaviour
     {
         foreach (GameObject objectToSpawn in objectsToSpawn)
         {
-            RoomPointer roomPointer;
-            if (spawnInInitialRoom || objectToSpawn.tag == "Player")
-            {
-                roomPointer = map.data.chunks[2, 2].instancePointer;
-            }
-            else
-            {
-                roomPointer = GetRandomRoomPointer();
-            }
-
-            Room room = roomPointer.roomData.prefab.GetComponent<Room>();
-            Vector3 spawnLocation = GetSpawnLocation(room, roomPointer);
+            Vector3 spawnLocation = GetSpawnLocation(objectToSpawn);
 
             if (objectToSpawn.tag == "Stairs")
             {
@@ -66,12 +67,62 @@ public class SpawnController : MonoBehaviour
             if (objectToSpawn.tag == "Animal")
             {
                 EnemyManager.instance.enemies.Add(newInstance.GetComponent<EnemyController>());
+
+                // how many more of that animal to spawn
+                int numAnimalsToSpawn = 0;
+                if (objectToSpawn.name.Contains("frog", System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    numAnimalsToSpawn = Random.Range(0, maxFrogs);
+                }
+                else if (objectToSpawn.name.Contains("jaguar", System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    numAnimalsToSpawn = Random.Range(0, maxJaguars);
+                }
+                else if (objectToSpawn.name.Contains("capybara", System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    numAnimalsToSpawn = Random.Range(0, maxCapybaras);
+                }
+                else if (objectToSpawn.name.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    numAnimalsToSpawn = Random.Range(0, maxButterflies);
+                }
+
+                for (int i = 0; i < numAnimalsToSpawn; i++)
+                {
+                    spawnLocation = GetSpawnLocation(objectToSpawn);
+                    newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+                    newInstance.GetComponent<EntityController>().TargetPosition = spawnLocation;
+                    EnemyManager.instance.enemies.Add(newInstance.GetComponent<EnemyController>());
+                }
             }
             else if(objectToSpawn.tag == "Player")
             {
                 mainCameraController.player = newInstance.GetComponent<PlayerController>().transform;
             }
         }
+    }
+
+    private Vector3 GetSpawnLocation(GameObject objectToSpawn)
+    {
+        RoomPointer roomPointer = GetSpawnRoomPointer(objectToSpawn);
+        Room room = roomPointer.roomData.prefab.GetComponent<Room>();
+        Vector3 spawnLocation = GetSpawnVector(room, roomPointer);
+        return spawnLocation;
+    }
+
+    private RoomPointer GetSpawnRoomPointer(GameObject objectToSpawn)
+    {
+        RoomPointer roomPointer;
+        if (spawnInInitialRoom || objectToSpawn.tag == "Player")
+        {
+            roomPointer = map.data.chunks[2, 2].instancePointer;
+        }
+        else
+        {
+            roomPointer = GetRandomRoomPointer();
+        }
+
+        return roomPointer;
     }
 
     private RoomPointer GetRandomRoomPointer()
@@ -87,7 +138,7 @@ public class SpawnController : MonoBehaviour
         return roomPointer;
     }
 
-    private Vector3 GetSpawnLocation(Room spawnRoom, RoomPointer spawnRoomPointer)
+    private Vector3 GetSpawnVector(Room spawnRoom, RoomPointer spawnRoomPointer)
     {
         BoundsInt bounds = spawnRoom.floor.cellBounds;
         Vector2 spawnLocation = Vector2.zero;

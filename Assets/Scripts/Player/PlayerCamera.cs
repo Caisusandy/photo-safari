@@ -15,9 +15,9 @@ public class PlayerCamera : MonoBehaviour
 
         if (animal != null)
         {
-            if (!GameManager.instance.enemiesWithPictures.Contains(animal))
+            if (!GameManager.instance.enemiesWithPictures.Contains(animal.name))
             {
-                GameManager.instance.enemiesWithPictures.Add(animal);
+                GameManager.instance.enemiesWithPictures.Add(animal.name);
                 UpdateStatusCounter(animal.name);
             }
 
@@ -29,19 +29,19 @@ public class PlayerCamera : MonoBehaviour
 
     private void UpdateStatusCounter(string photoSubject)
     {
-        if (photoSubject.Contains("frog", System.StringComparison.CurrentCultureIgnoreCase))
+        if (photoSubject.Contains("frog", System.StringComparison.CurrentCultureIgnoreCase) && GameManager.instance.numFrogsRequired > 0)
         {
             GameManager.instance.numFrogsRequired--;
         }
-        else if (photoSubject.Contains("capybara", System.StringComparison.CurrentCultureIgnoreCase))
+        else if (photoSubject.Contains("capybara", System.StringComparison.CurrentCultureIgnoreCase) && GameManager.instance.numCapybarasRequired > 0)
         {
             GameManager.instance.numCapybarasRequired--;
         }
-        else if (photoSubject.Contains("jaguar", System.StringComparison.CurrentCultureIgnoreCase))
+        else if (photoSubject.Contains("jaguar", System.StringComparison.CurrentCultureIgnoreCase) && GameManager.instance.numJaguarsRequired > 0)
         {
             GameManager.instance.numJaguarsRequired--;
         }
-        else if (photoSubject.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase))
+        else if (photoSubject.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase) && GameManager.instance.numButterfliesRequired > 0)
         {
             GameManager.instance.numButterfliesRequired--;
         }
