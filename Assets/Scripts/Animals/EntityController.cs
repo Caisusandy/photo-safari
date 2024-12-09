@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -21,6 +22,7 @@ namespace Safari.Animals
         public Sprite leftSprite;
         public Sprite rightSprite;
         public Animator animator;
+        public bool isDestroyed;
 
         protected Vector2Int Index => index;
 
@@ -131,24 +133,17 @@ namespace Safari.Animals
             ChangeSprite(direction);
         }
 
-        public override bool Equals(object obj)
+        [ContextMenu(nameof(PrintPositionDebug))]
+        public void PrintPositionDebug()
         {
-            if (obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            EntityController compareTo = obj as EntityController;
-            if (this == null && compareTo == null) return true;
-            if(this ==null)return false;
-            if (null== compareTo) return false;
-            return name == compareTo.name;
+            Debug.Log($"{index} {positionMap.TryGetValue(index, out var value)} {value == this}");
         }
 
-        public override int GetHashCode()
+        internal void Destroy()
         {
-            // TODO: write your implementation of GetHashCode() here
-            return name.GetHashCode();
+            if (isDestroyed) return;
+            Destroy(gameObject);
+            isDestroyed = true;
         }
     }
 }

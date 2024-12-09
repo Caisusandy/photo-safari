@@ -20,10 +20,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aa10ae0f0f6b0fb4fb7f5eb4a7301cb5, type: 2}
   - {fileID: 11400000, guid: 66f0d32719be9814abcf8063c84556b2, type: 2}
   - {fileID: 11400000, guid: 66f0d32719be9814abcf8063c84556b2, type: 2}
+  - {fileID: 11400000, guid: 6eaadcb0c6beb854bae646165c31feb9, type: 2}
+  - {fileID: 11400000, guid: da41db19d53c4fc4db47417667f61691, type: 2}
+  - {fileID: 11400000, guid: 88298725b7968714cbae99bb18837fc8, type: 2}
+  - {fileID: 11400000, guid: 88298725b7968714cbae99bb18837fc8, type: 2}
   finalRoom: {fileID: 11400000, guid: 186d63e856df66b4f92d9f10e09dab0f, type: 2}
   hallwayPreset:
     floor: {fileID: 11400000, guid: 3cc2ecefaf6d78e4bafd3b0aed604726, type: 2}
     geometry: {fileID: 11400000, guid: f544800ecc3cc33439ee344f414b7f73, type: 2}
   decors:
   - {fileID: 11400000, guid: 65c185828408dba4f93643e787bfb10c, type: 2}
+  - {fileID: 11400000, guid: b5db3861d77c1d5409cb9ea3265f1e58, type: 2}
   - {fileID: 11400000, guid: d65d84c8e4ffa3549824f3df95d0ba25, type: 2}
+  - {fileID: 11400000, guid: d65d84c8e4ffa3549824f3df95d0ba25, type: 2}
+  - {fileID: 11400000, guid: d65d84c8e4ffa3549824f3df95d0ba25, type: 2}
+  - {fileID: 11400000, guid: 1c033e4e7b49c844dae8329294386ac8, type: 2}

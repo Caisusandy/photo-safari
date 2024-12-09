@@ -33,12 +33,12 @@ namespace Safari
 
         [Header("Win Requirement Variables")]
         public int minPhotosRequired;
-        internal int numButterfliesRequired = 0;
-        internal int numCapybarasRequired = 0;
-        internal int numFrogsRequired = 0;
-        internal int numJaguarsRequired = 0;
+        public int numButterfliesRequired = 0;
+        public int numCapybarasRequired = 0;
+        public int numFrogsRequired = 0;
+        public int numJaguarsRequired = 0;
 
-        internal List<string> enemiesWithPictures = new List<string>();
+        public List<EnemyController> enemiesWithPictures = new List<EnemyController>();
 
         public GameState State
         {

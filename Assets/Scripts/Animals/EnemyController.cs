@@ -52,6 +52,8 @@ namespace Safari.Animals
 
         protected virtual void OnDestroy()
         {
+            GameManager.OnGameStateChange -= GameManager_OnGameStateChange;
+
             // update animal count
             if (name.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase))
             {
@@ -59,7 +61,8 @@ namespace Safari.Animals
             }
 
             EnemyManager.instance.enemies.Remove(this);
-            positionMap.Remove(Index);
+            if (positionMap.TryGetValue(Index, out var e) && e == this)
+                positionMap.Remove(Index);
             Debug.Log($"Destroyed {name}");
         }
 
@@ -88,6 +91,8 @@ namespace Safari.Animals
 
         public virtual void OnEnemyTurn()
         {
+            if (isDestroyed) return;
+
             switch (EnemyTrait)
             {
                 case EnemyTrait.RANDOM:
@@ -158,7 +163,7 @@ namespace Safari.Animals
             if (isFragile)
             {
                 // killed the entity, need to be better
-                Destroy(gameObject);
+                Destroy();
             }
             else
             {

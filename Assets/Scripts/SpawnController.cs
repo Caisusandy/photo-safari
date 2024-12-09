@@ -1,3 +1,4 @@
+using Safari;
 using Safari.Animals;
 using Safari.MapComponents;
 using Safari.Player;
@@ -47,12 +48,20 @@ public class SpawnController : MonoBehaviour
         }
     }
 
+
+
+
     internal void SpawnObjects()
     {
         foreach (GameObject objectToSpawn in objectsToSpawn)
         {
-            Vector3 spawnLocation = GetSpawnLocation(objectToSpawn);
-
+            Vector3? testSpawnLocation = GetSpawnLocation(objectToSpawn);
+            if (!testSpawnLocation.HasValue)
+            {
+                Debug.LogError("Failed to find a spawn point");
+                break;
+            }
+            Vector3 spawnLocation = testSpawnLocation.Value;
             if (objectToSpawn.tag == "Stairs")
             {
                 spawnLocation.Set(spawnLocation.x, spawnLocation.y, 1.5f);
@@ -61,52 +70,72 @@ public class SpawnController : MonoBehaviour
                 continue;
             }
 
-            GameObject newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
-            newInstance.GetComponent<EntityController>().TargetPosition = spawnLocation;
-
-            if (objectToSpawn.tag == "Animal")
+            GameObject newInstance;// = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+            //newInstance.name = newInstance.name.Remove(newInstance.name.IndexOf("("));
+            //newInstance.GetComponent<EntityController>().TargetPosition = spawnLocation;
+            if (objectToSpawn.name == "Stairs")
             {
-                EnemyManager.instance.enemies.Add(newInstance.GetComponent<EnemyController>());
-
+                newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+                GameManager.instance.stairs = newInstance.transform;
+            }
+            else if (objectToSpawn.CompareTag("Animal"))
+            {
                 // how many more of that animal to spawn
                 int numAnimalsToSpawn = 0;
                 if (objectToSpawn.name.Contains("frog", System.StringComparison.CurrentCultureIgnoreCase))
                 {
-                    numAnimalsToSpawn = Random.Range(0, maxFrogs);
+                    numAnimalsToSpawn = Random.Range(2, maxFrogs);
                 }
                 else if (objectToSpawn.name.Contains("jaguar", System.StringComparison.CurrentCultureIgnoreCase))
                 {
-                    numAnimalsToSpawn = Random.Range(0, maxJaguars);
+                    numAnimalsToSpawn = Random.Range(2, maxJaguars);
                 }
                 else if (objectToSpawn.name.Contains("capybara", System.StringComparison.CurrentCultureIgnoreCase))
                 {
-                    numAnimalsToSpawn = Random.Range(0, maxCapybaras);
+                    numAnimalsToSpawn = Random.Range(2, maxCapybaras);
                 }
                 else if (objectToSpawn.name.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase))
                 {
-                    numAnimalsToSpawn = Random.Range(0, maxButterflies);
+                    numAnimalsToSpawn = Random.Range(2, maxButterflies);
                 }
 
                 for (int i = 0; i < numAnimalsToSpawn; i++)
                 {
-                    spawnLocation = GetSpawnLocation(objectToSpawn);
-                    newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
-                    newInstance.GetComponent<EntityController>().TargetPosition = spawnLocation;
-                    EnemyManager.instance.enemies.Add(newInstance.GetComponent<EnemyController>());
+                    TrySpawn(objectToSpawn);
                 }
             }
-            else if (objectToSpawn.tag == "Player")
+            else if (objectToSpawn.CompareTag("Player"))
             {
+                newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
                 mainCameraController.player = newInstance.GetComponent<PlayerController>().transform;
+            }
+            else
+            {
+                newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
             }
         }
     }
 
-    private Vector3 GetSpawnLocation(GameObject objectToSpawn)
+    public void TrySpawn(GameObject objectToSpawn)
+    {
+        Vector3? testSpawnLocation = GetSpawnLocation(objectToSpawn);
+        if (!testSpawnLocation.HasValue)
+        {
+            Debug.LogError("Failed to find a spawn point");
+            return;
+        }
+        var spawnLocation = testSpawnLocation.Value;
+        var newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+        newInstance.name = newInstance.name.Remove(newInstance.name.IndexOf("("));
+        newInstance.GetComponent<EntityController>().TargetPosition = spawnLocation;
+        EnemyManager.instance.enemies.Add(newInstance.GetComponent<EnemyController>());
+    }
+
+    private Vector3? GetSpawnLocation(GameObject objectToSpawn)
     {
         RoomPointer roomPointer = GetSpawnRoomPointer(objectToSpawn);
         Room room = roomPointer.roomData.prefab.GetComponent<Room>();
-        Vector3 spawnLocation = GetSpawnVector(room, roomPointer);
+        var spawnLocation = GetSpawnVector(room, roomPointer);
         return spawnLocation;
     }
 
@@ -128,26 +157,31 @@ public class SpawnController : MonoBehaviour
     private RoomPointer GetRandomRoomPointer()
     {
         int roomIndex = Random.Range(0, map.data.rooms.Count);
-        RoomPointer roomPointer = map.data.rooms[roomIndex];
-        while (roomPointer == null)
-        {
-            roomIndex = Random.Range(0, map.data.rooms.Count);
-            roomPointer = map.data.rooms[roomIndex];
-        }
+        RoomPointer roomPointer = map.data.rooms[roomIndex] ?? throw new System.NullReferenceException();
+        //{
+        //    roomIndex = Random.Range(0, map.data.rooms.Count);
+        //    roomPointer = map.data.rooms[roomIndex];
+        //}
 
         return roomPointer;
     }
 
-    private Vector3 GetSpawnVector(Room spawnRoom, RoomPointer spawnRoomPointer)
+    private Vector3? GetSpawnVector(Room spawnRoom, RoomPointer spawnRoomPointer)
     {
         BoundsInt bounds = spawnRoom.floor.cellBounds;
         Vector2 spawnLocation = Vector2.zero;
         bool validSpawn = false;
-        List<Vector3Int> positionsTried = new List<Vector3Int>();
+        HashSet<Vector3Int> positionsTried = new HashSet<Vector3Int>();
         do
         {
             do
             {
+                if (positionsTried.Count > 10000)
+                {
+                    Debug.LogError("Failed to find a point");
+                    return null;
+                }
+
                 int xAdjustAmt = spawnRoomPointer.origin.x * Chunk.SIZE - bounds.xMax / 2;
                 int yAdjustAmt = spawnRoomPointer.origin.y * Chunk.SIZE - bounds.yMax / 2;
                 int randomX = Random.Range(bounds.xMin + xAdjustAmt, bounds.xMax + xAdjustAmt);
@@ -167,6 +201,7 @@ public class SpawnController : MonoBehaviour
             bool isInHallway = IsPosInHallway(spawnPoint);
             if (isInHallway)
             {
+                continue;
                 // pick a random adjacent position
                 Vector3Int validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
                 bool validDirection = false;

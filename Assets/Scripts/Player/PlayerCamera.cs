@@ -15,13 +15,13 @@ public class PlayerCamera : MonoBehaviour
 
         if (animal != null)
         {
-            if (!GameManager.instance.enemiesWithPictures.Contains(animal.name))
+            if (!GameManager.instance.enemiesWithPictures.Contains(animal))
             {
-                GameManager.instance.enemiesWithPictures.Add(animal.name);
+                GameManager.instance.enemiesWithPictures.Add(animal);
                 UpdateStatusCounter(animal.name);
             }
 
-            string photoSubject = animal.name.Remove(animal.name.IndexOf("("));
+            string photoSubject = animal.name;
             string message = GetPictureMessage(photoSubject);
             TextBoxController.instance.AddNewMessage(new Message(message));
         }
@@ -29,6 +29,7 @@ public class PlayerCamera : MonoBehaviour
 
     private void UpdateStatusCounter(string photoSubject)
     {
+        Debug.Log(photoSubject);
         if (photoSubject.Contains("frog", System.StringComparison.CurrentCultureIgnoreCase) && GameManager.instance.numFrogsRequired > 0)
         {
             GameManager.instance.numFrogsRequired--;

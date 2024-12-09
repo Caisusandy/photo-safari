@@ -115,7 +115,7 @@ namespace Safari.Player
                 {
                     if (((EnemyController)enemy).isFragile)
                     {
-                        Destroy(enemy);
+                        enemy.Destroy();
                     }
                     else
                     {

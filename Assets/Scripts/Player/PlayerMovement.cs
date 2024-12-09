@@ -1,5 +1,6 @@
 using Safari;
 using Safari.Animals;
+using Safari.MapComponents;
 using TMPro;
 using UnityEngine;
 
@@ -45,7 +46,8 @@ namespace Safari.Player
         public bool HandlePlayerMove(Vector3 finalMoveLocation)
         {
             // hit wall
-            if (Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
+            //if (Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
+            if (Map.instance.geometry.HasTile(Vector3Int.FloorToInt(finalMoveLocation)))
                 return false;
             // if player is still moving then don't move
             if (Vector2.Distance(controller.TargetPosition, controller.transform.position) > 0.01f)
