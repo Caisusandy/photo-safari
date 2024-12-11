@@ -71,7 +71,6 @@ namespace Safari
                 {
                     if (!mapData.chunks[x / Chunk.SIZE, y / Chunk.SIZE].isRoom) continue;
                     var f = Mathf.PerlinNoise(x * scale, y * scale);
-                    //Debug.Log(f);
                     if (f < lower || f > upper) continue;
                     var position = new Vector3Int(x, y);
                     if (map.decor.GetTile(position)) continue;
