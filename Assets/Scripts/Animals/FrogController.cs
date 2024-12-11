@@ -34,6 +34,7 @@ namespace Safari.Animals
             {
                 DetectEnemy();
             }
+
             if (obj == GameState.ENEMYTURN)
             {
                 var index = Vector2Int.FloorToInt(TargetPosition);
@@ -56,12 +57,12 @@ namespace Safari.Animals
             {
                 // temporary remove the frog from the map so player can't take photo
                 positionMap.Remove(index);
-                Debug.Log("scared");
+                //Debug.Log("scared");
                 ChangeAlphaHide();
             }
             else
             {
-                Debug.Log("normal");
+                //Debug.Log("normal");
                 UpdateSelfPosition();
                 ChangeAlphaShow();
             }

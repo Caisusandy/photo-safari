@@ -1,8 +1,7 @@
-﻿using Safari.MapComponents.Generators;
+using Safari.MapComponents.Generators;
 using Safari.MapComponents.Tiles;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using UnityEngine;
@@ -37,6 +36,12 @@ namespace Safari.MapComponents
         {
             var size = this.RectSize;
             return rect.xMin < 0 || rect.yMin < 0 || rect.xMax >= size.x || rect.yMax >= size.y;
+        }
+
+        public bool IsOutOfBound(Vector2Int chunkPosition)
+        {
+            var size = this.RectSize;
+            return chunkPosition.x < 0 || chunkPosition.y < 0 || chunkPosition.x >= size.x || chunkPosition.y >= size.y;
         }
 
         public bool IsEmpty(RectInt rect, bool outOfBoundAsFalse = false)
@@ -112,6 +117,20 @@ namespace Safari.MapComponents
         public static Vector3Int ToWorld(Vector2Int chunkPosition)
         {
             return new Vector3Int(chunkPosition.x * SIZE, chunkPosition.y * SIZE, 0);
+        }
+
+        public static Vector2Int ToChunk(Vector3Int positionToCheck)
+        {
+            FromWorld(positionToCheck.x, positionToCheck.y, out var result);
+            return result;
+        }
+
+        public static void FromWorld(int x, int y, out Vector2Int result)
+        {
+            Vector2Int chunkIndex = new(x / SIZE, y / SIZE);
+            if (x < 0) chunkIndex.x = 0;
+            if (y < 0) chunkIndex.y = 0;
+            result = chunkIndex;
         }
     }
 }

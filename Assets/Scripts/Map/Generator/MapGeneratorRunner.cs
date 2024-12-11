@@ -2,7 +2,7 @@
 
 namespace Safari.MapComponents.Generators
 {
-    public class MapGeneratorTester : MonoBehaviour
+    public class MapGeneratorRunner : MonoBehaviour
     {
         public LevelPreset levelPreset;
         public Map map;
@@ -24,6 +24,7 @@ namespace Safari.MapComponents.Generators
             Debug.Log(mapData);
             var instantiator = new MapInstantiator();
             instantiator.Instantiate(map, mapData);
+            map.data = mapData;
         }
 
         [ContextMenu(nameof(ResetMapComponent))]

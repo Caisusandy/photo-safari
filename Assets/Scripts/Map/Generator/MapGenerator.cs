@@ -122,7 +122,7 @@ namespace Safari.MapComponents.Generators
             var center1 = Vector2Int.FloorToInt(rect1.center);
             var center2 = Vector2Int.FloorToInt(rect2.center);
 
-            Debug.Log($"From {center1} to {center2} ({rect1.center} to {rect2.center})");
+            //Debug.Log($"From {center1} to {center2} ({rect1.center} to {rect2.center})");
 
             if (Random.Range(0, 2) == 1)
             {

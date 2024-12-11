@@ -1,10 +1,9 @@
 using Safari.Player;
-using System;
 using UnityEngine;
 
 namespace Safari.Animals
 {
-    public enum EnemyTrait { RANDOM, PATROL }
+    public enum EnemyTrait { RANDOM, PATROL, TRACEPLAYER, FLEEING }
 
     /// <summary>
     /// Base class of all enemy, create subclass for complicate data class
@@ -24,6 +23,7 @@ namespace Safari.Animals
         protected bool isInSpecialActivity;
         [SerializeField]
         protected EnemyTrait specialTrait;
+
         [Header("Counter")]
         [SerializeField]
         protected int baseMovementTurn;
@@ -33,16 +33,9 @@ namespace Safari.Animals
         protected int specialActivityTurn;
         [SerializeField]
         protected int specialActivityTurnCounter;
-        [Header("Patrol")]
-        [Tooltip("If the animal is set to patrol, how many tiles it will move before turning 90 degrees")]
-        [SerializeField]
-        int patrolLength = 1;
 
-        private int patrolCount = 0;
-
-        private Vector2 currentDir = new Vector2(1f, 0f);
+        protected Vector2 currentDir = new Vector2(1f, 0f);
         internal bool finishedTurn = false;
-        public SpriteRenderer spriteRenderer;
 
         protected EnemyTrait EnemyTrait => isInSpecialActivity ? specialTrait : enemyTrait;
 
@@ -58,7 +51,20 @@ namespace Safari.Animals
         }
 
         protected virtual void OnDestroy()
-        { }
+        {
+            GameManager.OnGameStateChange -= GameManager_OnGameStateChange;
+
+            // update animal count
+            if (name.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase))
+            {
+                EnemyManager.instance.butterflyTotal--;
+            }
+
+            EnemyManager.instance.enemies.Remove(this);
+            if (positionMap.TryGetValue(Index, out var e) && e == this)
+                positionMap.Remove(Index);
+            Debug.Log($"Destroyed {name}");
+        }
 
         private void GameManager_OnGameStateChange(GameState obj)
         {
@@ -85,44 +91,28 @@ namespace Safari.Animals
 
         public virtual void OnEnemyTurn()
         {
+            if (isDestroyed) return;
+
             switch (EnemyTrait)
             {
                 case EnemyTrait.RANDOM:
                     MoveRandom();
-                    break;
-                case EnemyTrait.PATROL:
-                    MovePatrol();
                     break;
                 default:
                     break;
             }
         }
 
-        public virtual void MovePatrol()
+        protected Vector3 PickRandomMoveLocation()
         {
-            Vector2 finalMoveLocation = TargetPosition;
-            if (patrolCount >= patrolLength)
-            {
-                currentDir = new Vector2(-currentDir.y, currentDir.x);
-                patrolCount = 0;
-            }
-
-            finalMoveLocation += currentDir;
-            patrolCount++;
-            HandleEnemyMove(finalMoveLocation);
-        }
-
-
-        public virtual void MoveRandom()
-        {
-            int moveBy = UnityEngine.Random.Range(-1, 2);
+            int moveBy = Random.Range(-1, 2);
             while (moveBy == 0)
             {
-                moveBy = UnityEngine.Random.Range(-1, 2);
+                moveBy = Random.Range(-1, 2);
             }
 
             Vector3 finalMoveLocation = TargetPosition;
-            if (UnityEngine.Random.Range(0, 2) == 0)
+            if (Random.Range(0, 2) == 0)
             {
                 finalMoveLocation += new Vector3(moveBy, 0f, 0f);
             }
@@ -131,7 +121,20 @@ namespace Safari.Animals
                 finalMoveLocation += new Vector3(0f, moveBy, 0f);
             }
 
+            return finalMoveLocation;
+        }
+
+
+        public virtual void MoveRandom()
+        {
+            Vector3 finalMoveLocation = PickRandomMoveLocation();
+            StartEnemyTurn(finalMoveLocation);
+        }
+
+        public virtual void StartEnemyTurn(Vector2 finalMoveLocation)
+        {
             HandleEnemyMove(finalMoveLocation);
+            finishedTurn = true;
         }
 
         public virtual void HandleEnemyMove(Vector2 finalMoveLocation)
@@ -141,25 +144,26 @@ namespace Safari.Animals
             {
                 // check for player pos
                 // use < 0.1 to avoid float calculation
-                //if (Vector2.Distance(PlayerController.instance.TargetPosition, finalMoveLocation) < 0.1f)
                 var rounded = Vector2Int.FloorToInt(finalMoveLocation);
+                UpdateSprite(finalMoveLocation);
                 if (positionMap.TryGetValue(rounded, out var entity) && entity is PlayerController player)
                 {
-                    HitPlayer(player);
+                    HandlePlayerCollision(player);
                 }
-                if (CanMove(finalMoveLocation))
-                    TargetPosition = finalMoveLocation;
-            }
 
-            finishedTurn = true;
+                if (CanMove(finalMoveLocation))
+                {
+                    TargetPosition = finalMoveLocation;
+                }
+            }
         }
 
-        private void HitPlayer(PlayerController player)
+        public virtual void HandlePlayerCollision(PlayerController player)
         {
             if (isFragile)
             {
                 // killed the entity, need to be better
-                Destroy(gameObject);
+                Destroy();
             }
             else
             {
@@ -167,9 +171,8 @@ namespace Safari.Animals
                 player.CurrentHealth--;
                 player.TargetPosition = player.transform.position;
 
-                TextBoxController.instance.AddNewMessage(new Message($"You were in the {name}'s way so it attacked you!"));
+                TextBoxController.instance.AddNewMessage(new Message($"You were in the {name.Replace("(Clone)", "")}'s way so it attacked you!"));
                 Debug.Log("Player moved where enemy was heading. Current Health: " + PlayerController.instance.CurrentHealth);
-                patrolCount--;
             }
         }
     }

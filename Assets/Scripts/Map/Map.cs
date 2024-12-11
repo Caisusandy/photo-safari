@@ -6,9 +6,17 @@ namespace Safari.MapComponents
 {
     public class Map : MonoBehaviour
     {
+        public static Map instance;
+
         public Tilemap geometry;
         public Tilemap floor;
         public Tilemap decor;
+        internal MapData data;
+
+        private void Awake()
+        {
+            instance = this;
+        }
 
         private void OnDrawGizmosSelected()
         {

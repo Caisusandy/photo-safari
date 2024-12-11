@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 3778457349715802135}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 266, y: 166, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46,7 +46,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  targetPosition: {x: 0, y: 0}
+  targetPosition: {x: 81.5, y: 53.5}
+  spriteRenderer: {fileID: 2740778397908600134}
+  upSprite: {fileID: 21300000, guid: c8cbc97f4b443614fb780a97413b884e, type: 3}
+  downSprite: {fileID: 21300000, guid: 477e92c72564bbf49bacc21f9c3b0910, type: 3}
+  leftSprite: {fileID: 0}
+  rightSprite: {fileID: 7582463240575272887, guid: 28f602d73a77bde42a7218e5839477ae, type: 3}
+  animator: {fileID: 0}
   collisionLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -58,8 +64,6 @@ MonoBehaviour:
   baseMovementTurnCounter: 0
   specialActivityTurn: 0
   specialActivityTurnCounter: 0
-  patrolLength: 1
-  spriteRenderer: {fileID: 2740778397908600134}
 --- !u!212 &2740778397908600134
 SpriteRenderer:
   m_ObjectHideFlags: 0

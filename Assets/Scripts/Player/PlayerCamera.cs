@@ -1,27 +1,51 @@
 using Safari;
 using Safari.Animals;
 using Safari.Player;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public CameraFlash cameraFlash;
     public PlayerController controller;
 
     public void TakePicture()
     {
-        cameraFlash.flashEnabled = true;
+        GameManager.instance.cameraFlash.flashEnabled = true;
 
-        string photoSubject = DetectPhotoSubject();
+        EnemyController animal = DetectPhotoSubject();
 
-        if (!controller.enemiesWithPictures.Contains(photoSubject) && !string.IsNullOrEmpty(photoSubject))
+        if (animal != null)
         {
-            controller.enemiesWithPictures.Add(photoSubject);
-        }
+            if (!GameManager.instance.enemiesWithPictures.Contains(animal))
+            {
+                GameManager.instance.enemiesWithPictures.Add(animal);
+                UpdateStatusCounter(animal.name);
+            }
 
-        string message = GetPictureMessage(photoSubject);
-        TextBoxController.instance.AddNewMessage(new Message(message));
+            string photoSubject = animal.name;
+            string message = GetPictureMessage(photoSubject);
+            TextBoxController.instance.AddNewMessage(new Message(message));
+        }
+    }
+
+    private void UpdateStatusCounter(string photoSubject)
+    {
+        Debug.Log(photoSubject);
+        if (photoSubject.Contains("frog", System.StringComparison.CurrentCultureIgnoreCase) && GameManager.instance.numFrogsRequired > 0)
+        {
+            GameManager.instance.numFrogsRequired--;
+        }
+        else if (photoSubject.Contains("capybara", System.StringComparison.CurrentCultureIgnoreCase) && GameManager.instance.numCapybarasRequired > 0)
+        {
+            GameManager.instance.numCapybarasRequired--;
+        }
+        else if (photoSubject.Contains("jaguar", System.StringComparison.CurrentCultureIgnoreCase) && GameManager.instance.numJaguarsRequired > 0)
+        {
+            GameManager.instance.numJaguarsRequired--;
+        }
+        else if (photoSubject.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase) && GameManager.instance.numButterfliesRequired > 0)
+        {
+            GameManager.instance.numButterfliesRequired--;
+        }
     }
 
     private string GetPictureMessage(string photoSubject)
@@ -39,27 +63,15 @@ public class PlayerCamera : MonoBehaviour
         return messageToDisplay;
     }
 
-    private string DetectPhotoSubject()
+    private EnemyController DetectPhotoSubject()
     {
-        List<Vector2> adjacentSpacesToPlayer = new List<Vector2>()
+        Vector2 spaceInFrontOfPlayer = controller.currentDirection.ToVector2() + (Vector2)transform.position;
+        var index = Vector2Int.FloorToInt(spaceInFrontOfPlayer);
+        if (EntityController.positionMap.TryGetValue(index, out var enemy))
         {
-            new Vector2(transform.position.x + 1, transform.position.y),
-            new Vector2(transform.position.x - 1, transform.position.y),
-            new Vector2(transform.position.x, transform.position.y + 1),
-            new Vector2(transform.position.x, transform.position.y - 1),
-        };
-
-        string photoSubject = null;
-        foreach (Vector2 space in adjacentSpacesToPlayer)
-        {
-            var index = Vector2Int.FloorToInt(space);
-            if (EntityController.positionMap.TryGetValue(index, out var enemy))
-            {
-                photoSubject = enemy.name;
-                break;
-            }
+            return (EnemyController)enemy;
         }
 
-        return photoSubject;
+        return null;
     }
 }

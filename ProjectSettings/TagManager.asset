@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Entity
+  - Animal
+  - Stairs
   layers:
   - Default
   - TransparentFX

@@ -1,13 +1,33 @@
+using Safari;
 using Safari.Animals;
 using Safari.MapComponents;
+using Safari.Player;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class SpawnController : MonoBehaviour
 {
-    public Map map;
     public List<GameObject> objectsToSpawn;
+    public EnemyManager enemyManager;
+    public MainCameraController mainCameraController;
+    public Map map;
+
+    [Header("Spawn Rates (in %)")]
+    public float jaguarSpawnRate = 50;
+    public float frogSpawnRate = 50;
+    public float capybaraSpawnRate = 50;
+    public float butterflySpawnRate = 50;
+
+    [Header("Max Amount of each Animal")]
+    public int maxJaguars = 5;
+    public int maxFrogs = 5;
+    public int maxCapybaras = 5;
+    public int maxButterflies = 5;
+
+    [Header("Debug")]
+    [Tooltip("Spawns everything in the initial room.")]
+    public bool spawnInInitialRoom = false;
 
     private Vector3Int spawnPoint;
     private List<Vector3Int> adjacentPositions
@@ -28,73 +48,185 @@ public class SpawnController : MonoBehaviour
         }
     }
 
-    private void Start()
+
+
+
+    internal void SpawnObjects()
     {
         foreach (GameObject objectToSpawn in objectsToSpawn)
         {
-            if (objectToSpawn.tag == "Entity")
+            Vector3? testSpawnLocation = GetSpawnLocation(objectToSpawn);
+            if (!testSpawnLocation.HasValue)
             {
-                SpawnEntity(objectToSpawn.GetComponent<EntityController>());
+                Debug.LogError("Failed to find a spawn point");
+                break;
+            }
+            Vector3 spawnLocation = testSpawnLocation.Value;
+            if (objectToSpawn.tag == "Stairs")
+            {
+                spawnLocation.Set(spawnLocation.x, spawnLocation.y, 1.5f);
+                objectToSpawn.transform.position = spawnLocation;
+                Debug.Log($"Stairs position is: {spawnLocation}");
+                continue;
+            }
+
+            GameObject newInstance;// = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+            //newInstance.name = newInstance.name.Remove(newInstance.name.IndexOf("("));
+            //newInstance.GetComponent<EntityController>().TargetPosition = spawnLocation;
+            if (objectToSpawn.name == "Stairs")
+            {
+                newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+                GameManager.instance.stairs = newInstance.transform;
+            }
+            else if (objectToSpawn.CompareTag("Animal"))
+            {
+                // how many more of that animal to spawn
+                int numAnimalsToSpawn = 0;
+                if (objectToSpawn.name.Contains("frog", System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    numAnimalsToSpawn = Random.Range(2, maxFrogs);
+                }
+                else if (objectToSpawn.name.Contains("jaguar", System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    numAnimalsToSpawn = Random.Range(2, maxJaguars);
+                }
+                else if (objectToSpawn.name.Contains("capybara", System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    numAnimalsToSpawn = Random.Range(2, maxCapybaras);
+                }
+                else if (objectToSpawn.name.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase))
+                {
+                    numAnimalsToSpawn = Random.Range(2, maxButterflies);
+                }
+
+                for (int i = 0; i < numAnimalsToSpawn; i++)
+                {
+                    TrySpawn(objectToSpawn);
+                }
+            }
+            else if (objectToSpawn.CompareTag("Player"))
+            {
+                newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+                mainCameraController.player = newInstance.GetComponent<PlayerController>().transform;
             }
             else
             {
-                SpawnObject(objectToSpawn);
+                newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
             }
         }
     }
 
-    public void SpawnEntity(EntityController controller) {
-        SpawnObject(controller.gameObject);
-        controller.TargetPosition = controller.transform.position;
+    public void TrySpawn(GameObject objectToSpawn)
+    {
+        Vector3? testSpawnLocation = GetSpawnLocation(objectToSpawn);
+        if (!testSpawnLocation.HasValue)
+        {
+            Debug.LogError("Failed to find a spawn point");
+            return;
+        }
+        var spawnLocation = testSpawnLocation.Value;
+        var newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
+        newInstance.name = newInstance.name.Remove(newInstance.name.IndexOf("("));
+        newInstance.GetComponent<EntityController>().TargetPosition = spawnLocation;
+        EnemyManager.instance.enemies.Add(newInstance.GetComponent<EnemyController>());
     }
 
-    public void SpawnObject(GameObject objectToSpawn)
+    private Vector3? GetSpawnLocation(GameObject objectToSpawn)
     {
-        // Get the bounds of where the player can spawn
-        BoundsInt bounds = map.floor.cellBounds;
+        RoomPointer roomPointer = GetSpawnRoomPointer(objectToSpawn);
+        Room room = roomPointer.roomData.prefab.GetComponent<Room>();
+        var spawnLocation = GetSpawnVector(room, roomPointer);
+        return spawnLocation;
+    }
 
-        // pick a random position for the player to spawn in
+    private RoomPointer GetSpawnRoomPointer(GameObject objectToSpawn)
+    {
+        RoomPointer roomPointer;
+        if (spawnInInitialRoom || objectToSpawn.tag == "Player")
+        {
+            roomPointer = map.data.chunks[2, 2].instancePointer;
+        }
+        else
+        {
+            roomPointer = GetRandomRoomPointer();
+        }
+
+        return roomPointer;
+    }
+
+    private RoomPointer GetRandomRoomPointer()
+    {
+        int roomIndex = Random.Range(0, map.data.rooms.Count);
+        RoomPointer roomPointer = map.data.rooms[roomIndex] ?? throw new System.NullReferenceException();
+        //{
+        //    roomIndex = Random.Range(0, map.data.rooms.Count);
+        //    roomPointer = map.data.rooms[roomIndex];
+        //}
+
+        return roomPointer;
+    }
+
+    private Vector3? GetSpawnVector(Room spawnRoom, RoomPointer spawnRoomPointer)
+    {
+        BoundsInt bounds = spawnRoom.floor.cellBounds;
         Vector2 spawnLocation = Vector2.zero;
         bool validSpawn = false;
-
-        while (!validSpawn)
+        HashSet<Vector3Int> positionsTried = new HashSet<Vector3Int>();
+        do
         {
-            int randomX = Random.Range(bounds.xMin, bounds.xMax);
-            int randomY = Random.Range(bounds.yMin, bounds.yMax);
-            spawnPoint = new Vector3Int(randomX, randomY, 0);
-
-            if (!PosInWall(spawnPoint) && !PosIsOccupied(spawnPoint))
+            do
             {
-                List<Vector3Int> adjacentWalls = GetAdjacentWalls();
-                bool isInHallway = PosInHallway(spawnPoint, adjacentWalls);
-                if (isInHallway)
+                if (positionsTried.Count > 10000)
                 {
-                    // need to move to outside of the hallway
-                    // pick a random adjacent position
-                    Vector3Int validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
-                    bool validDirection = false;
-                    while (!validDirection)
-                    {
-                        validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
-                        validDirection = !adjacentWalls.Contains(validAdjacentPos);
-                    }
-
-                    // move in that direction until we are no longer in a hallway
-                    Vector3Int direction = validAdjacentPos - spawnPoint;
-                    while (isInHallway)
-                    {
-                        spawnPoint += direction;
-                        adjacentWalls = GetAdjacentWalls();
-                        isInHallway = !PosInHallway(spawnPoint, adjacentWalls);
-                    }
+                    Debug.LogError("Failed to find a point");
+                    return null;
                 }
 
-                spawnLocation = map.floor.CellToWorld(spawnPoint);
-                validSpawn = true;
-            }
-        }
+                int xAdjustAmt = spawnRoomPointer.origin.x * Chunk.SIZE - bounds.xMax / 2;
+                int yAdjustAmt = spawnRoomPointer.origin.y * Chunk.SIZE - bounds.yMax / 2;
+                int randomX = Random.Range(bounds.xMin + xAdjustAmt, bounds.xMax + xAdjustAmt);
+                int randomY = Random.Range(bounds.yMin + yAdjustAmt, bounds.yMax + yAdjustAmt);
+                spawnPoint = new Vector3Int(randomX, randomY, 0);
 
-        objectToSpawn.transform.position = new Vector3(spawnLocation.x + 0.5f, spawnLocation.y + 0.5f, 0);
+            } while (positionsTried.Contains(spawnPoint));
+
+            positionsTried.Add(spawnPoint);
+
+            if (PosInWall(spawnPoint) || EntityController.positionMap.ContainsKey((Vector2Int)spawnPoint))
+            {
+                continue;
+            }
+
+            List<Vector3Int> adjacentWalls = GetAdjacentWalls();
+            bool isInHallway = IsPosInHallway(spawnPoint);
+            if (isInHallway)
+            {
+                continue;
+                // pick a random adjacent position
+                Vector3Int validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
+                bool validDirection = false;
+                while (!validDirection)
+                {
+                    validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
+                    validDirection = !adjacentWalls.Contains(validAdjacentPos);
+                }
+
+                // move in that direction until we are no longer in a hallway
+                Vector3Int direction = validAdjacentPos - spawnPoint;
+                while (isInHallway)
+                {
+                    spawnPoint += direction;
+                    adjacentWalls = GetAdjacentWalls();
+                    isInHallway = IsPosInHallway(spawnPoint);
+                }
+            }
+
+            spawnLocation = map.floor.CellToWorld(spawnPoint);
+            validSpawn = true;
+        }
+        while (!validSpawn);
+
+        return new Vector3(spawnLocation.x + 0.5f, spawnLocation.y + 0.5f, 0);
     }
 
     bool PosInWall(Vector3Int position)
@@ -106,24 +238,17 @@ public class SpawnController : MonoBehaviour
         return !notInWall;
     }
 
-    bool PosIsOccupied(Vector3Int position)
+    bool IsPosInHallway(Vector3Int positionToCheck)
     {
-        Vector3 positionVector = map.floor.CellToWorld(position);
-        foreach (GameObject gameObject in objectsToSpawn)
+        var chunkPosition = Chunk.ToChunk(positionToCheck);
+        if (map.data.IsOutOfBound(chunkPosition)) return false;
+        Chunk currentChunk = map.data.chunks[Mathf.Clamp(chunkPosition.x, 0, 31), Mathf.Clamp(chunkPosition.y, 0, 31)];
+        if (currentChunk.instancePointer != null)
         {
-            if (gameObject.activeSelf && gameObject.transform.position == positionVector)
-            {
-                return true;
-            }
+            return currentChunk.isHallway;
         }
 
-        return false;
-    }
-
-    bool PosInHallway(Vector3Int positionToCheck, List<Vector3Int> adjacentWalls)
-    {
-        bool isInHallway = adjacentWalls.Count >= 5 && (adjacentWalls[0].x == adjacentWalls[1].x || adjacentWalls[0].y == adjacentWalls[1].y);
-        return isInHallway;
+        return true; // find another place to spawn since a room doesn't exist there.
     }
 
     List<Vector3Int> GetAdjacentWalls()

@@ -16,7 +16,7 @@ namespace Safari
         const int lowerLeft = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
         const int upperRight = Chunk.SIZE / 2 + hallwaySize / 2 + wallThickness;
         const int netLength = Chunk.SIZE / 2 - hallwaySize / 2 - wallThickness;
-        const float decorDensity = 0.05f;
+        const float decorDensity = 0.15f;
 
         private Map map;
         private MapData mapData;
@@ -71,7 +71,6 @@ namespace Safari
                 {
                     if (!mapData.chunks[x / Chunk.SIZE, y / Chunk.SIZE].isRoom) continue;
                     var f = Mathf.PerlinNoise(x * scale, y * scale);
-                    Debug.Log(f);
                     if (f < lower || f > upper) continue;
                     var position = new Vector3Int(x, y);
                     if (map.decor.GetTile(position)) continue;
@@ -158,10 +157,10 @@ namespace Safari
 
             var breakingRect = direction switch
             {
-                Direction.Right => new BoundsInt(Chunk.SIZE, lowerLeft, 0, 1, hallwayTotalSize, 1),
-                Direction.Up => new BoundsInt(lowerLeft, Chunk.SIZE, 0, hallwayTotalSize, 1, 1),
-                Direction.Left => new BoundsInt(-1, lowerLeft, 0, 1, hallwayTotalSize, 1),
-                Direction.Down => new BoundsInt(lowerLeft, -1, 0, hallwayTotalSize, 1, 1),
+                Direction.Right => new BoundsInt(Chunk.SIZE, lowerLeft + 1, 0, 1, 1, 1),
+                Direction.Up => new BoundsInt(1 + lowerLeft, Chunk.SIZE, 0, 1, 1, 1),
+                Direction.Left => new BoundsInt(-1, lowerLeft + 1, 0, 1, 1, 1),
+                Direction.Down => new BoundsInt(1 + lowerLeft, -1, 0, 1, 1, 1),
                 _ => throw new ArgumentException("Direction is either composite or none"),
             };
             breakingRect.position += Chunk.ToWorld(chunkPosition);

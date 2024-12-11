@@ -10,22 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 63e24ec777268b944b99c75f49b0de1c, type: 3}
-  m_Name: Tile_Grass
+  m_Name: Tile_GrassWithFlowers
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 21300000, guid: 646f67542d27a334d9ec7d4e67ac6850, type: 3}
+  m_DefaultSprite: {fileID: 21300000, guid: 4611453e4bc4efa4f92db499a40c344c, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: 21300000, guid: 646f67542d27a334d9ec7d4e67ac6850, type: 3}
+    - {fileID: 21300000, guid: 4611453e4bc4efa4f92db499a40c344c, type: 3}
+    - {fileID: 21300000, guid: 358bb5eb47db9414aac9a0b4e80b67b3, type: 3}
+    - {fileID: 21300000, guid: 17aecd1a509f22d42a2f1ee9b375e2b4, type: 3}
+    - {fileID: 21300000, guid: d545b8b8823285b489876eda0fcdaba7, type: 3}
+    - {fileID: 21300000, guid: 194dd22c742f8f0459d77a077235e805, type: 3}
+    - {fileID: 21300000, guid: 79f30228bf7e84b46acb73f2cbe41791, type: 3}
+    - {fileID: 21300000, guid: 2557143698da95246b69075dfa53e232, type: 3}
+    - {fileID: 21300000, guid: 9d1cdeea1d9807741bf35f8364c31cee, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
-    m_PerlinScale: 0.919
+    m_PerlinScale: 0.848
     m_Output: 1
     m_ColliderType: 1
-    m_RandomTransform: 1
+    m_RandomTransform: 2
     m_Neighbors: 
     m_NeighborPositions:
     - {x: -1, y: 1, z: 0}
@@ -40,9 +47,5 @@ MonoBehaviour:
   isDescriptive: 0
   isStandardTile: 0
   themes: []
-  group:
-  - Sand
-  - Wall
-  connectTo:
-  - Stone
-  - Sand
+  group: []
+  connectTo: []
