@@ -123,7 +123,7 @@ namespace Safari.Player
                         CurrentHealth--;
                         TextBoxController.instance.AddNewMessage(new Message($"You walked into the {enemy.name.Replace("(Clone)", "")} and it attacked you!")); // The player taking damage is technically the enemy's action, so the enemy doesn't get to move again.
                     }
-
+                    Debug.Log("has enemy");
                     return;
                 }
 

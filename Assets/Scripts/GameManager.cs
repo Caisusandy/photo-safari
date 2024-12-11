@@ -3,6 +3,7 @@ using Safari.MapComponents.Generators;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Safari
 {
@@ -109,9 +110,18 @@ namespace Safari
             {
                 case GameState.WON:
                     winText.SetActive(true);
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        SceneManager.LoadScene(0);
+                    }
+                    break;
                     break;
                 case GameState.GAMEOVER:
                     gameOverText.SetActive(true);
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        SceneManager.LoadScene(0);
+                    }
                     break;
                 default:
                     break;

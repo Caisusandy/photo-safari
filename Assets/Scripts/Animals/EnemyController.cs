@@ -23,6 +23,8 @@ namespace Safari.Animals
         protected bool isInSpecialActivity;
         [SerializeField]
         protected EnemyTrait specialTrait;
+        [SerializeField]
+        protected GameObject tookedPicIcon;
 
         [Header("Counter")]
         [SerializeField]
@@ -38,6 +40,8 @@ namespace Safari.Animals
         internal bool finishedTurn = false;
 
         protected EnemyTrait EnemyTrait => isInSpecialActivity ? specialTrait : enemyTrait;
+
+        public GameObject TookedPicIcon { get => tookedPicIcon; set => tookedPicIcon = value; }
 
         protected virtual void Start()
         {

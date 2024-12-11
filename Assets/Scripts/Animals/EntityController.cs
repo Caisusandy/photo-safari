@@ -126,7 +126,8 @@ namespace Safari.Animals
             // this is just for the butterfly right now so the only directions will be left and right
             if (animator != null)
             {
-                animator.SetFloat("Horizontal", Mathf.Clamp(direction.x, -1f, 1f));
+                //animator.SetFloat("Horizontal", Mathf.Clamp(direction.x, -1f, 1f));
+                spriteRenderer.flipX = direction.x < 0;
                 return;
             }
 

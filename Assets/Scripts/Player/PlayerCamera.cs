@@ -19,6 +19,7 @@ public class PlayerCamera : MonoBehaviour
             {
                 GameManager.instance.enemiesWithPictures.Add(animal);
                 UpdateStatusCounter(animal.name);
+                if (animal.TookedPicIcon) animal.TookedPicIcon.SetActive(true);
             }
 
             string photoSubject = animal.name;
