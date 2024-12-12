@@ -131,6 +131,7 @@ namespace Safari
         private void OnDestroy()
         {
             instance = null;
+            OnGameStateChange = null;
         }
     }
 }

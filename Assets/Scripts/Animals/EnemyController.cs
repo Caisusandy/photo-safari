@@ -57,6 +57,7 @@ namespace Safari.Animals
 
         protected virtual void OnDestroy()
         {
+            GameManager.OnGameStateChange -= GameManager_OnGameStateChange;
         }
 
         private void GameManager_OnGameStateChange(GameState obj)

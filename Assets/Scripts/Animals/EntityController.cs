@@ -39,6 +39,11 @@ namespace Safari.Animals
             }
         }
 
+        private void Awake()
+        {
+            positionMap = new();
+        }
+
         /// <summary>
         /// Update self position on the position map
         /// </summary>
@@ -159,6 +164,11 @@ namespace Safari.Animals
 
             isDestroyed = true;
             Destroy(gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            positionMap = null;
         }
     }
 }

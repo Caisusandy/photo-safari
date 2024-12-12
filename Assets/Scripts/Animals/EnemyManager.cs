@@ -11,7 +11,7 @@ namespace Safari.Animals
         public GameManager gameManager;
         public SpawnController spawner;
         public List<EnemyController> enemies;
-        public List<EnemyController> toBeDestroyed = new List<EnemyController>();
+        public List<EnemyController> toBeDestroyed;
         public GameObject butterflyPrefab;
 
         internal int butterflyTotal = 0;
@@ -22,6 +22,12 @@ namespace Safari.Animals
         private void Awake()
         {
             instance = this;
+        }
+
+        private void Start()
+        {
+            enemies = new List<EnemyController>();
+            toBeDestroyed = new List<EnemyController>();
         }
 
         private void Update()
@@ -64,6 +70,11 @@ namespace Safari.Animals
                 }
             }
             return null;
+        }
+
+        private void OnDestroy()
+        {
+            instance = null;
         }
     }
 }
