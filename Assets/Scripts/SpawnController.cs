@@ -59,6 +59,7 @@ public class SpawnController : MonoBehaviour
             GameObject newInstance;
             if (objectToSpawn.name == "Stairs")
             {
+                spawnLocation.Set(spawnLocation.x, spawnLocation.y, 1.5f);
                 newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
                 GameManager.instance.stairs = newInstance.transform;
             }

@@ -19,6 +19,7 @@ namespace Safari
         [Header("UI Elements")]
         public GameObject gameOverText;
         public GameObject winText;
+        public GameObject restartText;
         public TextBoxController textBox;
 
         [Header("Scripts")]
@@ -111,15 +112,19 @@ namespace Safari
             {
                 case GameState.WON:
                     winText.SetActive(true);
+                    restartText.SetActive(true);
                     if (Input.GetKey(KeyCode.Space))
                     {
+                        EntityController.positionMap = null;
                         SceneManager.LoadScene(0);
                     }
                     break;
                 case GameState.GAMEOVER:
                     gameOverText.SetActive(true);
+                    restartText.SetActive(true);
                     if (Input.GetKey(KeyCode.Space))
                     {
+                        EntityController.positionMap = null;
                         SceneManager.LoadScene(0);
                     }
                     break;
@@ -131,6 +136,7 @@ namespace Safari
         private void OnDestroy()
         {
             instance = null;
+            OnGameStateChange = null;
         }
     }
 }

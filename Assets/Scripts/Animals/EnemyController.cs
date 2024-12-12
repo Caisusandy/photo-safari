@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using Safari.MapComponents;
 using Safari.Player;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Safari.Animals
@@ -58,17 +60,6 @@ namespace Safari.Animals
         protected virtual void OnDestroy()
         {
             GameManager.OnGameStateChange -= GameManager_OnGameStateChange;
-
-            // update animal count
-            if (name.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase))
-            {
-                EnemyManager.instance.butterflyTotal--;
-            }
-
-            EnemyManager.instance.enemies.Remove(this);
-            if (positionMap.TryGetValue(Index, out var e) && e == this)
-                positionMap.Remove(Index);
-            Debug.Log($"Destroyed {name}");
         }
 
         private void GameManager_OnGameStateChange(GameState obj)
@@ -162,11 +153,41 @@ namespace Safari.Animals
                     HandlePlayerCollision(player);
                 }
 
-                if (CanMove(finalMoveLocation))
+                if (CanMove(finalMoveLocation) && !PosBlockingHallway(finalMoveLocation))
                 {
                     TargetPosition = finalMoveLocation;
                 }
             }
+        }
+
+        public virtual bool PosInHallway(Vector2 finalMoveLocation)
+        {
+            bool posInVerticalHallway = Physics2D.OverlapCircle(finalMoveLocation + Direction.Right.ToVector2(), .2f, collisionLayer) &&
+                Physics2D.OverlapCircle(finalMoveLocation + Direction.Left.ToVector2(), .2f, collisionLayer);
+            bool posInHorzHallway = Physics2D.OverlapCircle(finalMoveLocation + Direction.Up.ToVector2(), .2f, collisionLayer) &&
+                Physics2D.OverlapCircle(finalMoveLocation + Direction.Down.ToVector2(), .2f, collisionLayer);
+            return posInVerticalHallway || posInHorzHallway;
+        }
+
+        public virtual bool PosBlockingHallway(Vector2 finalMoveLocation)
+        {
+            List<Vector2> adjacentPositions = new List<Vector2>()
+            {
+                Direction.Up.ToVector2(),
+                Direction.Down.ToVector2(),
+                Direction.Left.ToVector2(),
+                Direction.Right.ToVector2(),
+            };
+
+            foreach (Vector2 position in adjacentPositions)
+            {
+                if (PosInHallway(position + finalMoveLocation))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public virtual void HandlePlayerCollision(PlayerController player)
@@ -181,7 +202,6 @@ namespace Safari.Animals
                 // deal damage to player and don't move
                 player.CurrentHealth--;
                 player.TargetPosition = player.transform.position;
-
                 TextBoxController.instance.AddNewMessage(new Message($"You were in the {name.Replace("(Clone)", "")}'s way so it attacked you!"));
                 Debug.Log("Player moved where enemy was heading. Current Health: " + PlayerController.instance.CurrentHealth);
             }
