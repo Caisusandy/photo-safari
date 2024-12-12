@@ -27,7 +27,7 @@ namespace Safari.Animals
         {
             if (butterflyTotal < 3)
             {
-                spawner.TrySpawn(butterflyPrefab);
+                spawner.TrySpawnAnimal(butterflyPrefab);
                 butterflyTotal++;
             }
 

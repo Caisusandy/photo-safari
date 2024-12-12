@@ -115,7 +115,6 @@ namespace Safari
                         SceneManager.LoadScene(0);
                     }
                     break;
-                    break;
                 case GameState.GAMEOVER:
                     gameOverText.SetActive(true);
                     if (Input.GetKey(KeyCode.Space))
