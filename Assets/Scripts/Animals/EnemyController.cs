@@ -202,7 +202,6 @@ namespace Safari.Animals
                 // deal damage to player and don't move
                 player.CurrentHealth--;
                 player.TargetPosition = player.transform.position;
-
                 TextBoxController.instance.AddNewMessage(new Message($"You were in the {name.Replace("(Clone)", "")}'s way so it attacked you!"));
                 Debug.Log("Player moved where enemy was heading. Current Health: " + PlayerController.instance.CurrentHealth);
             }

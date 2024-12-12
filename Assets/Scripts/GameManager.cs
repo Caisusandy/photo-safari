@@ -115,6 +115,7 @@ namespace Safari
                     restartText.SetActive(true);
                     if (Input.GetKey(KeyCode.Space))
                     {
+                        EntityController.positionMap = null;
                         SceneManager.LoadScene(0);
                     }
                     break;
@@ -123,6 +124,7 @@ namespace Safari
                     restartText.SetActive(true);
                     if (Input.GetKey(KeyCode.Space))
                     {
+                        EntityController.positionMap = null;
                         SceneManager.LoadScene(0);
                     }
                     break;

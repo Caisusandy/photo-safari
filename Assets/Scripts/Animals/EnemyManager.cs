@@ -11,7 +11,7 @@ namespace Safari.Animals
         public GameManager gameManager;
         public SpawnController spawner;
         public List<EnemyController> enemies;
-        public List<EnemyController> toBeDestroyed;
+        public List<EnemyController> toBeDestroyed = new List<EnemyController>();
         public GameObject butterflyPrefab;
 
         internal int butterflyTotal = 0;

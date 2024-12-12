@@ -165,10 +165,5 @@ namespace Safari.Animals
             isDestroyed = true;
             Destroy(gameObject);
         }
-
-        private void OnDestroy()
-        {
-            positionMap = null;
-        }
     }
 }
