@@ -126,7 +126,6 @@ namespace Safari.Animals
             // this is just for the butterfly right now so the only directions will be left and right
             if (animator != null)
             {
-                //animator.SetFloat("Horizontal", Mathf.Clamp(direction.x, -1f, 1f));
                 spriteRenderer.flipX = direction.x < 0;
                 return;
             }
@@ -143,8 +142,23 @@ namespace Safari.Animals
         internal void Destroy()
         {
             if (isDestroyed) return;
-            Destroy(gameObject);
+
+            // update animal count
+            if (name.Contains("butterfly", StringComparison.CurrentCultureIgnoreCase))
+            {
+                EnemyManager.instance.butterflyTotal--;
+            }
+
+            if (positionMap.TryGetValue(Index, out var e) && e == this)
+            {
+                positionMap.Remove(Index);
+            }
+
+            EnemyManager.instance.toBeDestroyed.Add((EnemyController)this);
+            Debug.Log($"Destroyed {name}");
+
             isDestroyed = true;
+            Destroy(gameObject);
         }
     }
 }

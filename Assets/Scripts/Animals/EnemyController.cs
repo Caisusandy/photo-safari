@@ -57,18 +57,6 @@ namespace Safari.Animals
 
         protected virtual void OnDestroy()
         {
-            GameManager.OnGameStateChange -= GameManager_OnGameStateChange;
-
-            // update animal count
-            if (name.Contains("butterfly", System.StringComparison.CurrentCultureIgnoreCase))
-            {
-                EnemyManager.instance.butterflyTotal--;
-            }
-
-            EnemyManager.instance.enemies.Remove(this);
-            if (positionMap.TryGetValue(Index, out var e) && e == this)
-                positionMap.Remove(Index);
-            Debug.Log($"Destroyed {name}");
         }
 
         private void GameManager_OnGameStateChange(GameState obj)

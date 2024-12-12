@@ -11,6 +11,7 @@ namespace Safari.Animals
         public GameManager gameManager;
         public SpawnController spawner;
         public List<EnemyController> enemies;
+        public List<EnemyController> toBeDestroyed = new List<EnemyController>();
         public GameObject butterflyPrefab;
 
         internal int butterflyTotal = 0;
@@ -31,9 +32,15 @@ namespace Safari.Animals
                 butterflyTotal++;
             }
 
-            bool enemiesFinishedTurn = enemies.All(e => e == null || e.finishedTurn);
+            bool enemiesFinishedTurn = enemies.All(e => e == null || e.finishedTurn || e.isDestroyed || toBeDestroyed.Contains(e));
             if (enemiesFinishedTurn && gameManager.State == GameState.ENEMYTURN)
             {
+                foreach (var enemy in toBeDestroyed)
+                {
+                    enemies.Remove(enemy);
+                }
+
+                toBeDestroyed.Clear();
                 gameManager.State = GameState.PLAYERTURN;
             }
         }
