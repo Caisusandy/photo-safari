@@ -25,7 +25,7 @@ namespace Safari.Animals
 
         private void Update()
         {
-            if (butterflyTotal < 3)
+            if (enemies.Count(e => !e.TookedPicIcon.activeSelf) < gameManager.numButterfliesRequired)
             {
                 spawner.TrySpawnAnimal(butterflyPrefab);
                 butterflyTotal++;

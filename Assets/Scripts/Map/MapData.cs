@@ -65,9 +65,14 @@ namespace Safari.MapComponents
             return !chunks[rect.x, rect.y].isOccupied;
         }
 
-        internal bool IsNoRoom(Vector2Int point)
+        public bool IsNoRoom(Vector2Int point)
         {
             return !chunks[point.x, point.y].isRoom;
+        }
+
+        public bool IsHallway(Vector2Int point)
+        {
+            return !chunks[point.x, point.y].isHallway;
         }
 
         internal bool IsAny(Vector2Int point, params RoomPointer[] roomPointer)
