@@ -150,11 +150,20 @@ namespace Safari.Animals
                     HandlePlayerCollision(player);
                 }
 
-                if (CanMove(finalMoveLocation))
+                if (CanMove(finalMoveLocation) && !PosInHallway(finalMoveLocation))
                 {
                     TargetPosition = finalMoveLocation;
                 }
             }
+        }
+
+        public virtual bool PosInHallway(Vector2 finalMoveLocation)
+        {
+            bool posInVerticalHallway = Physics2D.OverlapCircle(finalMoveLocation + Direction.Right.ToVector2(), .2f, collisionLayer) &&
+                Physics2D.OverlapCircle(finalMoveLocation + Direction.Left.ToVector2(), .2f, collisionLayer);
+            bool posInHorzHallway = Physics2D.OverlapCircle(finalMoveLocation + Direction.Up.ToVector2(), .2f, collisionLayer) &&
+                Physics2D.OverlapCircle(finalMoveLocation + Direction.Down.ToVector2(), .2f, collisionLayer);
+            return posInVerticalHallway || posInHorzHallway;
         }
 
         public virtual void HandlePlayerCollision(PlayerController player)
