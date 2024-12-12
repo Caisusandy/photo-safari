@@ -57,6 +57,7 @@ MonoBehaviour:
   leftSprite: {fileID: 292627770, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
   rightSprite: {fileID: -39772849, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
   animator: {fileID: 0}
+  isDestroyed: 0
   maxHealth: 5
   currentHealth: 5
   movementScript: {fileID: 4308758787273860181}
@@ -132,8 +133,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -175973113
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 1605543356, guid: f2573b006b710a74ca11e6f12e148bcb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

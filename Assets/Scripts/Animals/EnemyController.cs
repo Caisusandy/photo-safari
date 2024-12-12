@@ -1,3 +1,4 @@
+using Safari.MapComponents;
 using Safari.Player;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ namespace Safari.Animals
         protected bool isInSpecialActivity;
         [SerializeField]
         protected EnemyTrait specialTrait;
+        [SerializeField]
+        protected GameObject tookedPicIcon;
 
         [Header("Counter")]
         [SerializeField]
@@ -38,6 +41,8 @@ namespace Safari.Animals
         internal bool finishedTurn = false;
 
         protected EnemyTrait EnemyTrait => isInSpecialActivity ? specialTrait : enemyTrait;
+
+        public GameObject TookedPicIcon { get => tookedPicIcon; set => tookedPicIcon = value; }
 
         protected virtual void Start()
         {
@@ -111,17 +116,23 @@ namespace Safari.Animals
                 moveBy = Random.Range(-1, 2);
             }
 
-            Vector3 finalMoveLocation = TargetPosition;
-            if (Random.Range(0, 2) == 0)
+            for (int i = 0; i < 100; i++)
             {
-                finalMoveLocation += new Vector3(moveBy, 0f, 0f);
-            }
-            else
-            {
-                finalMoveLocation += new Vector3(0f, moveBy, 0f);
-            }
+                Vector3 finalMoveLocation = TargetPosition;
+                if (Random.Range(0, 2) == 0)
+                {
+                    finalMoveLocation += new Vector3(moveBy, 0f, 0f);
+                }
+                else
+                {
+                    finalMoveLocation += new Vector3(0f, moveBy, 0f);
+                }
 
-            return finalMoveLocation;
+                Vector2Int point = Chunk.ToChunk(Vector3Int.FloorToInt(finalMoveLocation));
+                if (!Map.instance.data.IsOutOfBound(point) && !Map.instance.data.IsNoRoom(point))
+                    return finalMoveLocation;
+            }
+            return TargetPosition;
         }
 
 

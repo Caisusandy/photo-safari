@@ -40,16 +40,9 @@ public class SpawnController : MonoBehaviour
                 new Vector3Int(spawnPoint.x - 1, spawnPoint.y),
                 new Vector3Int(spawnPoint.x, spawnPoint.y + 1),
                 new Vector3Int(spawnPoint.x, spawnPoint.y - 1),
-                new Vector3Int(spawnPoint.x + 1, spawnPoint.y + 1),
-                new Vector3Int(spawnPoint.x + 1, spawnPoint.y - 1),
-                new Vector3Int(spawnPoint.x - 1, spawnPoint.y + 1),
-                new Vector3Int(spawnPoint.x - 1, spawnPoint.y - 1),
             };
         }
     }
-
-
-
 
     internal void SpawnObjects()
     {
@@ -61,18 +54,9 @@ public class SpawnController : MonoBehaviour
                 Debug.LogError("Failed to find a spawn point");
                 break;
             }
-            Vector3 spawnLocation = testSpawnLocation.Value;
-            if (objectToSpawn.tag == "Stairs")
-            {
-                spawnLocation.Set(spawnLocation.x, spawnLocation.y, 1.5f);
-                objectToSpawn.transform.position = spawnLocation;
-                Debug.Log($"Stairs position is: {spawnLocation}");
-                continue;
-            }
 
-            GameObject newInstance;// = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
-            //newInstance.name = newInstance.name.Remove(newInstance.name.IndexOf("("));
-            //newInstance.GetComponent<EntityController>().TargetPosition = spawnLocation;
+            Vector3 spawnLocation = testSpawnLocation.Value;
+            GameObject newInstance;
             if (objectToSpawn.name == "Stairs")
             {
                 newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
@@ -101,13 +85,15 @@ public class SpawnController : MonoBehaviour
 
                 for (int i = 0; i < numAnimalsToSpawn; i++)
                 {
-                    TrySpawn(objectToSpawn);
+                    TrySpawnAnimal(objectToSpawn);
                 }
             }
             else if (objectToSpawn.CompareTag("Player"))
             {
                 newInstance = Instantiate(objectToSpawn, spawnLocation, Quaternion.identity);
-                mainCameraController.player = newInstance.GetComponent<PlayerController>().transform;
+                PlayerController newPlayer = newInstance.GetComponent<PlayerController>();
+                mainCameraController.player = newPlayer.transform;
+                newPlayer.TargetPosition = spawnLocation;
             }
             else
             {
@@ -116,7 +102,7 @@ public class SpawnController : MonoBehaviour
         }
     }
 
-    public void TrySpawn(GameObject objectToSpawn)
+    public void TrySpawnAnimal(GameObject objectToSpawn)
     {
         Vector3? testSpawnLocation = GetSpawnLocation(objectToSpawn);
         if (!testSpawnLocation.HasValue)
@@ -158,11 +144,6 @@ public class SpawnController : MonoBehaviour
     {
         int roomIndex = Random.Range(0, map.data.rooms.Count);
         RoomPointer roomPointer = map.data.rooms[roomIndex] ?? throw new System.NullReferenceException();
-        //{
-        //    roomIndex = Random.Range(0, map.data.rooms.Count);
-        //    roomPointer = map.data.rooms[roomIndex];
-        //}
-
         return roomPointer;
     }
 
@@ -182,43 +163,52 @@ public class SpawnController : MonoBehaviour
                     return null;
                 }
 
+                // these adjust amounts are accounting for that (0,0) is for the current room, not for the entire map
                 int xAdjustAmt = spawnRoomPointer.origin.x * Chunk.SIZE - bounds.xMax / 2;
                 int yAdjustAmt = spawnRoomPointer.origin.y * Chunk.SIZE - bounds.yMax / 2;
+
                 int randomX = Random.Range(bounds.xMin + xAdjustAmt, bounds.xMax + xAdjustAmt);
                 int randomY = Random.Range(bounds.yMin + yAdjustAmt, bounds.yMax + yAdjustAmt);
                 spawnPoint = new Vector3Int(randomX, randomY, 0);
-
             } while (positionsTried.Contains(spawnPoint));
 
-            positionsTried.Add(spawnPoint);
 
             if (PosInWall(spawnPoint) || EntityController.positionMap.ContainsKey((Vector2Int)spawnPoint))
             {
+                positionsTried.Add(spawnPoint);
                 continue;
             }
 
             List<Vector3Int> adjacentWalls = GetAdjacentWalls();
             bool isInHallway = IsPosInHallway(spawnPoint);
-            if (isInHallway)
+            while (isInHallway)
             {
-                continue;
-                // pick a random adjacent position
+                // pick an adjacent position with no wall
                 Vector3Int validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
-                bool validDirection = false;
+                bool validDirection = !adjacentWalls.Contains(validAdjacentPos);
                 while (!validDirection)
                 {
                     validAdjacentPos = adjacentPositions[Random.Range(0, adjacentPositions.Count)];
                     validDirection = !adjacentWalls.Contains(validAdjacentPos);
                 }
 
-                // move in that direction until we are no longer in a hallway
+                // move in that direction until we are no longer in a hallway or find another wall
                 Vector3Int direction = validAdjacentPos - spawnPoint;
-                while (isInHallway)
+                while (isInHallway && validDirection)
                 {
                     spawnPoint += direction;
                     adjacentWalls = GetAdjacentWalls();
                     isInHallway = IsPosInHallway(spawnPoint);
+
+                    Vector3Int nextPos = spawnPoint + direction;
+                    validDirection = !adjacentWalls.Contains(nextPos);
                 }
+            }
+
+            if (EntityController.positionMap.ContainsKey((Vector2Int)spawnPoint))
+            {
+                positionsTried.Add(spawnPoint);
+                continue;
             }
 
             spawnLocation = map.floor.CellToWorld(spawnPoint);

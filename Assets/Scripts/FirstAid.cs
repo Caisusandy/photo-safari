@@ -1,10 +1,14 @@
 ﻿using Safari.Player;
 
-public class FirstAid : Item
+namespace Safari.Items
 {
-    public override void Use(PlayerController playerController)
+    public class FirstAid : Item
     {
-        playerController.CurrentHealth++;
-        Destroy(gameObject);
+        public override void Use(PlayerController playerController)
+        {
+            playerController.CurrentHealth++;
+            TextBoxController.instance.AddNewMessage(new Message("Recovered Health by 1"));
+            Destroy(gameObject);
+        }
     }
 }

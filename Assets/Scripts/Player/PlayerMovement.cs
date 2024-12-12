@@ -48,10 +48,16 @@ namespace Safari.Player
             // hit wall
             //if (Physics2D.OverlapCircle(finalMoveLocation, .2f, collisionLayer))
             if (Map.instance.geometry.HasTile(Vector3Int.FloorToInt(finalMoveLocation)))
+            {
+                Debug.Log("Has tile");
                 return false;
+            }
             // if player is still moving then don't move
             if (Vector2.Distance(controller.TargetPosition, controller.transform.position) > 0.01f)
+            {
+                Debug.Log("is already moving");
                 return false;
+            }
 
             controller.TargetPosition = finalMoveLocation;
             return true;

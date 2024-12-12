@@ -158,8 +158,8 @@ namespace Safari.MapComponents.Generators
                 }
 
                 // Add the final point
-                if (!mapData.IsAny(end, roomPointer1, roomPointer2))
-                    path.Add(end);
+                //if (!mapData.IsAny(end, roomPointer1, roomPointer2))
+                path.Add(end);
                 Debug.Log($"From {start} to {end}: {string.Join('|', path)}");
                 return path;
             }
@@ -191,8 +191,8 @@ namespace Safari.MapComponents.Generators
                 }
 
                 // Add the final point
-                if (!mapData.IsAny(end, roomPointer1, roomPointer2))
-                    path.Add(end);
+                //if (!mapData.IsAny(end, roomPointer1, roomPointer2))
+                path.Add(end);
                 Debug.Log($"From {start} to {end}: {string.Join('|', path)}");
                 return path;
             }

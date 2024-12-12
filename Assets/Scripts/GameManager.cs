@@ -3,6 +3,7 @@ using Safari.MapComponents.Generators;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Safari
 {
@@ -83,14 +84,15 @@ namespace Safari
         {
             EnemyManager.instance.DetermineAnimalTotals();
             int numPhotosRequired = -1;
-            while (numPhotosRequired < minPhotosRequired)
+            do
             {
-                numButterfliesRequired = UnityEngine.Random.Range(0, EnemyManager.instance.butterflyTotal + 1);
-                numCapybarasRequired = UnityEngine.Random.Range(0, EnemyManager.instance.capybaraTotal + 1);
-                numFrogsRequired = UnityEngine.Random.Range(0, EnemyManager.instance.frogTotal + 1);
-                numJaguarsRequired = UnityEngine.Random.Range(0, EnemyManager.instance.jaguarTotal + 1);
+                numButterfliesRequired = UnityEngine.Random.Range(0, EnemyManager.instance.butterflyTotal) + 1;
+                numCapybarasRequired = UnityEngine.Random.Range(0, EnemyManager.instance.capybaraTotal) + 1;
+                numFrogsRequired = UnityEngine.Random.Range(0, EnemyManager.instance.frogTotal) + 1;
+                numJaguarsRequired = UnityEngine.Random.Range(0, EnemyManager.instance.jaguarTotal) + 1;
                 numPhotosRequired = numButterfliesRequired + numCapybarasRequired + numFrogsRequired + numJaguarsRequired;
             }
+            while (numPhotosRequired < minPhotosRequired);
         }
 
         private void InitializeUi()
@@ -109,9 +111,17 @@ namespace Safari
             {
                 case GameState.WON:
                     winText.SetActive(true);
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        SceneManager.LoadScene(0);
+                    }
                     break;
                 case GameState.GAMEOVER:
                     gameOverText.SetActive(true);
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        SceneManager.LoadScene(0);
+                    }
                     break;
                 default:
                     break;
