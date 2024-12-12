@@ -1,5 +1,7 @@
+using NUnit.Framework;
 using Safari.MapComponents;
 using Safari.Player;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Safari.Animals
@@ -151,7 +153,7 @@ namespace Safari.Animals
                     HandlePlayerCollision(player);
                 }
 
-                if (CanMove(finalMoveLocation) && !PosInHallway(finalMoveLocation))
+                if (CanMove(finalMoveLocation) && !PosBlockingHallway(finalMoveLocation))
                 {
                     TargetPosition = finalMoveLocation;
                 }
@@ -165,6 +167,27 @@ namespace Safari.Animals
             bool posInHorzHallway = Physics2D.OverlapCircle(finalMoveLocation + Direction.Up.ToVector2(), .2f, collisionLayer) &&
                 Physics2D.OverlapCircle(finalMoveLocation + Direction.Down.ToVector2(), .2f, collisionLayer);
             return posInVerticalHallway || posInHorzHallway;
+        }
+
+        public virtual bool PosBlockingHallway(Vector2 finalMoveLocation)
+        {
+            List<Vector2> adjacentPositions = new List<Vector2>()
+            {
+                Direction.Up.ToVector2(),
+                Direction.Down.ToVector2(),
+                Direction.Left.ToVector2(),
+                Direction.Right.ToVector2(),
+            };
+
+            foreach (Vector2 position in adjacentPositions)
+            {
+                if (PosInHallway(position + finalMoveLocation))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public virtual void HandlePlayerCollision(PlayerController player)
